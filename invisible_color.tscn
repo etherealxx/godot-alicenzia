@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://cucxln3jo7w8r"]
+
+[sub_resource type="Gradient" id="Gradient_5orw5"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jojxw"]
+gradient = SubResource("Gradient_5orw5")
+width = 100
+
+[node name="InvisibleColor" type="TextureRect"]
+texture = SubResource("GradientTexture1D_jojxw")

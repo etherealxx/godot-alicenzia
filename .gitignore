@@ -1,0 +1,9 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+/addons/bettertable
+/addons/explore-editor-theme
+/addons/godot_table
+/addons/resources_spreadsheet_view
+/addons/script-ide
+/example

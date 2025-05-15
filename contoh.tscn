@@ -1,0 +1,138 @@
+[gd_scene load_steps=3 format=3 uid="uid://cchc5kkoelccl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yalo1"]
+bg_color = Color(0.276332, 0.336214, 0.510804, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3wg5c"]
+bg_color = Color(0.182924, 0.227703, 0.359338, 1)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Asset"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Asset Type"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Extension"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Ownership Type"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Creator"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "License"
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Link"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Path"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
+text = "orang_jalan.png"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Asset Type"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Extension"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Ownership Type"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Creator"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "License"
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Link"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Path"
+horizontal_alignment = 1
