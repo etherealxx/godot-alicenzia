@@ -157,6 +157,7 @@ layout_mode = 2
 [node name="TableRowContainer" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
 layout_mode = 2
 script = ExtResource("2_2aiid")
+minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
 [node name="Label" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
@@ -337,6 +338,143 @@ text = "Link"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Path"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer2"]
+layout_mode = 2
+
+[node name="TableContainer2" type="VBoxContainer" parent="VBoxContainer2"]
+layout_mode = 2
+script = ExtResource("1_5orw5")
+minimum_cell_length = 100.0
+update_interval_editor = null
+update_interval_game = null
+separation_horizontal = null
+separation_vertical = null
+metadata/_custom_type_script = "uid://bwo0xu2pgvwdp"
+
+[node name="TableRowContainer" type="HBoxContainer" parent="VBoxContainer2/TableContainer2"]
+layout_mode = 2
+script = ExtResource("2_2aiid")
+minimum_cell_length = 100.0
+metadata/_custom_type_script = "uid://cwyvk2ky18epe"
+
+[node name="Label" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+custom_minimum_size = Vector2(143, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Asset"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Asset Type"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Extension"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+custom_minimum_size = Vector2(126, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Ownership Type"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Creator"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "License"
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Link"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Path"
+horizontal_alignment = 1
+
+[node name="TableRowContainer2" type="HBoxContainer" parent="VBoxContainer2/TableContainer2"]
+layout_mode = 2
+script = ExtResource("2_2aiid")
+minimum_cell_length = 100.0
+metadata/_custom_type_script = "uid://cwyvk2ky18epe"
+
+[node name="Label" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(143, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
+text = "orang_jalan.png"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Asset Type"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Extension"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(126, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Ownership Type"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Creator"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "License"
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+text = "Link"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")

@@ -9,6 +9,7 @@ var is_held := false
 var drag_speed_multiplier = 32.0
 var prev_distance := 0.0
 var stable_x : float
+var minimum_cell_length := 0.0
 
 func _ready() -> void:
 	button_down.connect(_on_button_down)
@@ -45,7 +46,8 @@ func _process(delta: float) -> void:
 				if mouse_posx > button_middle_xpos:
 					control_to_adjust.custom_minimum_size.x += delta * 60 * drag_speed_multiplier
 				else:
-					control_to_adjust.custom_minimum_size.x -= delta * 60 * drag_speed_multiplier
+					if control_to_adjust.custom_minimum_size.x > minimum_cell_length:
+						control_to_adjust.custom_minimum_size.x -= delta * 60 * drag_speed_multiplier
 			else:
 				if button_to_mouse_distance != 0.0:
 					#mouse_pos.x = (2 * mouse_pos.x) - button_middle_xpos

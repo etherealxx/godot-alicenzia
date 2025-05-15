@@ -6,15 +6,19 @@ class_name TableRowContainer extends HBoxContainer
 @export_tool_button("Setup Draggable Buttons", "Callable") var setup_action = setup_draggable_buttons
 @export_tool_button("Clear Buttons", "Callable") var clearbtn_action = clear_drag_buttons
 @export var resizable_cells := true
-@export_custom(PROPERTY_HINT_NONE, "", 6 | PROPERTY_USAGE_READ_ONLY) var current_buttons_amount := 0
+@export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var current_buttons_amount := 0
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var minimum_cell_length : float = 0.0
 
 func _ready() -> void:
-	if resizable_cells: setup_draggable_buttons()
+	var parent = get_parent()
+	if ("minimum_cell_length" in parent) and (minimum_cell_length == 0.0):
+		minimum_cell_length = parent.minimum_cell_length
+	if resizable_cells and not Engine.is_editor_hint():
+		setup_draggable_buttons()
 
 func clear_drag_buttons():
 	# clear all previous dragbtn
-	get_children(true).filter(func(child): if child is TableRowDragButton: child.queue_free())
+	get_children().filter(func(child): if child is TableRowDragButton: child.queue_free())
 	current_buttons_amount = 0
 
 func setup_draggable_buttons():
@@ -30,13 +34,16 @@ func setup_draggable_buttons():
 			var new_dragbtn := TableRowDragButton.new()
 			#var new_dragbtn := TABLE_ROW_DRAG_BUTTON.instantiate()
 			var prev_child : Node = filtered_childs.get(index - 1)
-			add_child(new_dragbtn, false, )
-			move_child(new_dragbtn, prev_child.get_index() + 1)
-			#prev_child.add_sibling(new_dragbtn)
+			
+			#add_child(new_dragbtn, false)
+			#move_child(new_dragbtn, prev_child.get_index() + 1)
+			prev_child.add_sibling(new_dragbtn)
+			
 			new_dragbtn.owner = get_tree().edited_scene_root
 			new_dragbtn.set_control_to_adjust_node(prev_child)
+			new_dragbtn.minimum_cell_length = minimum_cell_length
 			#move_child(new_dragbtn, child.get_index())
 	var dragbtn_count := 0
-	for child in get_children(true):
+	for child in get_children():
 		if child is TableRowDragButton: dragbtn_count += 1
 	current_buttons_amount = dragbtn_count
