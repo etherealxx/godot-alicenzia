@@ -12,6 +12,7 @@ var stable_x : float
 var minimum_cell_length := 0.0
 
 func _ready() -> void:
+	mouse_default_cursor_shape = Control.CURSOR_HSIZE
 	button_down.connect(_on_button_down)
 	button_up.connect(_on_button_up)
 	if control_to_adjust_path:
@@ -25,6 +26,9 @@ func set_control_to_adjust_node(control : Control):
 
 func _on_button_down() -> void:
 	is_held = true
+	var parent = get_parent()
+	if parent is TableRowContainer:
+		parent.set_as_reference_row()
 
 func _on_button_up() -> void:
 	is_held = false

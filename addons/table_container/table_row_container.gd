@@ -6,15 +6,27 @@ class_name TableRowContainer extends HBoxContainer
 @export_tool_button("Setup Draggable Buttons", "Callable") var setup_action = setup_draggable_buttons
 @export_tool_button("Clear Buttons", "Callable") var clearbtn_action = clear_drag_buttons
 @export var resizable_cells := true
-@export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var current_buttons_amount := 0
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var minimum_cell_length : float = 0.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var current_buttons_amount := 0
+@export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var is_reference_row := false
 
 func _ready() -> void:
 	var parent = get_parent()
-	if ("minimum_cell_length" in parent) and (minimum_cell_length == 0.0):
-		minimum_cell_length = parent.minimum_cell_length
+	if parent:
+		if ("minimum_cell_length" in parent) and (minimum_cell_length == 0.0):
+			minimum_cell_length = parent.minimum_cell_length
 	if resizable_cells and not Engine.is_editor_hint():
 		setup_draggable_buttons()
+
+func unset_reference():
+	is_reference_row = false
+
+func set_as_reference_row():
+	if not is_reference_row:
+		var parent = get_parent()
+		if parent:
+			parent.get_children().filter(func(child): if child is TableRowContainer: child.unset_reference())
+		is_reference_row = true
 
 func clear_drag_buttons():
 	# clear all previous dragbtn

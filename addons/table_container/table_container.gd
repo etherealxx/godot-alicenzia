@@ -49,6 +49,8 @@ func _property_get_revert(property_name: StringName) -> Variant:
 ## Update interval, in frames, if [member auto_update_in_game] is true
 @export_range(1, 60) var update_interval_game = _checkable_properties[&"update_interval_game"]
 
+@export var handle_tablerow := false
+
 ## Override for horizontal padding between elements, in pixels.
 var separation_horizontal = null:
 	set(value):
@@ -121,7 +123,7 @@ func refresh() -> void:
 
 	var rows: Array[HBoxContainer] = _get_table_children()
 	_clear_custom_column_widths(rows)
-	print("afterclear rows item count: %d" % rows.size())
+	#print("afterclear rows item count: %d" % rows.size())
 	_set_column_widths(rows)
 	_apply_horizontal_override()
 
@@ -144,17 +146,38 @@ func _clear_custom_column_widths(rows: Array[HBoxContainer]) -> void:
 		#_clear_custom_column_widths_for_row(row)
 	for index : int in rows.size():
 		#if index > 0: # ignore first row
-		_clear_custom_column_widths_for_row(rows[index])
-
+		var row = rows[index]
+		if handle_tablerow:
+			if row is TableRowContainer:
+				if row.is_reference_row:
+					continue
+		_clear_custom_column_widths_for_row(row)
+		
 
 # TODO handle if there's different columns, probably with a warning
 func _set_column_widths(rows: Array[HBoxContainer]) -> void:
 	var column_widths: Array[float] = []
 
 	var first_row: bool = true
+	var tablerow_reference : TableRowContainer
+	
+	if handle_tablerow:
+		for row: HBoxContainer in rows:
+			if row is TableRowContainer:
+				if row.is_reference_row and !tablerow_reference:
+					tablerow_reference = row
+					break
+	
+	if tablerow_reference:
+		first_row = false
+		var cells: Array[Control] = _get_row_children(tablerow_reference)
+		for index: int in cells.size():
+			var cell: Control = cells[index]
+			column_widths.append(cell.get_combined_minimum_size().x)
+	
 	for row: HBoxContainer in rows:
 		var cells: Array[Control] = _get_row_children(row)
-		if first_row:
+		if first_row: # and (!handle_tablerow or (is_tablerow_reference and handle_tablerow)):
 			first_row = false
 			for index: int in cells.size():
 				var cell: Control = cells[index]
@@ -167,6 +190,8 @@ func _set_column_widths(rows: Array[HBoxContainer]) -> void:
 
 				if cell_minimum_width > column_minimum_width:
 					column_widths[index] = cell_minimum_width
+
+	# another search for handling tablerow reference
 
 	for row: HBoxContainer in rows:
 		var cells: Array[Control] = _get_row_children(row)

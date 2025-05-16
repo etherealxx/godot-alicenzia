@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bxw4naupdywpp"]
-
-[ext_resource type="Script" uid="uid://dax14yv0qlvb2" path="res://addons/table_container/table_row_drag_button.gd" id="1_7rrkt"]
-
-[node name="TableRowDragButton" type="Button"]
-offset_right = 8.0
-offset_bottom = 8.0
-script = ExtResource("1_7rrkt")
