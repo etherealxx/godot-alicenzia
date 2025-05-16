@@ -1,7 +1,9 @@
 @tool
 class_name TableRowContainer extends HBoxContainer
 
-#const TABLE_ROW_DRAG_BUTTON = preload("uid://bxw4naupdywpp")
+signal draggable_buttons_set
+
+const DEFAULT_STYLEBOX_UID := "uid://mo4xftcfdd0g"
 
 @export_tool_button("Setup Draggable Buttons", "Callable") var setup_action = setup_draggable_buttons
 @export_tool_button("Clear Buttons", "Callable") var clearbtn_action = clear_drag_buttons
@@ -10,16 +12,41 @@ class_name TableRowContainer extends HBoxContainer
 @export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var current_buttons_amount := 0
 @export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var is_reference_row := false
 
+enum RowOrder {FIRST, LAST, ONLY}
+
 func _ready() -> void:
 	var parent = get_parent()
 	if parent:
 		if ("minimum_cell_length" in parent) and (minimum_cell_length == 0.0):
 			minimum_cell_length = parent.minimum_cell_length
 	if resizable_cells and not Engine.is_editor_hint():
-		setup_draggable_buttons()
+		await setup_draggable_buttons()
+		draggable_buttons_set.emit()
+		#print(get_draggable_buttons())
 
+#func queue_execute_after_buttons_set(call : Callable):
+	#if
+
+func setup_dragbtn_style(row_order : RowOrder):
+	var btnstyle : StyleBoxFlat = ResourceLoader.load(DEFAULT_STYLEBOX_UID, "StyleBoxFlat").duplicate()
+	match (row_order):
+		RowOrder.FIRST:
+			btnstyle.expand_margin_top = 0
+		RowOrder.LAST:
+			btnstyle.expand_margin_bottom = 0
+		RowOrder.ONLY:
+			btnstyle.expand_margin_top = 0
+			btnstyle.expand_margin_bottom = 0
+	for dragbtn : TableRowDragButton in get_draggable_buttons():
+		dragbtn.set_theme_pack(btnstyle)
+ 
 func unset_reference():
 	is_reference_row = false
+
+func get_draggable_buttons() -> Array[TableRowDragButton]:
+	var arr : Array[TableRowDragButton]
+	get_children().filter(func(child): if child is TableRowDragButton: arr.append(child))
+	return arr
 
 func set_as_reference_row():
 	if not is_reference_row:

@@ -98,7 +98,23 @@ func _ready() -> void:
 		_update_counter_game = 0
 
 	refresh()
+	if handle_tablerow:
+		_update_tablerow_dragbtn_style()
 
+func _update_tablerow_dragbtn_style():
+	var first_tablerow : TableRowContainer
+	var last_tablerow : TableRowContainer
+	for child in get_children():
+		if child is TableRowContainer:
+			if !first_tablerow:
+				first_tablerow = child
+			else:
+				last_tablerow = child
+	if !last_tablerow:
+		first_tablerow.setup_dragbtn_style(TableRowContainer.RowOrder.ONLY)
+	elif first_tablerow:
+		first_tablerow.setup_dragbtn_style(TableRowContainer.RowOrder.FIRST)
+		last_tablerow.setup_dragbtn_style(TableRowContainer.RowOrder.LAST)
 
 ## Update the table based on the exported parameters.
 func _process(_delta: float) -> void:

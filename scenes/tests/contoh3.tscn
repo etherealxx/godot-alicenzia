@@ -29,6 +29,10 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_5k7ni")
 
+[node name="ReferenceRect" type="ReferenceRect" parent="Allitemvbox"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
 [node name="TableContainer2" type="VBoxContainer" parent="Allitemvbox"]
 layout_mode = 2
 script = ExtResource("4_t0t2d")

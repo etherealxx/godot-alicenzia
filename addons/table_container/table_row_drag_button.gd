@@ -1,6 +1,8 @@
 @tool
 class_name TableRowDragButton extends Button
 
+const DEFAULT_STYLEBOX_UID := "uid://mo4xftcfdd0g"
+
 @export_storage var control_to_adjust_path : NodePath
 @export_storage var sibling_to_hold : Control
 
@@ -12,11 +14,16 @@ var stable_x : float
 var minimum_cell_length := 0.0
 
 func _ready() -> void:
+	set_theme_pack(ResourceLoader.load(DEFAULT_STYLEBOX_UID, "StyleBox"))
 	mouse_default_cursor_shape = Control.CURSOR_HSIZE
+	focus_mode = Control.FOCUS_NONE
 	button_down.connect(_on_button_down)
 	button_up.connect(_on_button_up)
 	if control_to_adjust_path:
 		control_to_adjust = get_node(control_to_adjust_path)
+
+func set_theme_pack(stylebox : StyleBox):
+	set("theme_override_styles/normal", stylebox)
 
 func set_control_to_adjust_node(control : Control):
 	control_to_adjust_path = get_path_to(control)
