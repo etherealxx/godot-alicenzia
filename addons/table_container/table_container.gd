@@ -111,10 +111,16 @@ func _update_tablerow_dragbtn_style():
 			else:
 				last_tablerow = child
 	if !last_tablerow:
-		first_tablerow.setup_dragbtn_style(TableRowContainer.RowOrder.ONLY)
+		first_tablerow.queue_execute_after_buttons_set(
+			first_tablerow.setup_dragbtn_style.bind(TableRowContainer.RowOrder.ONLY)
+			)
 	elif first_tablerow:
-		first_tablerow.setup_dragbtn_style(TableRowContainer.RowOrder.FIRST)
-		last_tablerow.setup_dragbtn_style(TableRowContainer.RowOrder.LAST)
+		first_tablerow.queue_execute_after_buttons_set(
+			first_tablerow.setup_dragbtn_style.bind(TableRowContainer.RowOrder.FIRST)
+			)
+		last_tablerow.queue_execute_after_buttons_set(
+			last_tablerow.setup_dragbtn_style.bind(TableRowContainer.RowOrder.LAST)
+			)
 
 ## Update the table based on the exported parameters.
 func _process(_delta: float) -> void:

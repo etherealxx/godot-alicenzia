@@ -1,9 +1,11 @@
 @tool
 class_name TableRowContainer extends HBoxContainer
 
-signal draggable_buttons_set
+signal draggable_buttons_setup_finished
 
 const DEFAULT_STYLEBOX_UID := "uid://mo4xftcfdd0g"
+
+enum RowOrder {FIRST, LAST, ONLY}
 
 @export_tool_button("Setup Draggable Buttons", "Callable") var setup_action = setup_draggable_buttons
 @export_tool_button("Clear Buttons", "Callable") var clearbtn_action = clear_drag_buttons
@@ -12,7 +14,7 @@ const DEFAULT_STYLEBOX_UID := "uid://mo4xftcfdd0g"
 @export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var current_buttons_amount := 0
 @export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var is_reference_row := false
 
-enum RowOrder {FIRST, LAST, ONLY}
+var is_draggable_button_set := false
 
 func _ready() -> void:
 	var parent = get_parent()
@@ -21,11 +23,14 @@ func _ready() -> void:
 			minimum_cell_length = parent.minimum_cell_length
 	if resizable_cells and not Engine.is_editor_hint():
 		await setup_draggable_buttons()
-		draggable_buttons_set.emit()
+		draggable_buttons_setup_finished.emit()
+		is_draggable_button_set = true
 		#print(get_draggable_buttons())
 
-#func queue_execute_after_buttons_set(call : Callable):
-	#if
+func queue_execute_after_buttons_set(method : Callable):
+	if not is_draggable_button_set:
+		await draggable_buttons_setup_finished
+	method.call()
 
 func setup_dragbtn_style(row_order : RowOrder):
 	var btnstyle : StyleBoxFlat = ResourceLoader.load(DEFAULT_STYLEBOX_UID, "StyleBoxFlat").duplicate()
