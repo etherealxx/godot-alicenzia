@@ -129,6 +129,7 @@ func refresh() -> void:
 func _clear_custom_column_widths_for_row(row: HBoxContainer) -> void:
 	var cells: Array[Control] = _get_row_children(row)
 	for cell: Control in cells:
+		if cell is TableRowDragButton: continue
 		
 		if minimum_cell_length != null && minimum_cell_length > 0.0:
 			cell.custom_minimum_size.x = minimum_cell_length

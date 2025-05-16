@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://es8x1pi0l8nq"]
+[gd_scene load_steps=7 format=3 uid="uid://es8x1pi0l8nq"]
 
 [ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/table_container/table_container.gd" id="1_5orw5"]
 [ext_resource type="Script" uid="uid://dmsycuw4j2riy" path="res://dragtest.gd" id="1_jojxw"]
+[ext_resource type="Script" uid="uid://chg5y2ktfe547" path="res://allitemvbox.gd" id="1_ndot7"]
 [ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/table_container/table_row_container.gd" id="2_2aiid"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yalo1"]
@@ -21,202 +22,203 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+[node name="Allitemvbox" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("1_ndot7")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Allitemvbox"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Allitemvbox/VBoxContainer"]
 layout_mode = 2
 script = ExtResource("1_jojxw")
 
-[node name="Label" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Label4" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset Type"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Label3" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Extension"
 horizontal_alignment = 1
 
-[node name="Label5" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Label5" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Ownership Type"
 horizontal_alignment = 1
 
-[node name="Label6" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Label6" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Creator"
 horizontal_alignment = 1
 
-[node name="Label7" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Label7" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "License"
 horizontal_alignment = 1
 
-[node name="Label8" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Label8" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Link"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Path"
 horizontal_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Allitemvbox/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
 text = "orang_jalan.png"
 horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer2"]
+[node name="Label4" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset Type"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer2"]
+[node name="Label3" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Extension"
 horizontal_alignment = 1
 
-[node name="Label5" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer2"]
+[node name="Label5" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Ownership Type"
 horizontal_alignment = 1
 
-[node name="Label6" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer2"]
+[node name="Label6" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Creator"
 horizontal_alignment = 1
 
-[node name="Label7" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer2"]
+[node name="Label7" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "License"
 horizontal_alignment = 1
 
-[node name="Label8" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer2"]
+[node name="Label8" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Link"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer2/VBoxContainer/HBoxContainer2"]
+[node name="Label2" type="Label" parent="Allitemvbox/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Path"
 horizontal_alignment = 1
 
-[node name="Control" type="Control" parent="VBoxContainer2/VBoxContainer"]
+[node name="Control" type="Control" parent="Allitemvbox/VBoxContainer"]
 layout_mode = 2
 
-[node name="TableRowContainer" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+[node name="TableRowContainer" type="HBoxContainer" parent="Allitemvbox/VBoxContainer"]
 layout_mode = 2
 script = ExtResource("2_2aiid")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
-[node name="Label" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
+[node name="Label" type="Label" parent="Allitemvbox/VBoxContainer/TableRowContainer"]
 custom_minimum_size = Vector2(143, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset"
 horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
+[node name="Label4" type="Label" parent="Allitemvbox/VBoxContainer/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset Type"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
+[node name="Label3" type="Label" parent="Allitemvbox/VBoxContainer/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Extension"
 horizontal_alignment = 1
 
-[node name="Label5" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
+[node name="Label5" type="Label" parent="Allitemvbox/VBoxContainer/TableRowContainer"]
 custom_minimum_size = Vector2(126, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Ownership Type"
 horizontal_alignment = 1
 
-[node name="Label6" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
+[node name="Label6" type="Label" parent="Allitemvbox/VBoxContainer/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Creator"
 horizontal_alignment = 1
 
-[node name="Label7" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
+[node name="Label7" type="Label" parent="Allitemvbox/VBoxContainer/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "License"
 horizontal_alignment = 1
 
-[node name="Label8" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
+[node name="Label8" type="Label" parent="Allitemvbox/VBoxContainer/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Link"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer2/VBoxContainer/TableRowContainer"]
+[node name="Label2" type="Label" parent="Allitemvbox/VBoxContainer/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Path"
 horizontal_alignment = 1
 
-[node name="TableContainer" type="VBoxContainer" parent="VBoxContainer2"]
+[node name="TableContainer" type="VBoxContainer" parent="Allitemvbox"]
 layout_mode = 2
 script = ExtResource("1_5orw5")
 minimum_cell_length = 100.0
@@ -226,128 +228,128 @@ separation_horizontal = null
 separation_vertical = null
 metadata/_custom_type_script = "uid://bwo0xu2pgvwdp"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/TableContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Allitemvbox/TableContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer"]
 custom_minimum_size = Vector2(143, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset"
 horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer"]
+[node name="Label4" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset Type"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer"]
+[node name="Label3" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Extension"
 horizontal_alignment = 1
 
-[node name="Label5" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer"]
+[node name="Label5" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer"]
 custom_minimum_size = Vector2(126, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Ownership Type"
 horizontal_alignment = 1
 
-[node name="Label6" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer"]
+[node name="Label6" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Creator"
 horizontal_alignment = 1
 
-[node name="Label7" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer"]
+[node name="Label7" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "License"
 horizontal_alignment = 1
 
-[node name="Label8" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer"]
+[node name="Label8" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Link"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Path"
 horizontal_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer2/TableContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Allitemvbox/TableContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(143, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
 text = "orang_jalan.png"
 horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+[node name="Label4" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset Type"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+[node name="Label3" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Extension"
 horizontal_alignment = 1
 
-[node name="Label5" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+[node name="Label5" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(126, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Ownership Type"
 horizontal_alignment = 1
 
-[node name="Label6" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+[node name="Label6" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Creator"
 horizontal_alignment = 1
 
-[node name="Label7" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+[node name="Label7" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "License"
 horizontal_alignment = 1
 
-[node name="Label8" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+[node name="Label8" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Link"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer2/TableContainer/HBoxContainer2"]
+[node name="Label2" type="Label" parent="Allitemvbox/TableContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Path"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer2"]
+[node name="HSeparator" type="HSeparator" parent="Allitemvbox"]
 layout_mode = 2
 
-[node name="TableContainer2" type="VBoxContainer" parent="VBoxContainer2"]
+[node name="TableContainer2" type="VBoxContainer" parent="Allitemvbox"]
 layout_mode = 2
 script = ExtResource("1_5orw5")
 minimum_cell_length = 100.0
@@ -357,129 +359,134 @@ separation_horizontal = null
 separation_vertical = null
 metadata/_custom_type_script = "uid://bwo0xu2pgvwdp"
 
-[node name="TableRowContainer" type="HBoxContainer" parent="VBoxContainer2/TableContainer2"]
+[node name="TableRowContainer" type="HBoxContainer" parent="Allitemvbox/TableContainer2"]
 layout_mode = 2
 script = ExtResource("2_2aiid")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
-[node name="Label" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+[node name="Label" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
 custom_minimum_size = Vector2(143, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset"
 horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+[node name="Label4" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset Type"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+[node name="Label3" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Extension"
 horizontal_alignment = 1
 
-[node name="Label5" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+[node name="Label5" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
 custom_minimum_size = Vector2(126, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Ownership Type"
 horizontal_alignment = 1
 
-[node name="Label6" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+[node name="Label6" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Creator"
 horizontal_alignment = 1
 
-[node name="Label7" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+[node name="Label7" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "License"
 horizontal_alignment = 1
 
-[node name="Label8" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+[node name="Label8" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Link"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer"]
+[node name="Label2" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Path"
 horizontal_alignment = 1
 
-[node name="TableRowContainer2" type="HBoxContainer" parent="VBoxContainer2/TableContainer2"]
+[node name="TableRowContainer2" type="HBoxContainer" parent="Allitemvbox/TableContainer2"]
 layout_mode = 2
 script = ExtResource("2_2aiid")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
-[node name="Label" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+[node name="Label" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(143, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
 text = "orang_jalan.png"
 horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+[node name="Label4" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset Type"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+[node name="Label3" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Extension"
 horizontal_alignment = 1
 
-[node name="Label5" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+[node name="Label5" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(126, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Ownership Type"
 horizontal_alignment = 1
 
-[node name="Label6" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+[node name="Label6" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Creator"
 horizontal_alignment = 1
 
-[node name="Label7" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+[node name="Label7" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "License"
 horizontal_alignment = 1
 
-[node name="Label8" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+[node name="Label8" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Link"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer2/TableContainer2/TableRowContainer2"]
+[node name="Label2" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Path"
 horizontal_alignment = 1
 
-[connection signal="button_down" from="VBoxContainer2/VBoxContainer/HBoxContainer/Button" to="VBoxContainer2/VBoxContainer/HBoxContainer" method="_on_button_button_down"]
-[connection signal="button_up" from="VBoxContainer2/VBoxContainer/HBoxContainer/Button" to="VBoxContainer2/VBoxContainer/HBoxContainer" method="_on_button_button_up"]
+[node name="ManTrigBtn" type="Button" parent="Allitemvbox"]
+layout_mode = 2
+text = "manualtrigger"
+
+[connection signal="button_down" from="Allitemvbox/VBoxContainer/HBoxContainer/Button" to="Allitemvbox/VBoxContainer/HBoxContainer" method="_on_button_button_down"]
+[connection signal="button_up" from="Allitemvbox/VBoxContainer/HBoxContainer/Button" to="Allitemvbox/VBoxContainer/HBoxContainer" method="_on_button_button_up"]
+[connection signal="pressed" from="Allitemvbox/ManTrigBtn" to="Allitemvbox" method="_on_man_trig_btn_pressed"]
