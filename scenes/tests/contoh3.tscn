@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cp88ofyjg86d1"]
+[gd_scene load_steps=8 format=3 uid="uid://cp88ofyjg86d1"]
 
 [ext_resource type="Script" uid="uid://chg5y2ktfe547" path="res://scripts/tests/allitemvbox.gd" id="1_5k7ni"]
 [ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/table_container/table_row_container.gd" id="3_ne7qh"]
 [ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/table_firstrow_button.tscn" id="4_e0u3b"]
 [ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/table_container/table_container.gd" id="4_t0t2d"]
+[ext_resource type="PackedScene" uid="uid://b64comlxjc7tp" path="res://addons/alicenzia/row_check_box.tscn" id="5_tchf1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yalo1"]
 bg_color = Color(0.276332, 0.336214, 0.510804, 1)
@@ -59,7 +60,7 @@ minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
 [node name="Label" type="Label" parent="Allitemvbox/TableContainer2/FirstRow"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 horizontal_alignment = 1
@@ -110,10 +111,9 @@ script = ExtResource("3_ne7qh")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
-[node name="CheckBox" type="CheckBox" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
-custom_minimum_size = Vector2(100, 0)
+[node name="RowCheckBox" parent="Allitemvbox/TableContainer2/TableRowContainer2" instance=ExtResource("5_tchf1")]
+custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
 
 [node name="Label" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(193, 0)

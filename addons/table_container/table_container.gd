@@ -16,7 +16,7 @@ const _checkable_properties: Dictionary = {
 	&"separation_vertical": null,
 }
 
-const MIN_CELL_LENGTH_META_NAME := "_min_cell_length"
+#const MIN_CELL_LENGTH_META_NAME := "_min_cell_length"
 
 # Update flags of our checkable properties to appropriately set the checkable flags.
 func _validate_property(property: Dictionary) -> void:
@@ -105,11 +105,12 @@ func _ready() -> void:
 	else:
 		_update_counter_game = 0
 
-	if handle_tablerow:
-		_tablerow_set_min_cell_length_metas()
-		_tablerow_update_dragbtn_style()
-
 	refresh()
+
+	if handle_tablerow:
+		_tablerow_set_min_cell_length()
+		_tablerow_update_dragbtn_style()
+		refresh()
 
 
 func _get_tablerow_childs() -> Array[TableRowContainer]:
@@ -119,16 +120,22 @@ func _get_tablerow_childs() -> Array[TableRowContainer]:
 	return arr
 
 
-func _tablerow_set_min_cell_length_metas():
+func _tablerow_set_min_cell_length():
 	for tablerow : TableRowContainer in _get_tablerow_childs():
-		for column_number : int in column_cell_length.keys():
-			var min_cell_length := column_cell_length[column_number]
-			var cell = await tablerow.queue_execute_after_buttons_set(
-				tablerow.row_get_child.bind(column_number)
-				)
-			cell.set_meta(MIN_CELL_LENGTH_META_NAME, min_cell_length)
-			var dragbtn : TableRowDragButton = tablerow.get_dragbtn_of_child(column_number)
-			dragbtn.minimum_cell_length = min_cell_length
+		await tablerow._wait_until_buttons_set()
+		tablerow._dragbtn_update_min_cell_length(column_cell_length)
+		#tablerow.column_cell_length = column_cell_length
+
+#func _tablerow_set_min_cell_length_metas():
+	#for tablerow : TableRowContainer in _get_tablerow_childs():
+		#for column_number : int in column_cell_length.keys():
+			#var min_cell_length := column_cell_length[column_number]
+			#var cell = await tablerow.queue_execute_after_buttons_set(
+				#tablerow.row_get_child.bind(column_number)
+				#)
+			#cell.set_meta(MIN_CELL_LENGTH_META_NAME, min_cell_length)
+			#var dragbtn : TableRowDragButton = tablerow.get_dragbtn_of_child(column_number)
+			#dragbtn.minimum_cell_length = min_cell_length
 
 
 func _tablerow_update_dragbtn_style():
@@ -189,8 +196,19 @@ func _clear_custom_column_widths_for_row(row: HBoxContainer) -> void:
 	for cell: Control in cells:
 		if cell is TableRowDragButton: continue
 		
-		if cell.has_meta(MIN_CELL_LENGTH_META_NAME):
-			cell.custom_minimum_size.x = cell.get_meta(MIN_CELL_LENGTH_META_NAME)
+		var is_tablerow := row is TableRowContainer
+		var tablerow_has_minsize := false
+		var tablerow_column_num := -1
+		
+		if is_tablerow:
+			tablerow_column_num = row.cell_get_index(cell)
+			if tablerow_column_num > -1 and tablerow_column_num in column_cell_length.keys():
+				tablerow_has_minsize = true
+		
+		#if cell.has_meta(MIN_CELL_LENGTH_META_NAME):
+			#cell.custom_minimum_size.x = cell.get_meta(MIN_CELL_LENGTH_META_NAME)
+		if tablerow_has_minsize:
+			cell.custom_minimum_size.x = column_cell_length[tablerow_column_num]
 		else:
 			if minimum_cell_length != null && minimum_cell_length > 0.0:
 				cell.custom_minimum_size.x = minimum_cell_length

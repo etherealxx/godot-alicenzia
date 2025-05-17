@@ -14,6 +14,7 @@ enum RowOrder {FIRST, LAST, ONLY}
 
 #@export_group("Cell Length")
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var minimum_cell_length : float = 0.0
+#@export var column_cell_length : Dictionary[int, float]
 #@export var min_cell_length_exception : Dictionary[NodePath, float]
 
 @export_group("Statistics")
@@ -21,6 +22,7 @@ enum RowOrder {FIRST, LAST, ONLY}
 @export_custom(PROPERTY_HINT_NONE, "suffix:nodes", 6 | PROPERTY_USAGE_READ_ONLY) var is_reference_row := false
 
 var is_draggable_button_set := false
+var cell_dragbtn_pair_cache : Dictionary[NodePath, NodePath]
 
 func _ready() -> void:
 	var parent = get_parent()
@@ -45,11 +47,13 @@ func row_get_children() -> Array[Node]:
 		if child is not TableRowDragButton: arr.append(child))
 	return arr
 
+
 ## Get the nth child/cell of this node, excluding the buttons. 
 ## Visually, it starts from left to right.
 func row_get_child(idx : int) -> Node:
 	print("child: %s" % row_get_children().get(idx))
 	return row_get_children().get(idx)
+
 
 ## Get the TableRowDragButton paired with the nth child/cell of this node, excluding the buttons.
 func get_dragbtn_of_child(idx : int) -> TableRowDragButton:
@@ -58,6 +62,17 @@ func get_dragbtn_of_child(idx : int) -> TableRowDragButton:
 		if dragbtn.control_to_adjust == child:
 			return dragbtn
 	return null
+
+## Return the index of the input node, if it was the child of this node. 
+## Otherwise returns -1.
+func cell_get_index(node : Node) -> int:
+	var childs := row_get_children()
+	for idx : int in childs.size():
+		var cell := childs[idx]
+		if cell == node:
+			return idx
+	push_error("Node not found. Returning -1")
+	return -1
 
 
 ## Get the text of the nth child/cell of this node. 
@@ -82,10 +97,25 @@ func cell_get_text(idx : int) -> String:
 				#continue
 			#node.set_meta(MIN_CELL_LENGTH_META_NAME, min_cell_length_exception[child_path])
 
-func queue_execute_after_buttons_set(method : Callable) -> Variant:
+
+func _wait_until_buttons_set():
 	if not is_draggable_button_set:
 		await draggable_buttons_setup_finished
+
+
+func _dragbtn_update_min_cell_length(column_cell_length : Dictionary[int, float]):
+	var childs_arr := row_get_children()
+	for idx : int in childs_arr.size():
+		if idx in column_cell_length.keys():
+			var child := childs_arr[idx]
+			var dragbtn : TableRowDragButton = get_node(cell_dragbtn_pair_cache[self.get_path_to(child)])
+			dragbtn.minimum_cell_length = column_cell_length[idx]
+
+
+func queue_execute_after_buttons_set(method : Callable) -> Variant:
+	await _wait_until_buttons_set()
 	return method.call()
+
 
 func setup_dragbtn_style(row_order : RowOrder):
 	var btnstyle : StyleBoxFlat = ResourceLoader.load(DEFAULT_STYLEBOX_UID, "StyleBoxFlat").duplicate()
@@ -119,6 +149,7 @@ func set_as_reference_row():
 
 func clear_drag_buttons():
 	# clear all previous dragbtn
+	cell_dragbtn_pair_cache.clear()
 	get_children().filter(func(child): 
 		if child is TableRowDragButton: child.queue_free())
 	current_buttons_amount = 0
@@ -137,7 +168,8 @@ func setup_draggable_buttons():
 		if get_child(one_index_behind) is not TableRowDragButton:
 			var new_dragbtn := TableRowDragButton.new()
 			#var new_dragbtn := TABLE_ROW_DRAG_BUTTON.instantiate()
-			var prev_child : Node = filtered_childs.get(index - 1)
+			
+			var prev_child : Node = filtered_childs.get(index - 1) # will be the node paired with dragbtn
 			
 			#add_child(new_dragbtn, false)
 			#move_child(new_dragbtn, prev_child.get_index() + 1)
@@ -145,6 +177,7 @@ func setup_draggable_buttons():
 			
 			new_dragbtn.owner = get_tree().edited_scene_root
 			new_dragbtn.set_control_to_adjust_node(prev_child)
+			cell_dragbtn_pair_cache[self.get_path_to(prev_child)] = self.get_path_to(new_dragbtn)
 			new_dragbtn.minimum_cell_length = minimum_cell_length
 			
 			#@TODO remove if unnecessary
