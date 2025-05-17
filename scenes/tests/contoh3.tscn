@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://cp88ofyjg86d1"]
+[gd_scene load_steps=9 format=3 uid="uid://cp88ofyjg86d1"]
 
 [ext_resource type="Script" uid="uid://chg5y2ktfe547" path="res://scripts/tests/allitemvbox.gd" id="1_5k7ni"]
 [ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/table_container/table_row_container.gd" id="3_ne7qh"]
 [ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/table_firstrow_button.tscn" id="4_e0u3b"]
 [ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/table_container/table_container.gd" id="4_t0t2d"]
 [ext_resource type="PackedScene" uid="uid://b64comlxjc7tp" path="res://addons/alicenzia/row_check_box.tscn" id="5_tchf1"]
+[ext_resource type="PackedScene" uid="uid://bvmpyi0jxn06h" path="res://addons/alicenzia/view_full_lisence_btn.tscn" id="6_0bpa6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yalo1"]
 bg_color = Color(0.276332, 0.336214, 0.510804, 1)
@@ -30,16 +31,25 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Allitemvbox" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 204.0
+offset_bottom = 149.0
+grow_horizontal = 2
 script = ExtResource("1_5k7ni")
 
 [node name="ReferenceRect" type="ReferenceRect" parent="Allitemvbox"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="TableContainer2" type="VBoxContainer" parent="Allitemvbox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Allitemvbox"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TableContainer2" type="VBoxContainer" parent="Allitemvbox/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("4_t0t2d")
 minimum_cell_length = 100.0
@@ -53,76 +63,91 @@ column_cell_length = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://bwo0xu2pgvwdp"
 
-[node name="FirstRow" type="HBoxContainer" parent="Allitemvbox/TableContainer2"]
+[node name="FirstRow" type="HBoxContainer" parent="Allitemvbox/ScrollContainer/TableContainer2"]
 layout_mode = 2
 script = ExtResource("3_ne7qh")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
-[node name="Label" type="Label" parent="Allitemvbox/TableContainer2/FirstRow"]
+[node name="Label" type="Label" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow"]
 custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 horizontal_alignment = 1
 
-[node name="FRowName" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+[node name="FRowName" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(193, 0)
 layout_mode = 2
 text = "Name"
 
-[node name="FRowAssType" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+[node name="FRowAssType" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Asset Type"
 
-[node name="FRowExt" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+[node name="FRowExt" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Extension"
 
-[node name="FRowOwnType" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+[node name="FRowOwnType" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(154, 0)
 layout_mode = 2
 text = "Ownership Type"
 
-[node name="FRowCrtr" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+[node name="FRowCrtr" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(115, 0)
 layout_mode = 2
 text = "Creator"
 
-[node name="FRowLisc" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+[node name="FRowLisc" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "License"
 
-[node name="FRowLink" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+[node name="FRowUse" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Usage"
+
+[node name="FRowMods" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+custom_minimum_size = Vector2(106, 0)
+layout_mode = 2
+text = "Modification"
+
+[node name="FRowLink" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Link"
 
-[node name="FRowPath" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+[node name="FRowPath" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-text = "License"
+text = "Path"
 
-[node name="TableRowContainer2" type="HBoxContainer" parent="Allitemvbox/TableContainer2"]
+[node name="FRowFullLisc" parent="Allitemvbox/ScrollContainer/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Full License"
+
+[node name="TableRowContainer2" type="HBoxContainer" parent="Allitemvbox/ScrollContainer/TableContainer2"]
 layout_mode = 2
 script = ExtResource("3_ne7qh")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
-[node name="RowCheckBox" parent="Allitemvbox/TableContainer2/TableRowContainer2" instance=ExtResource("5_tchf1")]
+[node name="RowCheckBox" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2" instance=ExtResource("5_tchf1")]
 custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+[node name="Label" type="Label" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(193, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
 text = "game_backsound.mp3"
 horizontal_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+[node name="OptionButton" type="OptionButton" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 selected = 0
@@ -132,14 +157,14 @@ popup/item_0/id = 0
 popup/item_1/text = "Code"
 popup/item_1/id = 1
 
-[node name="Label4" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+[node name="Label4" type="Label" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
 text = "mp3"
 horizontal_alignment = 1
 
-[node name="OptionButton2" type="OptionButton" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+[node name="OptionButton2" type="OptionButton" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(154, 0)
 layout_mode = 2
 selected = 0
@@ -149,7 +174,7 @@ popup/item_0/id = 0
 popup/item_1/text = "External"
 popup/item_1/id = 1
 
-[node name="OptionButton3" type="OptionButton" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+[node name="OptionButton3" type="OptionButton" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(115, 0)
 layout_mode = 2
 selected = 0
@@ -157,7 +182,7 @@ item_count = 1
 popup/item_0/text = "Etherealxx"
 popup/item_0/id = 0
 
-[node name="OptionButton4" type="OptionButton" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+[node name="OptionButton4" type="OptionButton" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 selected = 0
@@ -165,15 +190,27 @@ item_count = 1
 popup/item_0/text = "MIT"
 popup/item_0/id = 0
 
-[node name="LineEdit" type="LineEdit" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+[node name="LineEdit3" type="LineEdit" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="LineEdit4" type="LineEdit" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(106, 0)
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "http://somewhere"
 
-[node name="LineEdit2" type="LineEdit" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+[node name="LineEdit2" type="LineEdit" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "res://game_backsound.mp3"
+
+[node name="ViewFullLisenceBtn" parent="Allitemvbox/ScrollContainer/TableContainer2/TableRowContainer2" instance=ExtResource("6_0bpa6")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Allitemvbox"]
 layout_mode = 2

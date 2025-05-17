@@ -44,7 +44,7 @@ func _process(delta: float) -> void:
 	if is_held and InputEventMouseMotion:
 		if control_to_adjust:
 			var mouse_posx := get_global_mouse_position().x
-			var button_middle_xpos := self.position.x + (self.size.x / 2.0)
+			var button_middle_xpos := self.global_position.x + (self.size.x / 2.0)
 			var button_to_mouse_distance : float = abs(button_middle_xpos - mouse_posx)
 			if button_to_mouse_distance != prev_distance:
 				prev_distance = button_to_mouse_distance
