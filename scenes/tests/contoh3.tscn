@@ -2,10 +2,8 @@
 
 [ext_resource type="Script" uid="uid://chg5y2ktfe547" path="res://scripts/tests/allitemvbox.gd" id="1_5k7ni"]
 [ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/table_container/table_row_container.gd" id="3_ne7qh"]
+[ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/table_firstrow_button.tscn" id="4_e0u3b"]
 [ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/table_container/table_container.gd" id="4_t0t2d"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yalo1"]
-bg_color = Color(0.276332, 0.336214, 0.510804, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3wg5c"]
 bg_color = Color(0.182924, 0.227703, 0.359338, 1)
@@ -43,67 +41,51 @@ separation_horizontal = null
 separation_vertical = null
 metadata/_custom_type_script = "uid://bwo0xu2pgvwdp"
 
-[node name="TableRowContainer" type="HBoxContainer" parent="Allitemvbox/TableContainer2"]
+[node name="FirstRow" type="HBoxContainer" parent="Allitemvbox/TableContainer2"]
 layout_mode = 2
 script = ExtResource("3_ne7qh")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
 
-[node name="Label" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
+[node name="FRowName" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(193, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Name"
-horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
+[node name="FRowAssType" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Asset Type"
-horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
+[node name="FRowExt" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Extension"
-horizontal_alignment = 1
 
-[node name="Label5" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
+[node name="FRowOwnType" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(154, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Ownership Type"
-horizontal_alignment = 1
 
-[node name="Label6" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
+[node name="FRowCrtr" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(115, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Creator"
-horizontal_alignment = 1
 
-[node name="Label7" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
+[node name="FRowLisc" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "License"
-horizontal_alignment = 1
 
-[node name="Label8" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
+[node name="FRowLink" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
 text = "Link"
-horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer"]
+[node name="FRowPath" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
-text = "Path"
-horizontal_alignment = 1
+text = "License"
 
 [node name="TableRowContainer2" type="HBoxContainer" parent="Allitemvbox/TableContainer2"]
 layout_mode = 2
