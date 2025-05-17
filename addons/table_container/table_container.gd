@@ -16,6 +16,7 @@ const _checkable_properties: Dictionary = {
 	&"separation_vertical": null,
 }
 
+const MIN_CELL_LENGTH_META_NAME := "_min_cell_length"
 
 # Update flags of our checkable properties to appropriately set the checkable flags.
 func _validate_property(property: Dictionary) -> void:
@@ -49,7 +50,6 @@ func _property_get_revert(property_name: StringName) -> Variant:
 ## Update interval, in frames, if [member auto_update_in_game] is true
 @export_range(1, 60) var update_interval_game = _checkable_properties[&"update_interval_game"]
 
-@export var handle_tablerow := false
 
 ## Override for horizontal padding between elements, in pixels.
 var separation_horizontal = null:
@@ -82,6 +82,14 @@ func _apply_vertical_override() -> void:
 		remove_theme_constant_override("separation")
 
 
+@export_group("TableRow")
+@export var handle_tablerow := false
+
+## Overrides the minimum cell length, based on the nth column of the row childs.
+## Key is the column number (starts from 0, left to right).
+## Value is minimum cell length of that column
+@export var column_cell_length : Dictionary[int, float]
+
 # ======== End Exporoted Properties ========
 
 # Update counter used in [member _process] for the editor
@@ -97,11 +105,33 @@ func _ready() -> void:
 	else:
 		_update_counter_game = 0
 
-	refresh()
 	if handle_tablerow:
-		_update_tablerow_dragbtn_style()
+		_tablerow_set_min_cell_length_metas()
+		_tablerow_update_dragbtn_style()
 
-func _update_tablerow_dragbtn_style():
+	refresh()
+
+
+func _get_tablerow_childs() -> Array[TableRowContainer]:
+	var arr : Array[TableRowContainer]
+	get_children().filter(func(child): 
+		if child is TableRowContainer: arr.append(child))
+	return arr
+
+
+func _tablerow_set_min_cell_length_metas():
+	for tablerow : TableRowContainer in _get_tablerow_childs():
+		for column_number : int in column_cell_length.keys():
+			var min_cell_length := column_cell_length[column_number]
+			var cell = await tablerow.queue_execute_after_buttons_set(
+				tablerow.row_get_child.bind(column_number)
+				)
+			cell.set_meta(MIN_CELL_LENGTH_META_NAME, min_cell_length)
+			var dragbtn : TableRowDragButton = tablerow.get_dragbtn_of_child(column_number)
+			dragbtn.minimum_cell_length = min_cell_length
+
+
+func _tablerow_update_dragbtn_style():
 	var first_tablerow : TableRowContainer
 	var last_tablerow : TableRowContainer
 	for child in get_children():
@@ -121,6 +151,7 @@ func _update_tablerow_dragbtn_style():
 		last_tablerow.queue_execute_after_buttons_set(
 			last_tablerow.setup_dragbtn_style.bind(TableRowContainer.RowOrder.LAST)
 			)
+
 
 ## Update the table based on the exported parameters.
 func _process(_delta: float) -> void:
@@ -142,7 +173,10 @@ func refresh() -> void:
 	if _have_uneven_rows():
 		push_error("Table has uneven rows. Aborting update.")
 		return
-
+	
+	#if Engine.is_editor_hint() and handle_tablerow:
+		#_tablerow_set_min_cell_length_metas()
+	
 	var rows: Array[HBoxContainer] = _get_table_children()
 	_clear_custom_column_widths(rows)
 	#print("afterclear rows item count: %d" % rows.size())
@@ -155,10 +189,13 @@ func _clear_custom_column_widths_for_row(row: HBoxContainer) -> void:
 	for cell: Control in cells:
 		if cell is TableRowDragButton: continue
 		
-		if minimum_cell_length != null && minimum_cell_length > 0.0:
-			cell.custom_minimum_size.x = minimum_cell_length
+		if cell.has_meta(MIN_CELL_LENGTH_META_NAME):
+			cell.custom_minimum_size.x = cell.get_meta(MIN_CELL_LENGTH_META_NAME)
 		else:
-			cell.custom_minimum_size.x = 0.0
+			if minimum_cell_length != null && minimum_cell_length > 0.0:
+				cell.custom_minimum_size.x = minimum_cell_length
+			else:
+				cell.custom_minimum_size.x = 0.0
 			
 		cell.custom_minimum_size.y = 0.0
 

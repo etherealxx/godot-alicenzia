@@ -1,9 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://cp88ofyjg86d1"]
+[gd_scene load_steps=7 format=3 uid="uid://cp88ofyjg86d1"]
 
 [ext_resource type="Script" uid="uid://chg5y2ktfe547" path="res://scripts/tests/allitemvbox.gd" id="1_5k7ni"]
 [ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/table_container/table_row_container.gd" id="3_ne7qh"]
 [ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/table_firstrow_button.tscn" id="4_e0u3b"]
 [ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/table_container/table_container.gd" id="4_t0t2d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yalo1"]
+bg_color = Color(0.276332, 0.336214, 0.510804, 1)
+border_width_left = 4
+border_width_right = 4
+border_color = Color(0.276332, 0.336214, 0.510804, 1)
+corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3wg5c"]
 bg_color = Color(0.182924, 0.227703, 0.359338, 1)
@@ -36,9 +43,13 @@ layout_mode = 2
 script = ExtResource("4_t0t2d")
 minimum_cell_length = 100.0
 update_interval_editor = null
-handle_tablerow = true
+update_interval_game = 2
 separation_horizontal = null
 separation_vertical = null
+handle_tablerow = true
+column_cell_length = Dictionary[int, float]({
+0: 36.0
+})
 metadata/_custom_type_script = "uid://bwo0xu2pgvwdp"
 
 [node name="FirstRow" type="HBoxContainer" parent="Allitemvbox/TableContainer2"]
@@ -46,6 +57,12 @@ layout_mode = 2
 script = ExtResource("3_ne7qh")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
+
+[node name="Label" type="Label" parent="Allitemvbox/TableContainer2/FirstRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yalo1")
+horizontal_alignment = 1
 
 [node name="FRowName" parent="Allitemvbox/TableContainer2/FirstRow" instance=ExtResource("4_e0u3b")]
 custom_minimum_size = Vector2(193, 0)
@@ -92,6 +109,11 @@ layout_mode = 2
 script = ExtResource("3_ne7qh")
 minimum_cell_length = 100.0
 metadata/_custom_type_script = "uid://cwyvk2ky18epe"
+
+[node name="CheckBox" type="CheckBox" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
 
 [node name="Label" type="Label" parent="Allitemvbox/TableContainer2/TableRowContainer2"]
 custom_minimum_size = Vector2(193, 0)
