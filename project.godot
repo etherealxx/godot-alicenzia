@@ -28,7 +28,7 @@ config/icon="res://icon.svg"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/explore-editor-theme/plugin.cfg", "res://addons/script-ide/plugin.cfg")
+enabled=PackedStringArray("res://addons/addon_toggler/plugin.cfg", "res://addons/alicenzia/plugin.cfg", "res://addons/explore-editor-theme/plugin.cfg", "res://addons/script-ide/plugin.cfg")
 
 [rendering]
 

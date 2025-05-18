@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/table_container/icons/TableContainer.svg")
+@icon("icons/TableContainer.svg")
 class_name TableContainer extends VBoxContainer
 ## A basic extension of [VBoxContainer] that treats [HBoxContainer] children like rows.
 ##

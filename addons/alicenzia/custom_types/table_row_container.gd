@@ -4,6 +4,7 @@ class_name TableRowContainer extends HBoxContainer
 signal draggable_buttons_setup_finished
 
 const DEFAULT_STYLEBOX_UID := "uid://mo4xftcfdd0g"
+const DEFAULT_STYLEBOX = preload("res://addons/alicenzia/custom_types/drag_button_stylebox.tres")
 const MIN_CELL_LENGTH_META_NAME := "_min_cell_length"
 
 enum RowOrder {FIRST, LAST, ONLY}
@@ -11,6 +12,7 @@ enum RowOrder {FIRST, LAST, ONLY}
 @export_tool_button("Setup Draggable Buttons", "Callable") var setup_action = setup_draggable_buttons
 @export_tool_button("Clear Buttons", "Callable") var clearbtn_action = clear_drag_buttons
 @export var resizable_cells := true
+@export var addon_mode := false
 
 #@export_group("Cell Length")
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var minimum_cell_length : float = 0.0
@@ -31,7 +33,8 @@ func _ready() -> void:
 			minimum_cell_length = parent.minimum_cell_length
 	#if min_cell_length_exception:
 		#_set_min_cell_length_metas()
-	if resizable_cells and not Engine.is_editor_hint():
+	var editor_status := addon_mode or !Engine.is_editor_hint()
+	if resizable_cells and editor_status:
 		await setup_draggable_buttons()
 		draggable_buttons_setup_finished.emit()
 		is_draggable_button_set = true
@@ -119,6 +122,8 @@ func queue_execute_after_buttons_set(method : Callable) -> Variant:
 
 func setup_dragbtn_style(row_order : RowOrder):
 	var btnstyle : StyleBoxFlat = ResourceLoader.load(DEFAULT_STYLEBOX_UID, "StyleBoxFlat").duplicate()
+	print("setup %s" % row_order)
+	#var btnstyle : StyleBoxFlat = DEFAULT_STYLEBOX.duplicate()
 	match (row_order):
 		RowOrder.FIRST:
 			btnstyle.expand_margin_top = 0
@@ -129,6 +134,7 @@ func setup_dragbtn_style(row_order : RowOrder):
 			btnstyle.expand_margin_bottom = 0
 	for dragbtn : TableRowDragButton in _get_draggable_buttons():
 		dragbtn.set_theme_pack(btnstyle)
+		pass
  
 func unset_reference():
 	is_reference_row = false
@@ -175,7 +181,8 @@ func setup_draggable_buttons():
 			#move_child(new_dragbtn, prev_child.get_index() + 1)
 			prev_child.add_sibling(new_dragbtn)
 			
-			new_dragbtn.owner = get_tree().edited_scene_root
+			if not addon_mode:
+				new_dragbtn.owner = get_tree().edited_scene_root
 			new_dragbtn.set_control_to_adjust_node(prev_child)
 			cell_dragbtn_pair_cache[self.get_path_to(prev_child)] = self.get_path_to(new_dragbtn)
 			new_dragbtn.minimum_cell_length = minimum_cell_length

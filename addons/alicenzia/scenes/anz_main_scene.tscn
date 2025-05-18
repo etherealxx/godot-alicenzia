@@ -1,0 +1,251 @@
+[gd_scene load_steps=9 format=3 uid="uid://ch5mnmkieer5x"]
+
+[ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/alicenzia/custom_types/table_container.gd" id="1_15so8"]
+[ext_resource type="Script" uid="uid://453yywbf1r1i" path="res://addons/alicenzia/scripts/anz_main_scene.gd" id="1_gppt2"]
+[ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/alicenzia/custom_types/table_row_container.gd" id="2_gppt2"]
+[ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/scenes/table_firstrow_button.tscn" id="3_4fvpr"]
+[ext_resource type="PackedScene" uid="uid://b64comlxjc7tp" path="res://addons/alicenzia/scenes/row_check_box.tscn" id="4_f84m6"]
+[ext_resource type="PackedScene" uid="uid://bvmpyi0jxn06h" path="res://addons/alicenzia/scenes/view_full_lisence_btn.tscn" id="5_qu26v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o3pt7"]
+bg_color = Color(0.276332, 0.336214, 0.510804, 1)
+border_width_left = 4
+border_width_right = 4
+border_color = Color(0.276332, 0.336214, 0.510804, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_27xpk"]
+bg_color = Color(0.182924, 0.227703, 0.359338, 1)
+border_width_left = 10
+border_width_top = 4
+border_width_right = 10
+border_width_bottom = 4
+border_color = Color(0.182924, 0.227703, 0.359338, 1)
+
+[node name="ANZMainScene" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_gppt2")
+
+[node name="UILayoutHbox" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="Spacer" type="Control" parent="UILayoutHbox"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="MainAddonVbox" type="VBoxContainer" parent="UILayoutHbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+metadata/_edit_lock_ = true
+
+[node name="ToolbarHbox" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox"]
+layout_mode = 2
+
+[node name="RefreshAddonBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
+text = "Refresh Addon"
+
+[node name="RefreshTableBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
+text = "Refresh Table"
+
+[node name="HSeparator" type="HSeparator" parent="UILayoutHbox/MainAddonVbox"]
+layout_mode = 2
+
+[node name="MainUIScroll" type="Node" parent="UILayoutHbox/MainAddonVbox"]
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UILayoutHbox/MainAddonVbox"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="AssetsTable" type="VBoxContainer" parent="UILayoutHbox/MainAddonVbox/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("1_15so8")
+minimum_cell_length = 100.0
+update_interval_editor = 2
+update_interval_game = 2
+separation_horizontal = null
+separation_vertical = null
+handle_tablerow = true
+column_cell_length = Dictionary[int, float]({
+0: 36.0
+})
+metadata/_custom_type_script = "uid://bwo0xu2pgvwdp"
+
+[node name="FirstRow" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable"]
+layout_mode = 2
+script = ExtResource("2_gppt2")
+addon_mode = true
+minimum_cell_length = 100.0
+current_buttons_amount = 11
+metadata/_custom_type_script = "uid://cwyvk2ky18epe"
+
+[node name="Label" type="Label" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_o3pt7")
+horizontal_alignment = 1
+
+[node name="FRowName" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(193, 0)
+layout_mode = 2
+text = "Name"
+
+[node name="FRowAssType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Asset Type"
+
+[node name="FRowExt" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Extension"
+
+[node name="FRowOwnType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(154, 0)
+layout_mode = 2
+text = "Ownership Type"
+
+[node name="FRowCrtr" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(115, 0)
+layout_mode = 2
+text = "Creator"
+
+[node name="FRowLisc" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "License"
+
+[node name="FRowUse" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Usage"
+
+[node name="FRowMods" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(106, 0)
+layout_mode = 2
+text = "Modification"
+
+[node name="FRowLink" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Link"
+
+[node name="FRowPath" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Path"
+
+[node name="FRowFullLisc" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("3_4fvpr")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Full License"
+
+[node name="TableRowContainer" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable"]
+layout_mode = 2
+script = ExtResource("2_gppt2")
+addon_mode = true
+minimum_cell_length = 100.0
+current_buttons_amount = 11
+metadata/_custom_type_script = "uid://cwyvk2ky18epe"
+
+[node name="RowCheckBox" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer" instance=ExtResource("4_f84m6")]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(193, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_27xpk")
+text = "game_backsound.mp3"
+horizontal_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Music"
+popup/item_0/id = 0
+popup/item_1/text = "Code"
+popup/item_1/id = 1
+
+[node name="Label4" type="Label" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_27xpk")
+text = "mp3"
+horizontal_alignment = 1
+
+[node name="OptionButton2" type="OptionButton" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(154, 0)
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Internally Made"
+popup/item_0/id = 0
+popup/item_1/text = "External"
+popup/item_1/id = 1
+
+[node name="OptionButton3" type="OptionButton" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(115, 0)
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "Etherealxx"
+popup/item_0/id = 0
+
+[node name="OptionButton4" type="OptionButton" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "MIT"
+popup/item_0/id = 0
+
+[node name="LineEdit3" type="LineEdit" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="LineEdit4" type="LineEdit" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(106, 0)
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "http://somewhere"
+
+[node name="LineEdit2" type="LineEdit" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "res://game_backsound.mp3"
+
+[node name="ViewFullLisenceBtn" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/TableRowContainer" instance=ExtResource("5_qu26v")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="UILayoutHbox/MainAddonVbox"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="Spacer2" type="Control" parent="UILayoutHbox"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshAddonBtn" to="." method="_on_refresh_addon_btn_pressed"]
+[connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshTableBtn" to="." method="_on_refresh_table_btn_pressed"]

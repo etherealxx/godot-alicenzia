@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://chg5y2ktfe547" path="res://scripts/tests/allitemvbox.gd" id="1_pw76t"]
 [ext_resource type="Script" uid="uid://dmsycuw4j2riy" path="res://scripts/unused/dragtest.gd" id="2_j0x7k"]
-[ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/table_container/table_row_container.gd" id="3_on6c7"]
-[ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/table_container/table_container.gd" id="4_nfn47"]
+[ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/alicenzia/custom_types/table_row_container.gd" id="3_on6c7"]
+[ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/alicenzia/custom_types/table_container.gd" id="4_nfn47"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yalo1"]
 bg_color = Color(0.276332, 0.336214, 0.510804, 1)
