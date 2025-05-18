@@ -3,8 +3,8 @@ class_name TableRowContainer extends HBoxContainer
 
 signal draggable_buttons_setup_finished
 
-const DEFAULT_STYLEBOX_UID := "uid://mo4xftcfdd0g"
-const DEFAULT_STYLEBOX = preload("res://addons/alicenzia/custom_types/drag_button_stylebox.tres")
+const DEFAULT_STYLEBOX_PATH := "res://addons/alicenzia/custom_types/drag_button_stylebox.tres"
+#const DEFAULT_STYLEBOX = preload("res://addons/alicenzia/custom_types/drag_button_stylebox.tres")
 const MIN_CELL_LENGTH_META_NAME := "_min_cell_length"
 
 enum RowOrder {FIRST, LAST, ONLY}
@@ -121,7 +121,7 @@ func queue_execute_after_buttons_set(method : Callable) -> Variant:
 
 
 func setup_dragbtn_style(row_order : RowOrder):
-	var btnstyle : StyleBoxFlat = ResourceLoader.load(DEFAULT_STYLEBOX_UID, "StyleBoxFlat").duplicate()
+	var btnstyle : StyleBoxFlat = ResourceLoader.load(DEFAULT_STYLEBOX_PATH, "StyleBoxFlat").duplicate()
 	print("setup %s" % row_order)
 	#var btnstyle : StyleBoxFlat = DEFAULT_STYLEBOX.duplicate()
 	match (row_order):
@@ -134,7 +134,6 @@ func setup_dragbtn_style(row_order : RowOrder):
 			btnstyle.expand_margin_bottom = 0
 	for dragbtn : TableRowDragButton in _get_draggable_buttons():
 		dragbtn.set_theme_pack(btnstyle)
-		pass
  
 func unset_reference():
 	is_reference_row = false

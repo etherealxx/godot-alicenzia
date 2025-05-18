@@ -1,8 +1,8 @@
 @tool
 class_name TableRowDragButton extends Button
 
-const DEFAULT_STYLEBOX_UID := "uid://mo4xftcfdd0g"
-const DEFAULT_STYLEBOX = preload("res://addons/alicenzia/custom_types/drag_button_stylebox.tres")
+const DEFAULT_STYLEBOX_PATH := "res://addons/alicenzia/custom_types/drag_button_stylebox.tres"
+#const DEFAULT_STYLEBOX = preload("res://addons/alicenzia/custom_types/drag_button_stylebox.tres")
 
 @export_storage var control_to_adjust_path : NodePath
 @export_storage var sibling_to_hold : Control
@@ -15,7 +15,7 @@ var stable_x : float
 var minimum_cell_length := 0.0
 
 func _ready() -> void:
-	set_theme_pack(ResourceLoader.load(DEFAULT_STYLEBOX_UID, "StyleBox"))
+	set_theme_pack(ResourceLoader.load(DEFAULT_STYLEBOX_PATH, "StyleBox"))
 	#set_theme_pack(DEFAULT_STYLEBOX)
 	mouse_default_cursor_shape = Control.CURSOR_HSIZE
 	focus_mode = Control.FOCUS_NONE
