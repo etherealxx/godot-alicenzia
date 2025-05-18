@@ -1,7 +1,7 @@
 @tool
 extends EditorPlugin
 
-const ALICENZIA_MAIN_WINDOW_SCENE_PATH = "uid://ch5mnmkieer5x"
+const ALICENZIA_MAIN_WINDOW_SCENE_PATH = "uid://c321mhbnb88ir" #"uid://ch5mnmkieer5x"
 
 var alicenzia_main_window_node : Node
 
@@ -22,6 +22,7 @@ func load_addon_mainscreen():
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		alicenzia_main_window_node.addon_refresh.connect(_on_addon_refresh)
+		alicenzia_main_window_node._addon_init()
 
 
 func _exit_tree() -> void:
@@ -59,6 +60,7 @@ func _on_addon_refresh():
 		alicenzia_main_window_node.addon_refresh.connect(_on_addon_refresh)
 		#scene_saved.connect(album_manager_node._on_any_scene_saved)
 		alicenzia_main_window_node.visible = true
+		alicenzia_main_window_node._addon_init()
 		print("Alicenzia refreshed")
 		print("---")
 

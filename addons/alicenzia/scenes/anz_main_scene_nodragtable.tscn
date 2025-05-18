@@ -1,0 +1,149 @@
+[gd_scene load_steps=7 format=3 uid="uid://c321mhbnb88ir"]
+
+[ext_resource type="Script" uid="uid://453yywbf1r1i" path="res://addons/alicenzia/scripts/anz_main_scene.gd" id="1_vbuva"]
+[ext_resource type="Script" uid="uid://b24bu7ntyeqfn" path="res://addons/alicenzia/scripts/recursive_file_digger.gd" id="2_dn6rg"]
+[ext_resource type="Script" uid="uid://cj3aqrhxi00ig" path="res://addons/alicenzia/scripts/assets_table.gd" id="3_ckmyg"]
+[ext_resource type="PackedScene" uid="uid://dagdcisuqdljk" path="res://addons/alicenzia/scenes/asset_data_row.tscn" id="3_qeyua"]
+[ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/scenes/table_firstrow_button.tscn" id="4_28ipe"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o3pt7"]
+bg_color = Color(0.276332, 0.336214, 0.510804, 1)
+border_width_left = 4
+border_width_right = 4
+border_color = Color(0.276332, 0.336214, 0.510804, 1)
+corner_detail = 1
+
+[node name="ANZMainSceneN" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_vbuva")
+
+[node name="RecursiveFileDigger" type="Node" parent="."]
+script = ExtResource("2_dn6rg")
+
+[node name="UILayoutHbox" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="Spacer" type="Control" parent="UILayoutHbox"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="MainAddonVbox" type="VBoxContainer" parent="UILayoutHbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+metadata/_edit_lock_ = true
+
+[node name="ToolbarHbox" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox"]
+layout_mode = 2
+
+[node name="RefreshAddonBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
+text = "Refresh Addon"
+
+[node name="RefreshTableBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
+text = "Refresh Table"
+
+[node name="HSeparator" type="HSeparator" parent="UILayoutHbox/MainAddonVbox"]
+layout_mode = 2
+
+[node name="MainUIScroll" type="Node" parent="UILayoutHbox/MainAddonVbox"]
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UILayoutHbox/MainAddonVbox"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="AssetsTable" type="VBoxContainer" parent="UILayoutHbox/MainAddonVbox/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("3_ckmyg")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable" groups=["first_row"]]
+layout_mode = 2
+
+[node name="CheckEmpty" type="Label" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_o3pt7")
+horizontal_alignment = 1
+
+[node name="FRowName" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(193, 0)
+layout_mode = 2
+text = "Name"
+
+[node name="FRowAssType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Asset Type"
+
+[node name="FRowExt" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Extension"
+
+[node name="FRowOwnType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(154, 0)
+layout_mode = 2
+text = "Ownership Type"
+
+[node name="FRowCrtr" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(115, 0)
+layout_mode = 2
+text = "Creator"
+
+[node name="FRowLisc" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "License"
+
+[node name="FRowUse" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Usage"
+
+[node name="FRowMods" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(106, 0)
+layout_mode = 2
+text = "Modification"
+
+[node name="FRowLink" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Link"
+
+[node name="FRowPath" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Path"
+
+[node name="FRowFullLisc" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Full License"
+
+[node name="AssetDataRow" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable" instance=ExtResource("3_qeyua")]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="UILayoutHbox/MainAddonVbox"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="Spacer2" type="Control" parent="UILayoutHbox"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshAddonBtn" to="." method="_on_refresh_addon_btn_pressed"]
+[connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshTableBtn" to="." method="_on_refresh_table_btn_pressed"]
