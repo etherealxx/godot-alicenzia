@@ -2,8 +2,9 @@
 extends VBoxContainer
 
 signal addon_refresh # addon
+#signal data_button_expand_request(idx : int, expand_yes : bool)
 
-const ASSET_DATA_ROW : PackedScene = preload("uid://dagdcisuqdljk")
+#const ASSET_DATA_ROW : PackedScene = preload("uid://dagdcisuqdljk")
 
 @onready var file_digger: Node = $RecursiveFileDigger
 @onready var assets_table: VBoxContainer = %AssetsTable
@@ -15,13 +16,13 @@ func _ready() -> void:
 
 
 func _addon_init():
-	await assets_table.clear_row()
+	#data_button_expand_request.connect(_on_data_button_expand_request)
+	assets_table.clear_row()
 	var path_data : PackedStringArray = file_digger.start_walk_dir("res://")
 	#print(path_data)
 	for path : String in path_data:
-		var new_data_row := ASSET_DATA_ROW.instantiate()
-		assets_table.add_child(new_data_row)
-		new_data_row.fill_data(path)
+		assets_table.add_data_row(path)
+		#	func(idx, expand_yes): data_button_expand_request.emit(idx, expand_yes))
 
 
 func _on_refresh_addon_btn_pressed() -> void:

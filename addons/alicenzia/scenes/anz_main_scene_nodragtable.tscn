@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://c321mhbnb88ir"]
+[gd_scene load_steps=8 format=3 uid="uid://c321mhbnb88ir"]
 
 [ext_resource type="Script" uid="uid://453yywbf1r1i" path="res://addons/alicenzia/scripts/anz_main_scene.gd" id="1_vbuva"]
 [ext_resource type="Script" uid="uid://b24bu7ntyeqfn" path="res://addons/alicenzia/scripts/recursive_file_digger.gd" id="2_dn6rg"]
 [ext_resource type="Script" uid="uid://cj3aqrhxi00ig" path="res://addons/alicenzia/scripts/assets_table.gd" id="3_ckmyg"]
 [ext_resource type="PackedScene" uid="uid://dagdcisuqdljk" path="res://addons/alicenzia/scenes/asset_data_row.tscn" id="3_qeyua"]
 [ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/scenes/table_firstrow_button.tscn" id="4_28ipe"]
+[ext_resource type="Script" uid="uid://c7jdcl12tk8lh" path="res://addons/alicenzia/scripts/abstract_data_row.gd" id="4_vbuva"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o3pt7"]
 bg_color = Color(0.276332, 0.336214, 0.510804, 1)
@@ -25,6 +26,10 @@ script = ExtResource("1_vbuva")
 
 [node name="RecursiveFileDigger" type="Node" parent="."]
 script = ExtResource("2_dn6rg")
+
+[node name="Spacer" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
 
 [node name="UILayoutHbox" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -70,69 +75,88 @@ unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("3_ckmyg")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable" groups=["first_row"]]
+[node name="FirstRow" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable" groups=["first_row"]]
 layout_mode = 2
+script = ExtResource("4_vbuva")
+cell_path_cache = Array[NodePath]([NodePath("CheckEmpty"), NodePath("FRowName"), NodePath("FRowAssType"), NodePath("FRowExt"), NodePath("FRowOwnType"), NodePath("FRowCrtr"), NodePath("FRowLisc"), NodePath("FRowUse"), NodePath("FRowMods"), NodePath("FRowLink"), NodePath("FRowPath"), NodePath("FRowFullLisc")])
+custom_minimum_length = Dictionary[NodePath, float]({
+NodePath("CheckEmpty"): 40.0,
+NodePath("FRowName"): 180.0,
+NodePath("FRowMods"): 130.0
+})
 
-[node name="CheckEmpty" type="Label" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer"]
-custom_minimum_size = Vector2(36, 0)
+[node name="CheckEmpty" type="Label" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow"]
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_o3pt7")
 horizontal_alignment = 1
+metadata/asset_data_row_idx = 0
 
-[node name="FRowName" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
-custom_minimum_size = Vector2(193, 0)
+[node name="FRowName" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 text = "Name"
+metadata/asset_data_row_idx = 1
 
-[node name="FRowAssType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowAssType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Asset Type"
+metadata/asset_data_row_idx = 2
 
-[node name="FRowExt" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowExt" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Extension"
+metadata/asset_data_row_idx = 3
 
-[node name="FRowOwnType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowOwnType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(154, 0)
 layout_mode = 2
 text = "Ownership Type"
+metadata/asset_data_row_idx = 4
 
-[node name="FRowCrtr" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowCrtr" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(115, 0)
 layout_mode = 2
 text = "Creator"
+metadata/asset_data_row_idx = 5
 
-[node name="FRowLisc" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowLisc" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "License"
+metadata/asset_data_row_idx = 6
 
-[node name="FRowUse" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowUse" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Usage"
+metadata/asset_data_row_idx = 7
 
-[node name="FRowMods" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
-custom_minimum_size = Vector2(106, 0)
+[node name="FRowMods" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 text = "Modification"
+metadata/asset_data_row_idx = 8
 
-[node name="FRowLink" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowLink" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Link"
+metadata/asset_data_row_idx = 9
 
-[node name="FRowPath" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowPath" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Path"
+metadata/asset_data_row_idx = 10
 
-[node name="FRowFullLisc" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/HBoxContainer" instance=ExtResource("4_28ipe")]
+[node name="FRowFullLisc" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Full License"
+metadata/asset_data_row_idx = 11
 
 [node name="AssetDataRow" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable" instance=ExtResource("3_qeyua")]
 layout_mode = 2
