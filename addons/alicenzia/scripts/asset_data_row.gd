@@ -1,6 +1,8 @@
 @tool
 class_name AssetDataRow extends AbstractDataRow
 
+const DOT := "."
+
 signal expand_button(index : int, expand_yes : bool)
 
 @onready var asset_name: Button = $AssetName
@@ -34,8 +36,16 @@ func _ready() -> void:
 func fill_data(file_path : String):
 	var file_name := file_path.get_file()
 	asset_name.text = file_name
-	asset_extension.text = file_name.get_slice(
-		".", file_name.get_slice_count(".") - 1).to_lower()
+	
+	var extension := ""
+	if DOT in file_name:
+		if file_name.get_slice_count(DOT) > 1:
+			if not file_name.get_slice(DOT, 0).is_empty():
+				extension = file_name.get_slice(
+								DOT,
+								file_name.get_slice_count(DOT) - 1).to_lower()
+	asset_extension.text = extension
+	
 	asset_path.text = file_path
 
 

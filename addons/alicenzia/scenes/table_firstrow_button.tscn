@@ -4,7 +4,7 @@
 bg_color = Color(0.2091, 0.284325, 0.51, 1)
 border_width_left = 4
 border_width_right = 4
-border_color = Color(0.276332, 0.336214, 0.510804, 1)
+border_color = Color(0.2091, 0.284325, 0.51, 1)
 corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwy0w"]

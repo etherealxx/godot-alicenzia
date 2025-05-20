@@ -6,7 +6,8 @@ const FILE_NAME_IGNORE_LIST : Array[String] = [
 ]
 
 const FILE_EXTENSION_IGNORE_LIST : Array[String] = [ # Lowercase, No need for the dot
-	"import", "uid", "gitignore", "gitattributes"
+	"import", "uid", "gitignore", "gitattributes",
+	"gitkeep"
 ]
 
 const DIRECTORY_IGNORE_LIST : Array[String] = [ # No need for extra slash

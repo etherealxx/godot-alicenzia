@@ -13,6 +13,8 @@ func _ready() -> void:
 	add_child(asset_data_row_ref)
 	var length_ref : PackedFloat32Array = asset_data_row_ref.get_min_length_references()
 	first_row.adjust_min_length_with_ref(length_ref)
+	var cellpath_minlength_pair = first_row.pair_nodepath_with_minlength_from_ref(length_ref)
+	first_row.adjust_special_case_with_pair(cellpath_minlength_pair)
 	asset_data_row_ref.queue_free()
 
 
@@ -37,7 +39,8 @@ func add_data_row(data_path : String):
 		new_data_row.fill_data(data_path)
 		new_data_row.expand_button.connect(_on_data_button_expand_request)
 
-
+#@TODO check if the column who send request doesn't have an expandable
+# button, like all of their size is small enough they need no expansion
 func _on_data_button_expand_request(idx : int, is_currently_expanding : bool):
 	var data_rows : Array[AssetDataRow] = get_data_rows()
 	var lengthiest := 0.0

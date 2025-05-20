@@ -41,7 +41,7 @@ layout_mode = 2
 metadata/asset_data_row_idx = 3
 
 [node name="AssetOwnType" type="OptionButton" parent="."]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -75,7 +75,7 @@ layout_mode = 2
 metadata/asset_data_row_idx = 7
 
 [node name="AssetMods" type="LineEdit" parent="."]
-custom_minimum_size = Vector2(120, 0)
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 metadata/asset_data_row_idx = 8
 

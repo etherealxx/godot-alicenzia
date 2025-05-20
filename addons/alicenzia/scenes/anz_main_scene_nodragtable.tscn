@@ -84,6 +84,7 @@ NodePath("CheckEmpty"): 40.0,
 NodePath("FRowName"): 180.0,
 NodePath("FRowMods"): 130.0
 })
+special_case_minlength = Array[NodePath]([NodePath("FRowOwnType"), NodePath("FRowCrtr")])
 
 [node name="CheckEmpty" type="Label" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow"]
 custom_minimum_size = Vector2(40, 0)
