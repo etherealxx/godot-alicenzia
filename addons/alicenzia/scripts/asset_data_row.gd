@@ -4,6 +4,7 @@ class_name AssetDataRow extends AbstractDataRow
 const DOT := "."
 
 signal expand_button(index : int, expand_yes : bool)
+signal open_data(data : JSON)
 
 @onready var asset_name: Button = $AssetName
 @onready var asset_type: OptionButton = $AssetType
@@ -75,3 +76,16 @@ func get_min_length_references() -> PackedFloat32Array:
 		var ref_length : float = maxf(cell.get_combined_minimum_size().x, cell.size.x)
 		ref.append(ref_length)
 	return ref
+	
+
+func pack_data_into_dict() -> Dictionary:
+	var asset_data_dict : Dictionary[String, String] = {
+		"asset_name" = asset_name.text,
+		"asset_path" = asset_path.text
+	}
+	return asset_data_dict
+
+
+func _on_row_check_box_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		open_data.emit(pack_data_into_dict())

@@ -6,7 +6,7 @@ const ASSET_DATA_ROW : PackedScene = preload("uid://dagdcisuqdljk")
 @export_tool_button("Clear Row", "Callable") var action_clear = clear_row
 
 @onready var first_row: AbstractDataRow = $FirstRow
-
+@onready var expanded_box: VBoxContainer = %ExpandedBox
 
 func _ready() -> void:
 	var asset_data_row_ref := ASSET_DATA_ROW.instantiate()
@@ -34,10 +34,12 @@ func get_data_rows() -> Array[AssetDataRow]:
 
 
 func add_data_row(data_path : String):
-		var new_data_row := ASSET_DATA_ROW.instantiate()
-		add_child(new_data_row)
-		new_data_row.fill_data(data_path)
-		new_data_row.expand_button.connect(_on_data_button_expand_request)
+	var new_data_row := ASSET_DATA_ROW.instantiate()
+	add_child(new_data_row)
+	new_data_row.fill_data(data_path)
+	new_data_row.expand_button.connect(_on_data_button_expand_request)
+	new_data_row.open_data.connect(_on_open_data_request)
+
 
 #@TODO check if the column who send request doesn't have an expandable
 # button, like all of their size is small enough they need no expansion
@@ -58,3 +60,7 @@ func _on_data_button_expand_request(idx : int, is_currently_expanding : bool):
 	#print(final_length)
 	first_row.reset_cells_length()
 	first_row.set_cell_new_minsize(idx, final_length)
+
+
+func _on_open_data_request(asset_data : Dictionary[String, String]):
+	expanded_box.open_and_fill_data(asset_data)

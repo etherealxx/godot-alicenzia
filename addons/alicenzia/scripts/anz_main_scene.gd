@@ -8,11 +8,13 @@ signal addon_refresh # addon
 
 @onready var file_digger: Node = $RecursiveFileDigger
 @onready var assets_table: VBoxContainer = %AssetsTable
+@onready var expanded_box: VBoxContainer = %ExpandedBox
 
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
 		_addon_init()
+		expanded_box._ready()
 
 
 func _addon_init():

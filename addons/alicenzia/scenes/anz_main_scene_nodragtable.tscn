@@ -1,11 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://c321mhbnb88ir"]
+[gd_scene load_steps=11 format=3 uid="uid://c321mhbnb88ir"]
 
 [ext_resource type="Script" uid="uid://453yywbf1r1i" path="res://addons/alicenzia/scripts/anz_main_scene.gd" id="1_vbuva"]
 [ext_resource type="Script" uid="uid://b24bu7ntyeqfn" path="res://addons/alicenzia/scripts/recursive_file_digger.gd" id="2_dn6rg"]
+[ext_resource type="Script" uid="uid://shtut6x5kdvu" path="res://addons/alicenzia/scripts/expanded_box.gd" id="3_0bqo7"]
 [ext_resource type="Script" uid="uid://cj3aqrhxi00ig" path="res://addons/alicenzia/scripts/assets_table.gd" id="3_ckmyg"]
 [ext_resource type="PackedScene" uid="uid://dagdcisuqdljk" path="res://addons/alicenzia/scenes/asset_data_row.tscn" id="3_qeyua"]
 [ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/scenes/table_firstrow_button.tscn" id="4_28ipe"]
+[ext_resource type="PackedScene" uid="uid://c3itrv4fmgowh" path="res://addons/alicenzia/expanded_box/scenes/param_and_option.tscn" id="4_mubm6"]
 [ext_resource type="Script" uid="uid://c7jdcl12tk8lh" path="res://addons/alicenzia/scripts/abstract_data_row.gd" id="4_vbuva"]
+[ext_resource type="PackedScene" uid="uid://cpyy6k4dwk3wy" path="res://addons/alicenzia/expanded_box/scenes/param_and_big_text.tscn" id="5_28ipe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o3pt7"]
 bg_color = Color(0.276332, 0.336214, 0.510804, 1)
@@ -63,11 +66,107 @@ layout_mode = 2
 
 [node name="MainUIScroll" type="Node" parent="UILayoutHbox/MainAddonVbox"]
 
+[node name="ExpandedBox" type="VBoxContainer" parent="UILayoutHbox/MainAddonVbox"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("3_0bqo7")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ExpandedBox"]
+layout_mode = 2
+
+[node name="ParamAndData" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/HBoxContainer2"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/HBoxContainer2/ParamAndData"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Asset Name"
+
+[node name="LineEdit_name" type="LineEdit" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/HBoxContainer2/ParamAndData"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ParamAndOption" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/HBoxContainer2" instance=ExtResource("4_mubm6")]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 1
+param_name = "Asset Type"
+show_separator = false
+
+[node name="ParamAndDataMax2" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ExpandedBox"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/ParamAndDataMax2"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Resource Path"
+
+[node name="LineEdit_path" type="LineEdit" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/ParamAndDataMax2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OptionsRow" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ExpandedBox"]
+layout_mode = 2
+
+[node name="ParamAndOption" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/OptionsRow" instance=ExtResource("4_mubm6")]
+layout_mode = 2
+param_name = "Ownership Type"
+
+[node name="ParamAndOption2" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/OptionsRow" instance=ExtResource("4_mubm6")]
+layout_mode = 2
+param_name = "Creator"
+
+[node name="ParamAndOption3" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/OptionsRow" instance=ExtResource("4_mubm6")]
+layout_mode = 2
+param_name = "License"
+
+[node name="ParamAndDataMax" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ExpandedBox"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/ParamAndDataMax"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Link"
+
+[node name="LineEdit" type="LineEdit" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/ParamAndDataMax"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BigTextAreas" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox/ExpandedBox"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ParamAndBigText" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/BigTextAreas" instance=ExtResource("5_28ipe")]
+layout_mode = 2
+param_name = "Usage:"
+
+[node name="VSeparator" type="VSeparator" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/BigTextAreas"]
+layout_mode = 2
+
+[node name="ParamAndBigText2" parent="UILayoutHbox/MainAddonVbox/ExpandedBox/BigTextAreas" instance=ExtResource("5_28ipe")]
+layout_mode = 2
+param_name = "Modifications:"
+
+[node name="Spacer" type="Control" parent="UILayoutHbox/MainAddonVbox/ExpandedBox"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="SaveCloseBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ExpandedBox"]
+layout_mode = 2
+text = "Save & Close Asset Details"
+
+[node name="HSeparator" type="HSeparator" parent="UILayoutHbox/MainAddonVbox/ExpandedBox"]
+layout_mode = 2
+
 [node name="ScrollContainer" type="ScrollContainer" parent="UILayoutHbox/MainAddonVbox"]
-custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+vertical_scroll_mode = 4
 metadata/_edit_lock_ = true
 
 [node name="AssetsTable" type="VBoxContainer" parent="UILayoutHbox/MainAddonVbox/ScrollContainer"]
@@ -96,7 +195,7 @@ metadata/asset_data_row_idx = 0
 [node name="FRowName" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
-text = "Name"
+text = "Asset Name"
 metadata/asset_data_row_idx = 1
 
 [node name="FRowAssType" parent="UILayoutHbox/MainAddonVbox/ScrollContainer/AssetsTable/FirstRow" instance=ExtResource("4_28ipe")]
@@ -172,3 +271,4 @@ layout_mode = 2
 
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshAddonBtn" to="." method="_on_refresh_addon_btn_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshTableBtn" to="." method="_on_refresh_table_btn_pressed"]
+[connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ExpandedBox/SaveCloseBtn" to="UILayoutHbox/MainAddonVbox/ExpandedBox" method="_on_save_close_btn_pressed"]

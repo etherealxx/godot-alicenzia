@@ -41,7 +41,7 @@ layout_mode = 2
 metadata/asset_data_row_idx = 3
 
 [node name="AssetOwnType" type="OptionButton" parent="."]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -94,3 +94,5 @@ metadata/asset_data_row_idx = 10
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 metadata/asset_data_row_idx = 11
+
+[connection signal="toggled" from="RowCheckBox" to="." method="_on_row_check_box_toggled"]
