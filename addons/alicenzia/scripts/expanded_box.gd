@@ -7,7 +7,6 @@ extends VBoxContainer
 
 func _ready() -> void:
 	hide()
-	print("yee")
 	#await get_tree().create_timer(2.0, true, true).timeout
 	#for paramdata : HBoxContainer in options_row.get_children():
 		#print(options_row.size.x)

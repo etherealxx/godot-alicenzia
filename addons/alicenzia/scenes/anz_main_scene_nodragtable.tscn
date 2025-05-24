@@ -68,6 +68,7 @@ layout_mode = 2
 
 [node name="ExpandedBox" type="VBoxContainer" parent="UILayoutHbox/MainAddonVbox"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 script = ExtResource("3_0bqo7")
 

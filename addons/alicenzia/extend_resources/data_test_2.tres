@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PathLicenseData" load_steps=2 format=3 uid="uid://chr3ct5p77mlt"]
+
+[ext_resource type="Script" uid="uid://dok8hwrf73yww" path="res://addons/alicenzia/extend_resources/path_license_data.gd" id="1_c58oc"]
+
+[resource]
+script = ExtResource("1_c58oc")
+asset_type_hint = "Code,Music"
+ownership_type_hint = "Internally Made,External"
+creator_hint = "Etherealxx"
+license_type_hint = "Apache,MIT,CC-BY"
+name = "Gilagilaa"
+type = "Code"
+ownership_type = "Internally Made"
+creator = "Etherealxx"
+license_type = "Apache"
+usage = ""
+modification = ""
+link = ""
+path = ""
+metadata/_custom_type_script = "uid://dok8hwrf73yww"
