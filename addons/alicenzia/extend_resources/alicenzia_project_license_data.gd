@@ -2,4 +2,6 @@
 extends Resource
 class_name ALZProjectLicenseDatabase
 
-var project_wide_license : ALZProjectWideLicense
+@export var project_wide_license : ALZProjectWideLicense
+
+@export var path_license_dict : Dictionary[String, PathLicenseData]

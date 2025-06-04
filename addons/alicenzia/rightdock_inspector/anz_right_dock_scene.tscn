@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdgcops15lly0"]
+[gd_scene load_steps=5 format=3 uid="uid://cdgcops15lly0"]
 
 [ext_resource type="Script" uid="uid://cqgx4b6criqnj" path="res://addons/alicenzia/rightdock_inspector/anz_right_dock_scene.gd" id="1_gmbqi"]
 [ext_resource type="PackedScene" uid="uid://c1l4iekh4v87y" path="res://addons/alicenzia/rightdock_inspector/scenes/project_wide_license_dialog.tscn" id="2_1ly1l"]
+[ext_resource type="PackedScene" uid="uid://bms5q447dngpi" path="res://addons/alicenzia/rightdock_inspector/scenes/exist_in_lic_db_info.tscn" id="2_40gp4"]
+[ext_resource type="PackedScene" uid="uid://bm1y5fmy46rbf" path="res://addons/alicenzia/rightdock_inspector/scenes/lic_inherit_info.tscn" id="2_s5q64"]
 
 [node name="License" type="VBoxContainer"]
 anchors_preset = 15
@@ -13,11 +15,11 @@ size_flags_horizontal = 3
 script = ExtResource("1_gmbqi")
 
 [node name="NoProjectLicenseWarn" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="NoProjectLicenseWarn"]
 layout_mode = 2
-size_flags_horizontal = 4
 
 [node name="WarnIcon" type="TextureRect" parent="NoProjectLicenseWarn/HBoxContainer"]
 unique_name_in_owner = true
@@ -25,9 +27,12 @@ layout_mode = 2
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="NoProjectLicenseWarn/HBoxContainer"]
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "This project does not have a project-wide license yet."
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="InitPWLBtn" type="Button" parent="NoProjectLicenseWarn"]
 layout_mode = 2
@@ -41,13 +46,14 @@ layout_mode = 2
 text = "License data on this path:"
 horizontal_alignment = 1
 
-[node name="CurrentPath2" type="LineEdit" parent="."]
+[node name="CurrentPathOld" type="LineEdit" parent="."]
 visible = false
 layout_mode = 2
 editable = false
 expand_to_text_length = true
 
 [node name="CurrentPath" type="TextEdit" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 text = "res://addons/alicenzia/extend_resources/data_test.tres"
 editable = false
@@ -61,19 +67,40 @@ empty_selection_clipboard_enabled = false
 wrap_mode = 1
 scroll_fit_content_height = true
 
-[node name="Button" type="Button" parent="."]
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="LicInheritInfo" parent="." instance=ExtResource("2_s5q64")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ExistInLicDBInfo" parent="." instance=ExtResource("2_40gp4")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SavePathLicenseBtn" type="Button" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
 
-[node name="HSeparator" type="HSeparator" parent="."]
+[node name="HSeparator2" type="HSeparator" parent="."]
 layout_mode = 2
+
+[node name="ProjectWideLicenseDialog" parent="." instance=ExtResource("2_1ly1l")]
+unique_name_in_owner = true
 
 [node name="InspectorBelowHere" type="Node" parent="."]
 unique_name_in_owner = true
 
-[node name="ProjectWideLicenseDialog" parent="." instance=ExtResource("2_1ly1l")]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RightDockVbox" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [connection signal="pressed" from="NoProjectLicenseWarn/InitPWLBtn" to="." method="_on_init_pwl_btn_pressed"]
-[connection signal="confirmed" from="ProjectWideLicenseDialog" to="ProjectWideLicenseDialog" method="_on_confirmed"]
-[connection signal="new_pwl_saved" from="ProjectWideLicenseDialog" to="." method="_on_project_wide_license_dialog_new_pwl_saved"]
+[connection signal="pressed" from="SavePathLicenseBtn" to="." method="_on_save_path_license_btn_pressed"]
+[connection signal="confirmed" from="ProjectWideLicenseDialog" to="." method="_on_project_wide_license_dialog_confirmed"]

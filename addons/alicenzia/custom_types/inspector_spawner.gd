@@ -50,7 +50,7 @@ func _prop_changed_override(prop : String, value : Variant):
 func instantiate_inspector(res_to_edit : Resource = null, res_array := Array()):
 	if Engine.is_editor_hint():
 		res_array_ref = res_array
-		res_to_edit_ref = res_to_edit
+		#res_to_edit_ref = res_to_edit
 		
 		mini_inspector = EditorInspector.new()
 		_miniinspector_anchor_sizeflag_override(mini_inspector)
@@ -80,6 +80,8 @@ func refill_inspector(res_to_edit : Resource):
 		if mini_inspector_vbox.get_child_count() > 0:
 			for child : Node in mini_inspector_vbox.get_children():
 				child.queue_free()
+		
+		res_to_edit_ref = res_to_edit
 		
 		var data_dict_list : Array[Dictionary]
 		for prop_dict : Dictionary in res_to_edit.get_property_list():
