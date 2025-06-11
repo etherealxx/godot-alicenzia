@@ -25,7 +25,7 @@ var temp_pathlicencedata : PathLicenseData
 var cached_alz_licdb : ALZProjectLicenseDatabase
 
 func _ready() -> void:
-	pass
+	pwl_dialog.hide()
 
 
 func _addon_init():
@@ -68,7 +68,7 @@ func _miniinspector_anchor_sizeflag_override(_mini_inspector : ScrollContainer):
 	_mini_inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	#mini_inspector.custom_minimum_size.y = self.custom_minimum_size.y + 30.0
 	#mini_inspector.size_flags_vertical = SIZE_EXPAND_FILL
-	_mini_inspector.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_mini_inspector.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO # unnecessary line
 	pass
 
 
@@ -94,11 +94,15 @@ func _on_filesystemdock_selectedpath_changed():
 		
 		var dir = DirAccess.open(RES_PATH)
 		
+		var lic_context := ALZLicenseContext.new() # will be used later for checking inherits
+		
 		if dir.dir_exists(fsd_last_selected_file):
 			save_btn.text = "Save Per-Folder License"
+			lic_context.path_type = ALZLicenseContext.LicensePathType.FOLDER
 		else:
 			if dir.file_exists(fsd_last_selected_file):
 				save_btn.text = "Save Per-File License"
+				lic_context.path_type = ALZLicenseContext.LicensePathType.FILE
 			else:
 				push_warning("type of path unknown")
 		
@@ -115,9 +119,10 @@ func _on_filesystemdock_selectedpath_changed():
 		var saved_licdata_found := false
 		var lic_dict : Dictionary
 		
+		var cleansed_path := _cleanse_dir_path(fsd_last_selected_file)
+		
 		if cached_alz_licdb:
 			lic_dict = cached_alz_licdb.path_license_dict
-			var cleansed_path := _cleanse_dir_path(fsd_last_selected_file)
 			if lic_dict.has(cleansed_path):
 				temp_pathlicencedata = lic_dict[cleansed_path]
 				saved_licdata_found = true
@@ -129,12 +134,12 @@ func _on_filesystemdock_selectedpath_changed():
 		
 		refill_inspector(temp_pathlicencedata)
 		
-		var skip_search := _cleanse_dir_path(fsd_last_selected_file) == RES_PATH
-		
+		# for now, skip if the dir path is res://
+		var skip_search := cleansed_path == RES_PATH
 		if skip_search:
 			return
 		
-		var next_dir_to_search := _cleanse_dir_path(fsd_last_selected_file).get_base_dir()
+		var next_dir_to_search := cleansed_path.get_base_dir()
 		var parent_dir_license := ""
 		
 		# search for the closest parent per-folder license
@@ -145,25 +150,28 @@ func _on_filesystemdock_selectedpath_changed():
 				if lic_dict.has(next_dir_to_search):
 					var parent_dir_pld : PathLicenseData = lic_dict[next_dir_to_search]
 					parent_dir_license = parent_dir_pld.license_type
+					lic_context.license_parent_folder = next_dir_to_search.get_slice(
+															"/",
+															next_dir_to_search.get_slice_count("/") - 1
+														)
 					break
 				next_dir_to_search = _cleanse_dir_path(next_dir_to_search).get_base_dir()
 		
+		lic_context.current_fsd_path = cleansed_path
+		
 		if saved_licdata_found:
-			lic_inherit_info.set_text_by_license_status(
-				PathLicenseStatus.SELF_ASSIGNED, temp_pathlicencedata.license_type
-				)
+			lic_context.inherit_type = ALZLicenseContext.LicenseInheritType.SELF_ASSIGNED
+			lic_context.license_name = temp_pathlicencedata.license_type
 		elif not parent_dir_license.is_empty():
-			lic_inherit_info.set_text_by_license_status(
-				PathLicenseStatus.INHERIT_CLOSEST_PARENT_FOLDER, parent_dir_license
-				)
+			lic_context.inherit_type = ALZLicenseContext.LicenseInheritType.INHERIT_CLOSEST_PARENT_FOLDER
+			lic_context.license_name = parent_dir_license
 		elif is_pwl_exist():
-			lic_inherit_info.set_text_by_license_status(
-				PathLicenseStatus.INHERIT_PROJECT_WIDE, _get_license_database_or_null().project_wide_license.license
-				)
+			lic_context.inherit_type = ALZLicenseContext.LicenseInheritType.INHERIT_PROJECT_WIDE
+			lic_context.license_name = _get_license_database_or_null().project_wide_license.license
 		else:
-			lic_inherit_info.set_text_by_license_status(
-				PathLicenseStatus.INHERIT_NONE, ""
-				)
+			lic_context.inherit_type = ALZLicenseContext.LicenseInheritType.INHERIT_NONE
+		
+		lic_inherit_info.set_text_by_license_context(lic_context)
 
 
 func construct_license_inspector(fsd_last_selected_file):
@@ -179,7 +187,7 @@ func _exit_tree() -> void:
 			if fsd_tree.cell_selected.is_connected(_on_filesystemdock_selectedpath_changed):
 				fsd_tree.cell_selected.disconnect(_on_filesystemdock_selectedpath_changed)
 		%WarnIcon.texture = null
-
+		pwl_dialog.hide()
 
 func _on_init_pwl_btn_pressed() -> void:
 	if not pwl_dialog.visible:
@@ -200,7 +208,7 @@ func _get_license_database_or_null() -> ALZProjectLicenseDatabase:
 	var alz_licdb : ALZProjectLicenseDatabase
 	 
 	if _check_license_database_exists():
-		print("file does exist")
+		#print("licensedb does exist")
 		alz_licdb = ResourceLoader.load(
 										LICENSE_DATABASE_SAVE_PATH,
 										"",

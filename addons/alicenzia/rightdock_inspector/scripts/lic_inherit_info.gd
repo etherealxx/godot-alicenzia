@@ -1,43 +1,42 @@
 @tool
 extends VBoxContainer
 
-enum PathLicenseStatus {
-	INHERIT_NONE, INHERIT_PROJECT_WIDE,
-	INHERIT_CLOSEST_PARENT_FOLDER, SELF_ASSIGNED
-}
+#enum PathLicenseStatus {
+	#INHERIT_NONE, INHERIT_PROJECT_WIDE,
+	#INHERIT_CLOSEST_PARENT_FOLDER, SELF_ASSIGNED
+#}
 
-@export var panels_to_theme : Array[PanelContainer]
+#@export var panels_to_theme : Array[PanelContainer]
 
 @onready var info_icon: TextureRect = %InfoIcon
-@onready var label: RichTextLabel = %Label
+@onready var inherit_info: RichTextLabel = %InheritInfo
+@onready var folder_info_panel: PanelContainer = %FolderInfoPanel
+@onready var folder_info: RichTextLabel = %FolderInfoPanel/FolderInfo
+
+var panel_themer: Node
 
 
 func _addon_init() -> void:
+	panel_themer = $PanelThemer
 	_cleanse_theme()
-	
-	for panel : PanelContainer in panels_to_theme:
-		panel.set_theme( EditorInterface.get_editor_theme() )
-		
-		var editor_disabled_bg_color = panel.get_theme_color("disabled_bg_color", "Editor")
-		var new_stylebox_panel := StyleBoxFlat.new()
-		new_stylebox_panel.bg_color = editor_disabled_bg_color
-		#new_stylebox_panel.border_color = editor_disabled_bg_color
-		panel.add_theme_stylebox_override("panel", new_stylebox_panel)
+	panel_themer.replace_panel_themes()
 
 
-#@TODO make license status a class, and add the file/folder type
-func set_text_by_license_status(licstatus : PathLicenseStatus, lic_name : String):
+# func set_text_by_license_status(licstatus : PathLicenseStatus, lic_name : String):
+func set_text_by_license_context(lic_context : ALZLicenseContext):
 	show()
 	info_icon.texture = get_theme_icon("NodeInfo", "EditorIcons")
-	
-	match (licstatus):
-		PathLicenseStatus.INHERIT_NONE:
+	folder_info_panel.hide()
+	match (lic_context.inherit_type):
+		ALZLicenseContext.LicenseInheritType.INHERIT_NONE:
 			hide()
-		PathLicenseStatus.INHERIT_PROJECT_WIDE:
-			label.text = "Without a path-specific license, this file [b]inherits[/b] the [b]project-wide[/b] %s." % lic_name
-		PathLicenseStatus.INHERIT_CLOSEST_PARENT_FOLDER:
-			label.text = "Without a path-specific license, this file [b]inherits[/b] the [b]parent folder's[/b] %s." % lic_name
-		PathLicenseStatus.SELF_ASSIGNED:
+		ALZLicenseContext.LicenseInheritType.INHERIT_PROJECT_WIDE:
+			inherit_info.text = "Without a path-specific license, this file [b]inherits[/b] the [b]project-wide[/b] %s." % lic_context.license_name
+		ALZLicenseContext.LicenseInheritType.INHERIT_CLOSEST_PARENT_FOLDER:
+			inherit_info.text = "Without a path-specific license, this file [b]inherits[/b] the [b]parent folder's[/b] %s." % lic_context.license_name #
+			folder_info.text = "License inherited from the [b]%s[/b] folder" % lic_context.license_parent_folder
+			folder_info_panel.show()
+		ALZLicenseContext.LicenseInheritType.SELF_ASSIGNED:
 			hide()
 	#if licdata_exists:
 		#label.text = "License data for this path found on the database and loaded."
@@ -48,10 +47,9 @@ func set_text_by_license_status(licstatus : PathLicenseStatus, lic_name : String
 
 
 func _cleanse_theme():
-	for panel : PanelContainer in panels_to_theme:
-		panel.remove_theme_stylebox_override("panel")
+	panel_themer.cleanse_panel_themes()
 	info_icon.texture = null
 
 
 func _exit_tree() -> void:
-	_cleanse_theme()
+	info_icon.texture = null

@@ -63,9 +63,9 @@ func instantiate_inspector(res_to_edit : Resource = null, res_array := Array()):
 		inspector_below_here.add_sibling(mini_inspector)
 		
 		mini_inspector_vbox = VBoxContainer.new()
-		_inspectorvbox_anchor_sizeflag_override(mini_inspector_vbox)
 		mini_inspector_vbox.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 		mini_inspector_vbox.size_flags_vertical = SIZE_EXPAND_FILL
+		_inspectorvbox_anchor_sizeflag_override(mini_inspector_vbox)
 		mini_inspector.add_child(mini_inspector_vbox)
 		
 		if res_to_edit != null:

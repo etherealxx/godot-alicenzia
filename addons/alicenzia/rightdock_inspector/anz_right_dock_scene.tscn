@@ -88,6 +88,8 @@ layout_mode = 2
 
 [node name="ProjectWideLicenseDialog" parent="." instance=ExtResource("2_1ly1l")]
 unique_name_in_owner = true
+auto_translate_mode = 2
+visible = false
 
 [node name="InspectorBelowHere" type="Node" parent="."]
 unique_name_in_owner = true

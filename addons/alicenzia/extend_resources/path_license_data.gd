@@ -19,12 +19,10 @@ class_name PathLicenseData
 	#CC_BY_NC_ND, GPLV3
 #}
 
-@export_storage var asset_type_hint := "Code,Music,Addon/Plugin/GDExtension"
+@export_storage var asset_type_hint := "Addon/Plugin/GDExtension,Code,Font,Music,Shader,Sound Effect"
 @export_storage var ownership_type_hint := "Internally Made,External"
 @export_storage var creator_hint := "Etherealxx"
-@export_storage var license_type_hint := "Apache,MIT,CC-BY"
-
-var variable_
+@export_storage var license_type_hint := "0BSD,All Rights Reserved,Apache 2.0,CC0 1.0,CC-BY 3.0,CC-BY 4.0,_Custom,MIT,_NotProper,SIL OFL 1.1,_Unknown"
 
 @export var name := ""
 @export var type := ""
