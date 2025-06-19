@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://d06v3okq6ixlj" path="res://addons/alicenzia/expanded_box/scenes/param_and_data.tscn" id="1_qycya"]
 
 [node name="ProjectWideLicenseDialog" type="ConfirmationDialog"]
+auto_translate_mode = 2
 disable_3d = true
-oversampling_override = 1.0
 title = "Initialize a Project-wide License"
 initial_position = 2
 size = Vector2i(416, 158)

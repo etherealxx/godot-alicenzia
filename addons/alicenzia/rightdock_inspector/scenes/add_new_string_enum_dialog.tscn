@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://chyu8jn2cxpto"]
+
+[ext_resource type="Script" uid="uid://baun4byo2hfoj" path="res://addons/alicenzia/rightdock_inspector/scripts/add_new_string_enum_dialog.gd" id="1_ttvfg"]
+[ext_resource type="PackedScene" uid="uid://d06v3okq6ixlj" path="res://addons/alicenzia/expanded_box/scenes/param_and_data.tscn" id="2_jmf4a"]
+
+[node name="AddNewStringEnumDialog" type="ConfirmationDialog"]
+auto_translate_mode = 2
+disable_3d = true
+title = "Edit Property X"
+initial_position = 2
+size = Vector2i(416, 219)
+unresizable = true
+auto_translate = false
+script = ExtResource("1_ttvfg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 408.0
+offset_bottom = 170.0
+
+[node name="ListLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "List of current options of X:"
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="NewItemPnD" parent="VBoxContainer" instance=ExtResource("2_jmf4a")]
+unique_name_in_owner = true
+layout_mode = 2
+param_name = "New Option"

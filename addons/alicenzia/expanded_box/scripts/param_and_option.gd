@@ -20,13 +20,29 @@ extends HBoxContainer
 @export var options : Array[String]:
 	set(new_opt):
 		options = new_opt
-		var opt : OptionButton = $OptionAndPlus.get_option_btn()
-		opt.clear()
-		if options.size() > 0:
-			for item : String in options:
-				if !item.is_empty():
-					opt.add_item(item)
+		refill_options(options)
 
 
+func refill_options(new_opt_array : Array[String]):
+	#print("called")
+	var opt : OptionButton = $OptionAndPlus.get_option_btn()
+	opt.clear()
+	if new_opt_array.size() > 0:
+		for item : String in new_opt_array:
+			if !item.is_empty():
+				opt.add_item(item)
+
+
+# only works if all options has unique texts
+func set_selected_option(selected_opt : String) -> bool:
+	var opt : OptionButton = $OptionAndPlus.get_option_btn()
+	if selected_opt in options:
+		for item_id : int in options.size():
+			if opt.get_item_text(item_id) == selected_opt:
+				opt.select(item_id)
+				return true
+	return false
+	
+	
 func get_value() -> String:
 	return $OptionAndPlus.get_value()

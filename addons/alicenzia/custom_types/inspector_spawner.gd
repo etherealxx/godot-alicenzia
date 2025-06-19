@@ -126,6 +126,7 @@ func refill_inspector(res_to_edit : Resource):
 				
 				var new_hbox = HBoxContainer.new()
 				var new_btn = Button.new()
+				new_btn.pressed.connect(_on_stringenumdropdown_addmore_btn_pressed.bind(new_btn, res_to_edit, prop_name))
 				new_hbox.add_child(prop_editor)
 				new_hbox.add_child(new_btn)
 				new_btn.text = "+"
@@ -177,3 +178,6 @@ func _prop_selected(p_path:String, p_focusable: int) -> void:
 				continue
 			if edprop.is_selected():
 				edprop.deselect()
+
+func _on_stringenumdropdown_addmore_btn_pressed(button_ref : Button, res_ref : Resource, prop_name_ref : String):
+	pass

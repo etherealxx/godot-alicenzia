@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://ch5mnmkieer5x"]
+[gd_scene load_steps=8 format=3 uid="uid://ch5mnmkieer5x"]
 
 [ext_resource type="Script" uid="uid://bwo0xu2pgvwdp" path="res://addons/alicenzia/custom_types/table_container.gd" id="1_15so8"]
-[ext_resource type="Script" uid="uid://453yywbf1r1i" path="res://addons/alicenzia/scripts/anz_main_scene.gd" id="1_gppt2"]
 [ext_resource type="Script" uid="uid://cwyvk2ky18epe" path="res://addons/alicenzia/custom_types/table_row_container.gd" id="2_gppt2"]
 [ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/scenes/table_firstrow_button.tscn" id="3_4fvpr"]
 [ext_resource type="PackedScene" uid="uid://b64comlxjc7tp" path="res://addons/alicenzia/scenes/row_check_box.tscn" id="4_f84m6"]
@@ -30,7 +29,6 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_gppt2")
 
 [node name="UILayoutHbox" type="HBoxContainer" parent="."]
 layout_mode = 2

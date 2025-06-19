@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cdgcops15lly0"]
+[gd_scene load_steps=6 format=3 uid="uid://cdgcops15lly0"]
 
 [ext_resource type="Script" uid="uid://cqgx4b6criqnj" path="res://addons/alicenzia/rightdock_inspector/anz_right_dock_scene.gd" id="1_gmbqi"]
 [ext_resource type="PackedScene" uid="uid://c1l4iekh4v87y" path="res://addons/alicenzia/rightdock_inspector/scenes/project_wide_license_dialog.tscn" id="2_1ly1l"]
 [ext_resource type="PackedScene" uid="uid://bms5q447dngpi" path="res://addons/alicenzia/rightdock_inspector/scenes/exist_in_lic_db_info.tscn" id="2_40gp4"]
 [ext_resource type="PackedScene" uid="uid://bm1y5fmy46rbf" path="res://addons/alicenzia/rightdock_inspector/scenes/lic_inherit_info.tscn" id="2_s5q64"]
+[ext_resource type="PackedScene" uid="uid://chyu8jn2cxpto" path="res://addons/alicenzia/rightdock_inspector/scenes/add_new_string_enum_dialog.tscn" id="5_s5q64"]
 
 [node name="License" type="VBoxContainer"]
 anchors_preset = 15
@@ -88,8 +89,10 @@ layout_mode = 2
 
 [node name="ProjectWideLicenseDialog" parent="." instance=ExtResource("2_1ly1l")]
 unique_name_in_owner = true
-auto_translate_mode = 2
 visible = false
+
+[node name="AddNewStringEnumDialog" parent="." instance=ExtResource("5_s5q64")]
+unique_name_in_owner = true
 
 [node name="InspectorBelowHere" type="Node" parent="."]
 unique_name_in_owner = true

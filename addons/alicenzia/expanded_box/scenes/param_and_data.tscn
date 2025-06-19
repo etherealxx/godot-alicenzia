@@ -4,7 +4,6 @@
 
 [node name="ParamAndData" type="HBoxContainer"]
 script = ExtResource("1_8j1xl")
-placeholder_text = null
 
 [node name="Label" type="Label" parent="."]
 custom_minimum_size = Vector2(150, 0)

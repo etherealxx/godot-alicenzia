@@ -19,6 +19,7 @@ class_name PathLicenseData
 	#CC_BY_NC_ND, GPLV3
 #}
 
+# These ones should be the default one i guess
 @export_storage var asset_type_hint := "Addon/Plugin/GDExtension,Code,Font,Music,Shader,Sound Effect"
 @export_storage var ownership_type_hint := "Internally Made,External"
 @export_storage var creator_hint := "Etherealxx"
@@ -32,17 +33,34 @@ class_name PathLicenseData
 @export var license_type := ""
 @export_multiline var usage := ""
 @export_multiline var modification := ""
-@export var link := ""
+@export var webpage_link := ""
 
 var path := ""
 var extension := ""
 var full_lisence := ""
 
-func get_enum_hint_pair():
+
+func get_enum_hint_name_pair() -> Dictionary[String, String]:
 	var pair : Dictionary[String, String] = {
-		"type" = asset_type_hint,
-		"ownership_type" = ownership_type_hint,
-		"creator" = creator_hint,
-		"license_type" = license_type_hint
+		"type" = "asset_type_hint",
+		"ownership_type" = "ownership_type_hint",
+		"creator" = "creator_hint",
+		"license_type" = "license_type_hint"
 	}
+	return pair
+
+
+func get_enum_hint_pair() -> Dictionary[String, String]:
+	#var pair : Dictionary[String, String] = {
+		#"type" = asset_type_hint,
+		#"ownership_type" = ownership_type_hint,
+		#"creator" = creator_hint,
+		#"license_type" = license_type_hint
+	#}
+	var pair : Dictionary[String, String]
+	var name_pair := get_enum_hint_name_pair()
+	for enum_propname : String in name_pair.keys():
+		var type_hint_varname : String = name_pair[enum_propname]
+		if type_hint_varname in self:
+			pair[enum_propname] = self.get(type_hint_varname)
 	return pair

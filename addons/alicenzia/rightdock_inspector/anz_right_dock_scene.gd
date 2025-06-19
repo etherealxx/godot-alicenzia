@@ -56,6 +56,7 @@ func _addon_init():
 	exist_in_lic_db_info.hide()
 	lic_inherit_info._addon_init()
 	lic_inherit_info.hide()
+	pwl_dialog._addon_init()
 	
 	#fsd_last_selected_dir = EditorInterface.get_current_directory()
 	#fsd_last_selected_file = EditorInterface.get_current_path()
@@ -88,7 +89,7 @@ func _on_filesystemdock_selectedpath_changed():
 		if new_current_file == "Favorites":
 			return
 		fsd_last_selected_file = new_current_file
-		print("current file: %s" % fsd_last_selected_file)
+		#print("current file: %s" % fsd_last_selected_file)
 		current_path.text = fsd_last_selected_file
 		construct_license_inspector(fsd_last_selected_file)
 		
@@ -132,7 +133,8 @@ func _on_filesystemdock_selectedpath_changed():
 		
 		exist_in_lic_db_info.set_text_by_existance(saved_licdata_found)
 		
-		refill_inspector(temp_pathlicencedata)
+		#refill_inspector(temp_pathlicencedata)
+		_refill_pathlicensedata_inspector(temp_pathlicencedata)
 		
 		# for now, skip if the dir path is res://
 		var skip_search := cleansed_path == RES_PATH
@@ -146,7 +148,7 @@ func _on_filesystemdock_selectedpath_changed():
 		if cached_alz_licdb and not saved_licdata_found:
 			var i := 0
 			while (next_dir_to_search != RES_PATH):
-				print(next_dir_to_search)
+				#print(next_dir_to_search)
 				if lic_dict.has(next_dir_to_search):
 					var parent_dir_pld : PathLicenseData = lic_dict[next_dir_to_search]
 					parent_dir_license = parent_dir_pld.license_type
@@ -263,6 +265,7 @@ func _on_project_wide_license_dialog_confirmed() -> void:
 	if not alz_licdb:
 		alz_licdb = ALZProjectLicenseDatabase.new()
 	
+	alz_licdb.project_name = ProjectSettings.get("application/config/name")
 	alz_licdb.project_wide_license = new_pwl
 	ResourceSaver.save(alz_licdb, LICENSE_DATABASE_SAVE_PATH)
 	%NoProjectLicenseWarn.visible = false
@@ -270,38 +273,29 @@ func _on_project_wide_license_dialog_confirmed() -> void:
 		cached_alz_licdb = alz_licdb
 
 
-#func _on_inspector_deselect():
-	#if mini_inspector_vbox_ref:
-		#for _edprop in mini_inspector_vbox.get_children():
-			#var edprop = _edprop
-			#if edprop is HBoxContainer:
-				#if edprop.get_child(0) is EditorProperty:
-					#edprop = _edprop.get_child(0)
-			#if edprop is EditorProperty:
-				#if edprop.is_selected():
-					#edprop.deselect()
-							
-#func _propname_matchcase_override(res_to_edit : Resource, prop_name : String):
-	#match prop_name:
-		#prop_title_varname:
-			#song_title_label.text = res_to_edit.get(prop_name)
+func _on_stringenumdropdown_addmore_btn_pressed(button_ref : Button, res_ref : Resource, prop_name_ref : String): # override
+	%AddNewStringEnumDialog.show_and_setup(res_ref, prop_name_ref)
 
-#func _prop_changed_override(prop : String, value : Variant):
-	#if prop == prop_title_varname:
-		#song_title_label.text = value
-	#pass
 
-#func fill_data(data : Resource):
-	#song_data = data
-	#instantiate_inspector(song_data)
-	#init_panel()
+func _on_add_new_string_enum_dialog_confirmed() -> void:
+	var updated_licdb : ALZProjectLicenseDatabase = %AddNewStringEnumDialog.assign_new_prop_option_to_res(
+		_get_license_database_or_null()
+	)
+	if updated_licdb:
+		_save_license_database(updated_licdb)
+		print("db updated")
+	#%AddNewStringEnumDialog.update_resdefault_changes()
+	var updated_res : Resource = %AddNewStringEnumDialog.get_cached_edited_res()
+	_refill_pathlicensedata_inspector(updated_res)
 
-#func print_prop(res : Resource):
-	#print("---")
-	#for prop_dict : Dictionary in res.get_property_list():
-		#print(prop_dict)
-	#print("---")
-
-#func _on_remove_btn_pressed() -> void:
-	#EditorInterface.mark_scene_as_unsaved()
-	#remove_this_panel.emit()
+func _refill_pathlicensedata_inspector(pld_res : PathLicenseData):
+	# check and update the type hints first
+	var alz_licdb := _get_license_database_or_null()
+	if alz_licdb:
+		var sdc := alz_licdb.get_saved_default_changes_or_null("PathLicenseData")
+		if sdc:
+			for propname : String in sdc.propname_savedvalue_pairs.keys():
+				var new_value = sdc.propname_savedvalue_pairs[propname]
+				pld_res.set(propname, new_value)
+				
+	refill_inspector(pld_res)

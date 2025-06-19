@@ -22,3 +22,7 @@ func _ready():
 
 func get_value() -> String:
 	return $LineEdit.text
+
+
+func get_lineedit_node() -> LineEdit:
+	return $LineEdit
