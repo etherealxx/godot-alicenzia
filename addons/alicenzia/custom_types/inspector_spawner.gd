@@ -21,11 +21,11 @@ var prop_cover_varname : String
 var res_to_edit_ref : Resource
 var res_array_ref : Array
 
-func _miniinspector_anchor_sizeflag_override(_mini_inspector : ScrollContainer):
+func _miniinspector_anchor_sizeflag_override(_mini_inspector : ScrollContainer) -> void:
 	#set_anchors_and_offsets_preset, size_flags_horizontal, custom_minimum_size
 	pass
 
-func _inspectorvbox_anchor_sizeflag_override(_mini_inspector_vbox : VBoxContainer):
+func _inspectorvbox_anchor_sizeflag_override(_mini_inspector_vbox : VBoxContainer) -> void:
 	# size_flags_horizontal, custom_minimum_size
 	pass
 
@@ -35,19 +35,19 @@ func _skip_if_true_override(res_to_edit : Resource, prop_dict : Dictionary) -> b
 		
 	return false
 
-func _propname_matchcase_override(res_to_edit : Resource, prop_name : String):
+func _propname_matchcase_override(res_to_edit : Resource, prop_name : String) -> void:
 	match prop_name:
 		_:
 			pass
 
-func _after_init_override():
+func _after_init_override() -> void:
 	#mini_inspector.hide()
 	pass
 
-func _prop_changed_override(prop : String, value : Variant):
+func _prop_changed_override(prop : String, value : Variant) -> void:
 	pass
 
-func instantiate_inspector(res_to_edit : Resource = null, res_array := Array()):
+func instantiate_inspector(res_to_edit : Resource = null, res_array := Array()) -> void:
 	if Engine.is_editor_hint():
 		res_array_ref = res_array
 		#res_to_edit_ref = res_to_edit
@@ -75,7 +75,7 @@ func instantiate_inspector(res_to_edit : Resource = null, res_array := Array()):
 		#return mini_inspector # mini_inspector_vbox
 
 
-func refill_inspector(res_to_edit : Resource):
+func refill_inspector(res_to_edit : Resource) -> void:
 	if Engine.is_editor_hint():
 		if mini_inspector_vbox.get_child_count() > 0:
 			for child : Node in mini_inspector_vbox.get_children():
@@ -155,7 +155,7 @@ func refill_inspector(res_to_edit : Resource):
 			propname_edprop_map[prop_name] = prop_editor
 
 
-func _on_mini_inspector_focus_exited():
+func _on_mini_inspector_focus_exited() -> void:
 	for edprop in mini_inspector_vbox.get_children():
 		if edprop is EditorProperty:
 			edprop.deselect()
@@ -179,5 +179,5 @@ func _prop_selected(p_path:String, p_focusable: int) -> void:
 			if edprop.is_selected():
 				edprop.deselect()
 
-func _on_stringenumdropdown_addmore_btn_pressed(button_ref : Button, res_ref : Resource, prop_name_ref : String):
+func _on_stringenumdropdown_addmore_btn_pressed(button_ref : Button, res_ref : Resource, prop_name_ref : String) -> void:
 	pass

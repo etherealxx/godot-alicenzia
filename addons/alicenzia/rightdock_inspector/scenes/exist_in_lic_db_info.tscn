@@ -34,7 +34,7 @@ custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "This path has no license data saved in the database.
-Create new one by filling the fields below and save."
+Create new one (if needed) by filling the fields below and save."
 horizontal_alignment = 1
 autowrap_mode = 3
 

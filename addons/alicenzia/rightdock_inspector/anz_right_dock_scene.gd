@@ -12,6 +12,7 @@ const RES_PATH := "res://"
 
 @onready var current_path: TextEdit = %CurrentPath
 @onready var pwl_dialog: ConfirmationDialog = %ProjectWideLicenseDialog
+@onready var add_new_string_enum_dialog: ConfirmationDialog = %AddNewStringEnumDialog
 @onready var save_btn: Button = %SavePathLicenseBtn
 @onready var exist_in_lic_db_info: VBoxContainer = %ExistInLicDBInfo
 @onready var lic_inherit_info: VBoxContainer = %LicInheritInfo
@@ -24,12 +25,14 @@ var fsd_last_selected_file : String
 var temp_pathlicencedata : PathLicenseData
 var cached_alz_licdb : ALZProjectLicenseDatabase
 
+
 func _ready() -> void:
-	pwl_dialog.hide()
+	#pwl_dialog.hide()
+	pass
 
 
-func _addon_init():
-	pwl_dialog.hide()
+func _addon_init() -> void:
+	#pwl_dialog.hide()
 	inspector_below_here = %InspectorBelowHere
 	# mini_inspector_vbox = instantiate_inspector(DATA_TEST)
 	instantiate_inspector()
@@ -58,13 +61,15 @@ func _addon_init():
 	lic_inherit_info.hide()
 	pwl_dialog._addon_init()
 	
+	add_new_string_enum_dialog.attempt_remove_hint_from_param.connect(_on_attempt_remove_hint_from_param)
+	
 	#fsd_last_selected_dir = EditorInterface.get_current_directory()
 	#fsd_last_selected_file = EditorInterface.get_current_path()
 	#mini_inspector_vbox_ref.get_parent().size_flags
 	#deselect_area.deselect.connect(_on_inspector_deselect)
 
 
-func _miniinspector_anchor_sizeflag_override(_mini_inspector : ScrollContainer):
+func _miniinspector_anchor_sizeflag_override(_mini_inspector : ScrollContainer) -> void:
 	_mini_inspector.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	_mini_inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	#mini_inspector.custom_minimum_size.y = self.custom_minimum_size.y + 30.0
@@ -73,12 +78,12 @@ func _miniinspector_anchor_sizeflag_override(_mini_inspector : ScrollContainer):
 	pass
 
 
-func _inspectorvbox_anchor_sizeflag_override(_mini_inspector_vbox : VBoxContainer):
+func _inspectorvbox_anchor_sizeflag_override(_mini_inspector_vbox : VBoxContainer) -> void:
 	_mini_inspector_vbox.size_flags_horizontal = SIZE_EXPAND_FILL
 	pass
 
 	
-func _on_filesystemdock_selectedpath_changed():
+func _on_filesystemdock_selectedpath_changed() -> void:
 	# slight delay so that the signal reads the true current file
 	await get_tree().create_timer(0.01, true, true, true).timeout
 	#var new_current_dir := EditorInterface.get_current_directory()
@@ -182,6 +187,11 @@ func construct_license_inspector(fsd_last_selected_file):
 
 func _exit_tree() -> void:
 	if Engine.is_editor_hint():
+		if pwl_dialog:
+			pwl_dialog.hide()
+		if add_new_string_enum_dialog:
+			add_new_string_enum_dialog.hide()
+		
 		if mini_inspector:
 			mini_inspector.get_parent().remove_child(mini_inspector)
 			mini_inspector.queue_free()
@@ -221,8 +231,10 @@ func _get_license_database_or_null() -> ALZProjectLicenseDatabase:
 		return null
 
 
-func _save_license_database(alz_licdb : ALZProjectLicenseDatabase):
-	ResourceSaver.save(alz_licdb, LICENSE_DATABASE_SAVE_PATH)
+func _save_license_database(alz_licdb : ALZProjectLicenseDatabase) -> int:
+	var err := ResourceSaver.save(alz_licdb, LICENSE_DATABASE_SAVE_PATH)
+	#print("db updated")
+	return err
 	
 
 func _cleanse_dir_path(dir_path : String) -> String:
@@ -273,7 +285,7 @@ func _on_project_wide_license_dialog_confirmed() -> void:
 		cached_alz_licdb = alz_licdb
 
 
-func _on_stringenumdropdown_addmore_btn_pressed(button_ref : Button, res_ref : Resource, prop_name_ref : String): # override
+func _on_stringenumdropdown_addmore_btn_pressed(button_ref : Button, res_ref : Resource, prop_name_ref : String) -> void: # override
 	%AddNewStringEnumDialog.show_and_setup(res_ref, prop_name_ref)
 
 
@@ -283,12 +295,23 @@ func _on_add_new_string_enum_dialog_confirmed() -> void:
 	)
 	if updated_licdb:
 		_save_license_database(updated_licdb)
-		print("db updated")
 	#%AddNewStringEnumDialog.update_resdefault_changes()
 	var updated_res : Resource = %AddNewStringEnumDialog.get_cached_edited_res()
 	_refill_pathlicensedata_inspector(updated_res)
 
-func _refill_pathlicensedata_inspector(pld_res : PathLicenseData):
+func _on_attempt_remove_hint_from_param(hint_to_remove : String) -> void:
+	var updated_licdb : ALZProjectLicenseDatabase = %AddNewStringEnumDialog.remove_selected_hint_on_cached_res(
+		hint_to_remove, _get_license_database_or_null()
+	)
+	if updated_licdb:
+		_save_license_database(updated_licdb)
+	
+	await %AddNewStringEnumDialog.refresh_after_remove_hint()
+	
+	var updated_res : Resource = %AddNewStringEnumDialog.get_cached_edited_res()
+	_refill_pathlicensedata_inspector(updated_res)
+
+func _refill_pathlicensedata_inspector(pld_res : PathLicenseData) -> void:
 	# check and update the type hints first
 	var alz_licdb := _get_license_database_or_null()
 	if alz_licdb:
