@@ -6,6 +6,8 @@ signal addon_refresh # addon
 
 #const ASSET_DATA_ROW : PackedScene = preload("uid://dagdcisuqdljk")
 
+@export var prepare_data_rows_on_start := true
+
 @onready var file_digger: Node = $RecursiveFileDigger
 @onready var assets_table: VBoxContainer = %AssetsTable
 @onready var expanded_box: VBoxContainer = %ExpandedBox
@@ -20,11 +22,12 @@ func _ready() -> void:
 func _addon_init():
 	#data_button_expand_request.connect(_on_data_button_expand_request)
 	assets_table.clear_row()
-	var path_data : PackedStringArray = file_digger.start_walk_dir("res://")
-	#print(path_data)
-	for path : String in path_data:
-		assets_table.add_data_row(path)
-		#	func(idx, expand_yes): data_button_expand_request.emit(idx, expand_yes))
+	if prepare_data_rows_on_start:
+		var path_data : PackedStringArray = file_digger.start_walk_dir("res://")
+		#print(path_data)
+		for path : String in path_data:
+			assets_table.add_data_row(path)
+			#	func(idx, expand_yes): data_button_expand_request.emit(idx, expand_yes))
 
 
 func _on_refresh_addon_btn_pressed() -> void:

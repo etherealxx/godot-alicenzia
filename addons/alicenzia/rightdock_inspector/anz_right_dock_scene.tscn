@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://cdgcops15lly0"]
+[gd_scene load_steps=9 format=3 uid="uid://cdgcops15lly0"]
 
 [ext_resource type="Script" uid="uid://cqgx4b6criqnj" path="res://addons/alicenzia/rightdock_inspector/anz_right_dock_scene.gd" id="1_gmbqi"]
 [ext_resource type="PackedScene" uid="uid://c1l4iekh4v87y" path="res://addons/alicenzia/rightdock_inspector/scenes/project_wide_license_dialog.tscn" id="2_1ly1l"]
 [ext_resource type="PackedScene" uid="uid://bms5q447dngpi" path="res://addons/alicenzia/rightdock_inspector/scenes/exist_in_lic_db_info.tscn" id="2_40gp4"]
+[ext_resource type="PackedScene" uid="uid://lk8mtb18ib5h" path="res://addons/alicenzia/rightdock_inspector/scenes/current_path_textedit_readonly.tscn" id="2_j83lm"]
 [ext_resource type="PackedScene" uid="uid://bm1y5fmy46rbf" path="res://addons/alicenzia/rightdock_inspector/scenes/lic_inherit_info.tscn" id="2_s5q64"]
+[ext_resource type="Script" uid="uid://oj2q8wepfbwf" path="res://addons/alicenzia/components/panel_themer.gd" id="4_syktp"]
 [ext_resource type="PackedScene" uid="uid://chyu8jn2cxpto" path="res://addons/alicenzia/rightdock_inspector/scenes/add_new_string_enum_dialog.tscn" id="5_s5q64"]
+[ext_resource type="PackedScene" uid="uid://dwdf70chwedd0" path="res://addons/alicenzia/rightdock_inspector/scenes/confirm_remove_path_lic_dialog.tscn" id="8_j83lm"]
 
 [node name="License" type="VBoxContainer"]
 anchors_preset = 15
@@ -22,7 +25,7 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="NoProjectLicenseWarn"]
 layout_mode = 2
 
-[node name="WarnIcon" type="TextureRect" parent="NoProjectLicenseWarn/HBoxContainer"]
+[node name="NoPWLWarnIcon" type="TextureRect" parent="NoProjectLicenseWarn/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 stretch_mode = 5
@@ -53,20 +56,9 @@ layout_mode = 2
 editable = false
 expand_to_text_length = true
 
-[node name="CurrentPath" type="TextEdit" parent="."]
+[node name="CurrentPath" parent="." instance=ExtResource("2_j83lm")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "res://addons/alicenzia/extend_resources/data_test.tres"
-editable = false
-context_menu_enabled = false
-emoji_menu_enabled = false
-shortcut_keys_enabled = false
-drag_and_drop_selection_enabled = false
-virtual_keyboard_enabled = false
-middle_mouse_paste_enabled = false
-empty_selection_clipboard_enabled = false
-wrap_mode = 1
-scroll_fit_content_height = true
 
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
@@ -79,13 +71,63 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SavePathLicenseBtn" type="Button" parent="."]
+[node name="UnsavedChangesHbox" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="IconPanel" type="PanelContainer" parent="UnsavedChangesHbox"]
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 2
+
+[node name="UnsavedChangesWarningIcon" type="TextureRect" parent="UnsavedChangesHbox/IconPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+stretch_mode = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="UnsavedChangesHbox"]
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="UnsavedChangesHbox/PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "You have unsaved license changes. Save or discard the changes before navigating into other paths."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SaveDiscardLicHbox" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="SavePathLicenseBtn" type="Button" parent="SaveDiscardLicHbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
 text = "Save"
+
+[node name="RemovePathLicenseBtn" type="Button" parent="SaveDiscardLicHbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Remove Path License"
+
+[node name="DiscardChangesBtn" type="Button" parent="SaveDiscardLicHbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Discard Changes"
 
 [node name="HSeparator2" type="HSeparator" parent="."]
 layout_mode = 2
+
+[node name="PanelThemer" type="Node" parent="." node_paths=PackedStringArray("panels_to_theme")]
+script = ExtResource("4_syktp")
+panels_to_theme = [NodePath("../UnsavedChangesHbox/IconPanel"), NodePath("../UnsavedChangesHbox/PanelContainer")]
 
 [node name="ProjectWideLicenseDialog" parent="." instance=ExtResource("2_1ly1l")]
 unique_name_in_owner = true
@@ -93,21 +135,29 @@ visible = false
 
 [node name="AddNewStringEnumDialog" parent="." instance=ExtResource("5_s5q64")]
 unique_name_in_owner = true
+size = Vector2i(471, 296)
+visible = false
+
+[node name="ConfirmRemovePathLicDialog" parent="." instance=ExtResource("8_j83lm")]
+unique_name_in_owner = true
 visible = false
 
 [node name="InspectorBelowHere" type="Node" parent="."]
 unique_name_in_owner = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainerUnused" type="ScrollContainer" parent="."]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="RightDockVbox" type="VBoxContainer" parent="ScrollContainer"]
+[node name="RightDockVbox" type="VBoxContainer" parent="ScrollContainerUnused"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [connection signal="pressed" from="NoProjectLicenseWarn/InitPWLBtn" to="." method="_on_init_pwl_btn_pressed"]
-[connection signal="pressed" from="SavePathLicenseBtn" to="." method="_on_save_path_license_btn_pressed"]
+[connection signal="pressed" from="SaveDiscardLicHbox/SavePathLicenseBtn" to="." method="_on_save_path_license_btn_pressed"]
+[connection signal="pressed" from="SaveDiscardLicHbox/RemovePathLicenseBtn" to="." method="_on_remove_path_license_btn_pressed"]
+[connection signal="pressed" from="SaveDiscardLicHbox/DiscardChangesBtn" to="." method="_on_discard_changes_btn_pressed"]
 [connection signal="confirmed" from="ProjectWideLicenseDialog" to="." method="_on_project_wide_license_dialog_confirmed"]
 [connection signal="confirmed" from="AddNewStringEnumDialog" to="." method="_on_add_new_string_enum_dialog_confirmed"]
+[connection signal="confirmed" from="ConfirmRemovePathLicDialog" to="." method="_on_confirm_remove_path_lic_dialog_confirmed"]

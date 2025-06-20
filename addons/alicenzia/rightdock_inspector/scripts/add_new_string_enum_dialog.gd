@@ -34,7 +34,7 @@ func _ready() -> void:
 	new_item_lineedit = new_item_pn_d.get_lineedit_node()
 	
 	new_item_lineedit.text_changed.connect(func(new_item_text : String):
-		if (new_item_text.is_empty() or (new_item_text in param_options_cache)):
+		if (new_item_text.is_empty() or (new_item_text in param_options_cache) or ("," in new_item_text)):
 			ok_btn.disabled = true
 		else:
 			ok_btn.disabled = false

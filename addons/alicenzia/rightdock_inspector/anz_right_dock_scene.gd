@@ -8,22 +8,36 @@ enum PathLicenseStatus {
 
 const LICENSE_DATABASE_SAVE_PATH := "res://alz_license_database.tres"
 const RES_PATH := "res://"
+
 #@onready var deselect_area: Control = $DeselectArea
 
-@onready var current_path: TextEdit = %CurrentPath
-@onready var pwl_dialog: ConfirmationDialog = %ProjectWideLicenseDialog
-@onready var add_new_string_enum_dialog: ConfirmationDialog = %AddNewStringEnumDialog
-@onready var save_btn: Button = %SavePathLicenseBtn
+@onready var current_path_textbox: TextEdit = %CurrentPath
 @onready var exist_in_lic_db_info: VBoxContainer = %ExistInLicDBInfo
 @onready var lic_inherit_info: VBoxContainer = %LicInheritInfo
+@onready var unsaved_changes_hbox: HBoxContainer = %UnsavedChangesHbox
 
+@onready var pwl_dialog: ConfirmationDialog = %ProjectWideLicenseDialog
+@onready var add_new_string_enum_dialog: ConfirmationDialog = %AddNewStringEnumDialog
+@onready var confirm_remove_path_lic_dialog: ConfirmationDialog = %ConfirmRemovePathLicDialog
+
+@onready var save_btn: Button = %SavePathLicenseBtn
+@onready var remove_path_license_btn: Button = %RemovePathLicenseBtn
+@onready var discard_changes_btn: Button = %DiscardChangesBtn
+
+var tracked_signal_callable_pair : Dictionary[Signal, Callable]
+
+var ed_theme : Theme 
+var ed_toast : EditorToaster
 #var mini_inspector_vbox : EditorInspector
 var fsd_tree : Tree
 #var fsd_last_selected_dir : String
 var fsd_last_selected_file : String
 
-var temp_pathlicencedata : PathLicenseData
+var currently_edited_pld : PathLicenseData
 var cached_alz_licdb : ALZProjectLicenseDatabase
+
+var inspector_changed_unsaved := false
+var empty_pld_ref : PathLicenseData
 
 
 func _ready() -> void:
@@ -32,6 +46,8 @@ func _ready() -> void:
 
 
 func _addon_init() -> void:
+	ed_theme = EditorInterface.get_editor_theme()
+	ed_toast = EditorInterface.get_editor_toaster()
 	#pwl_dialog.hide()
 	inspector_below_here = %InspectorBelowHere
 	# mini_inspector_vbox = instantiate_inspector(DATA_TEST)
@@ -46,27 +62,48 @@ func _addon_init() -> void:
 				fsd_tree = gc
 				break
 				
-	#refill_inspector(DATA_TEST_2)
 	#fsd_tree.print_tree_pretty()
-	#mini_inspector.edit(load("res://addons/alicenzia/extend_resources/data_test.tres"))
-	fsd_tree.cell_selected.connect(_on_filesystemdock_selectedpath_changed)
 	
-	%WarnIcon.texture = get_theme_icon("StatusWarning", "EditorIcons")
-	#project_wide_license_dialog.confirmed.connect(_on_pwl_confirmed)
+	
+	%NoPWLWarnIcon.texture = get_theme_icon("StatusWarning", "EditorIcons")
+	%UnsavedChangesWarningIcon.texture = get_theme_icon("NodeWarning", "EditorIcons")
 
 	%NoProjectLicenseWarn.visible = !is_pwl_exist() # !project_wide_license_dialog.is_pwl_exist()
 	#exist_in_lic_db_info._addon_init()
-	exist_in_lic_db_info.hide()
-	lic_inherit_info._addon_init()
-	lic_inherit_info.hide()
-	pwl_dialog._addon_init()
 	
-	add_new_string_enum_dialog.attempt_remove_hint_from_param.connect(_on_attempt_remove_hint_from_param)
+	for c: Control in \
+	[exist_in_lic_db_info, lic_inherit_info, unsaved_changes_hbox,
+	remove_path_license_btn, discard_changes_btn]:
+		c.hide()
 	
-	#fsd_last_selected_dir = EditorInterface.get_current_directory()
-	#fsd_last_selected_file = EditorInterface.get_current_path()
-	#mini_inspector_vbox_ref.get_parent().size_flags
+	for n: Node in \
+	[lic_inherit_info, pwl_dialog]:
+		if n.has_method("_addon_init"):
+			n._addon_init()
+			
+	#fsd_tree.cell_selected.connect(_on_filesystemdock_selectedpath_changed)
+	#add_new_string_enum_dialog.attempt_remove_hint_from_param.connect(_on_attempt_remove_hint_from_param)
+	connect_and_track_signal(
+		fsd_tree.cell_selected, _on_filesystemdock_selectedpath_changed)
+	connect_and_track_signal(
+		add_new_string_enum_dialog.attempt_remove_hint_from_param, _on_attempt_remove_hint_from_param)
+	
+	save_btn.disabled = true
+	
+	property_changed.connect(func():
+		inspector_changed_unsaved = true
+		# TODO check if the currently edited pld is empty/default on the inspector, if yes then disable the button
+		discard_changes_btn.show()
+		save_btn.disabled = false
+		remove_path_license_btn.hide()
+	)
+
 	#deselect_area.deselect.connect(_on_inspector_deselect)
+
+
+func connect_and_track_signal(obj_and_signal : Signal, callable_to_connect : Callable):
+	obj_and_signal.connect(callable_to_connect)
+	tracked_signal_callable_pair[obj_and_signal] = callable_to_connect
 
 
 func _miniinspector_anchor_sizeflag_override(_mini_inspector : ScrollContainer) -> void:
@@ -84,19 +121,29 @@ func _inspectorvbox_anchor_sizeflag_override(_mini_inspector_vbox : VBoxContaine
 
 	
 func _on_filesystemdock_selectedpath_changed() -> void:
+	if inspector_changed_unsaved:
+		unsaved_changes_hbox.show()
+		return
 	# slight delay so that the signal reads the true current file
 	await get_tree().create_timer(0.01, true, true, true).timeout
+	_refresh_right_scene_dock()
+
+	
+func _refresh_right_scene_dock(force_refresh := false):
 	#var new_current_dir := EditorInterface.get_current_directory()
 	var new_current_file := EditorInterface.get_current_path()
 	#print("%s | %s" % [new_current_dir, new_current_file])
 	
-	if new_current_file != fsd_last_selected_file:
+	if new_current_file != fsd_last_selected_file or force_refresh:
 		if new_current_file == "Favorites":
 			return
 		fsd_last_selected_file = new_current_file
 		#print("current file: %s" % fsd_last_selected_file)
-		current_path.text = fsd_last_selected_file
-		construct_license_inspector(fsd_last_selected_file)
+		current_path_textbox.text = fsd_last_selected_file
+		current_path_textbox.animate_current_path_text()
+		#construct_license_inspector(fsd_last_selected_file)
+		
+		empty_pld_ref = PathLicenseData.new() # so far no usage rn
 		
 		var dir = DirAccess.open(RES_PATH)
 		
@@ -130,16 +177,20 @@ func _on_filesystemdock_selectedpath_changed() -> void:
 		if cached_alz_licdb:
 			lic_dict = cached_alz_licdb.path_license_dict
 			if lic_dict.has(cleansed_path):
-				temp_pathlicencedata = lic_dict[cleansed_path]
+				currently_edited_pld = lic_dict[cleansed_path]
 				saved_licdata_found = true
 		
 		if not saved_licdata_found:
-			temp_pathlicencedata = PathLicenseData.new()
+			currently_edited_pld = PathLicenseData.new()
+			remove_path_license_btn.hide()
+		else:
+			remove_path_license_btn.show()
 		
 		exist_in_lic_db_info.set_text_by_existance(saved_licdata_found)
 		
+		
 		#refill_inspector(temp_pathlicencedata)
-		_refill_pathlicensedata_inspector(temp_pathlicencedata)
+		_refill_pathlicensedata_inspector(currently_edited_pld)
 		
 		# for now, skip if the dir path is res://
 		var skip_search := cleansed_path == RES_PATH
@@ -168,7 +219,7 @@ func _on_filesystemdock_selectedpath_changed() -> void:
 		
 		if saved_licdata_found:
 			lic_context.inherit_type = ALZLicenseContext.LicenseInheritType.SELF_ASSIGNED
-			lic_context.license_name = temp_pathlicencedata.license_type
+			lic_context.license_name = currently_edited_pld.license_type
 		elif not parent_dir_license.is_empty():
 			lic_context.inherit_type = ALZLicenseContext.LicenseInheritType.INHERIT_CLOSEST_PARENT_FOLDER
 			lic_context.license_name = parent_dir_license
@@ -181,25 +232,42 @@ func _on_filesystemdock_selectedpath_changed() -> void:
 		lic_inherit_info.set_text_by_license_context(lic_context)
 
 
-func construct_license_inspector(fsd_last_selected_file):
-	pass
+#func construct_license_inspector(fsd_last_selected_file): # wtf what does this one do?
+	#pass
 
 
 func _exit_tree() -> void:
 	if Engine.is_editor_hint():
-		if pwl_dialog:
-			pwl_dialog.hide()
-		if add_new_string_enum_dialog:
-			add_new_string_enum_dialog.hide()
+		
+		for cd: ConfirmationDialog in \
+		[pwl_dialog, add_new_string_enum_dialog, confirm_remove_path_lic_dialog]:
+			if cd:
+				cd.hide()
 		
 		if mini_inspector:
-			mini_inspector.get_parent().remove_child(mini_inspector)
+			var inspector_parent := mini_inspector.get_parent()
+			if inspector_parent:
+				mini_inspector.get_parent().remove_child(mini_inspector)
 			mini_inspector.queue_free()
 		if fsd_tree:
 			if fsd_tree.cell_selected.is_connected(_on_filesystemdock_selectedpath_changed):
 				fsd_tree.cell_selected.disconnect(_on_filesystemdock_selectedpath_changed)
-		%WarnIcon.texture = null
+		
+		for np : NodePath in ["%UnsavedChangesWarningIcon", "%NoPWLWarnIcon"]:
+			var n : TextureRect = get_node_or_null(np)
+			if n != null:
+				n.texture = null
+
 		pwl_dialog.hide()
+		
+		#print(tracked_signal_callable_pair)
+		for s : Signal in tracked_signal_callable_pair.keys():
+			var callable : Callable = tracked_signal_callable_pair[s]
+			if s.is_connected(callable):
+				s.disconnect(callable)
+		
+		tracked_signal_callable_pair.clear()
+
 
 func _on_init_pwl_btn_pressed() -> void:
 	if not pwl_dialog.visible:
@@ -251,13 +319,17 @@ func _on_save_path_license_btn_pressed() -> void:
 	
 	# fill the path license dict with the path as key and the license data as the value
 	alz_licdb.path_license_dict.set(
-		_cleanse_dir_path(fsd_last_selected_file), temp_pathlicencedata)
+		_cleanse_dir_path(fsd_last_selected_file), currently_edited_pld)
 	
 	_save_license_database(alz_licdb)
 	exist_in_lic_db_info.set_text_by_existance(true)
-	lic_inherit_info.set_text_by_license_status(
-		PathLicenseStatus.SELF_ASSIGNED, temp_pathlicencedata.license_type
-	)
+	
+	#lic_inherit_info.set_text_by_license_status(
+		#PathLicenseStatus.SELF_ASSIGNED, temp_pathlicencedata.license_type
+	#)
+	inspector_changed_unsaved = false
+	discard_changes_btn.hide()
+	_refresh_right_scene_dock(true)
 
 
 func is_pwl_exist() -> bool :
@@ -299,6 +371,7 @@ func _on_add_new_string_enum_dialog_confirmed() -> void:
 	var updated_res : Resource = %AddNewStringEnumDialog.get_cached_edited_res()
 	_refill_pathlicensedata_inspector(updated_res)
 
+
 func _on_attempt_remove_hint_from_param(hint_to_remove : String) -> void:
 	var updated_licdb : ALZProjectLicenseDatabase = %AddNewStringEnumDialog.remove_selected_hint_on_cached_res(
 		hint_to_remove, _get_license_database_or_null()
@@ -311,6 +384,7 @@ func _on_attempt_remove_hint_from_param(hint_to_remove : String) -> void:
 	var updated_res : Resource = %AddNewStringEnumDialog.get_cached_edited_res()
 	_refill_pathlicensedata_inspector(updated_res)
 
+
 func _refill_pathlicensedata_inspector(pld_res : PathLicenseData) -> void:
 	# check and update the type hints first
 	var alz_licdb := _get_license_database_or_null()
@@ -322,3 +396,33 @@ func _refill_pathlicensedata_inspector(pld_res : PathLicenseData) -> void:
 				pld_res.set(propname, new_value)
 				
 	refill_inspector(pld_res)
+
+
+func _on_discard_changes_btn_pressed() -> void:
+	inspector_changed_unsaved = false
+	unsaved_changes_hbox.hide()
+	discard_changes_btn.hide()
+	save_btn.disabled = true
+	_refresh_right_scene_dock(true)
+
+
+func _on_remove_path_license_btn_pressed() -> void:
+	confirm_remove_path_lic_dialog.show_and_fill_path_info(
+		_cleanse_dir_path(fsd_last_selected_file)
+	)
+
+
+func _on_confirm_remove_path_lic_dialog_confirmed() -> void:
+	
+	var alz_licdb := _get_license_database_or_null()
+	if not alz_licdb:
+		return
+	
+	var cleansed_path := _cleanse_dir_path(fsd_last_selected_file)
+	var _erase_successful := alz_licdb.path_license_dict.erase(cleansed_path)
+	
+	_save_license_database(alz_licdb)
+	discard_changes_btn.hide()
+	
+	ed_toast.push_toast("Alicenzia: License data at %s successfully removed." % fsd_last_selected_file, EditorToaster.SEVERITY_INFO)
+	_refresh_right_scene_dock(true)

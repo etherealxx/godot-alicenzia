@@ -10,17 +10,20 @@ var alicenzia_right_dock_node : Control
 
 func _enter_tree() -> void:
 	if Engine.is_editor_hint():
-		load_addon_mainscreen()
+		_load_addon_mainscreen()
+		_load_rightdock_scene()
 		pass
 
 
-func load_addon_mainscreen():
+func _load_addon_mainscreen():
 	alicenzia_main_window_node = load(ALICENZIA_MAIN_WINDOW_SCENE_PATH).instantiate()
-	alicenzia_right_dock_node = load(ALICENZIA_RIGHT_DOCK_SCENE_PATH).instantiate()
 	
 	EditorInterface.get_editor_main_screen().add_child(alicenzia_main_window_node)
 	_make_visible(false)
-	
+
+
+func _load_rightdock_scene():
+	alicenzia_right_dock_node = load(ALICENZIA_RIGHT_DOCK_SCENE_PATH).instantiate()
 	add_control_to_dock(DOCK_SLOT_RIGHT_UL, alicenzia_right_dock_node)
 
 
@@ -36,9 +39,7 @@ func _exit_tree() -> void:
 		if alicenzia_main_window_node:
 			#alicenzia_main_window_node.attempt_save_resource_changes()
 			alicenzia_main_window_node.queue_free()
-		if alicenzia_right_dock_node:
-			remove_control_from_docks(alicenzia_right_dock_node)
-			alicenzia_right_dock_node.queue_free()
+		_attempt_remove_right_dock_scene()
 
 
 func _has_main_screen():
@@ -60,25 +61,33 @@ func _get_plugin_icon():
 
 func _on_addon_refresh():
 	var editor_main_screen : Node = EditorInterface.get_editor_main_screen()
+	
 	if editor_main_screen.is_ancestor_of(alicenzia_main_window_node):
 		alicenzia_main_window_node.addon_refresh.disconnect(_on_addon_refresh)
 		#scene_saved.disconnect(album_manager_node._on_any_scene_saved)
 		alicenzia_main_window_node.queue_free()
 		#remove_inspector_plugin(inspector_plugin_inst)
-		load_addon_mainscreen()
+		_load_addon_mainscreen()
 		alicenzia_main_window_node.addon_refresh.connect(_on_addon_refresh)
 		#scene_saved.connect(album_manager_node._on_any_scene_saved)
 		alicenzia_main_window_node.visible = true
 		alicenzia_main_window_node._addon_init()
+		
 	
-	remove_control_from_docks(alicenzia_right_dock_node)
-	alicenzia_right_dock_node.queue_free()
-	add_control_to_dock(DOCK_SLOT_RIGHT_UL, alicenzia_right_dock_node)
+	_attempt_remove_right_dock_scene()
+	_load_rightdock_scene()
+	alicenzia_right_dock_node._addon_init()
 	
 	print("Alicenzia refreshed")
 	print("---")
 
 
+func _attempt_remove_right_dock_scene():
+	if alicenzia_right_dock_node:
+		remove_control_from_docks(alicenzia_right_dock_node)
+		alicenzia_right_dock_node._exit_tree() # because somehow it doesn't call _exit_tree()
+		alicenzia_right_dock_node.queue_free()
+	
 #func _save_external_data() -> void:
 	#if album_manager_node:
 		##@TODO currently it makes saving the resource twice. but might worth because it also saves before closing

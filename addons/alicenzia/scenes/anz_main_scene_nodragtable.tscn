@@ -26,6 +26,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_vbuva")
+prepare_data_rows_on_start = false
 
 [node name="RecursiveFileDigger" type="Node" parent="."]
 script = ExtResource("2_dn6rg")
@@ -60,6 +61,10 @@ text = "Refresh Addon"
 layout_mode = 2
 tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
 text = "Refresh Table"
+
+[node name="WIPLabel" type="Label" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+text = "⚠️This part of the addon is currently WIP🙏"
 
 [node name="HSeparator" type="HSeparator" parent="UILayoutHbox/MainAddonVbox"]
 layout_mode = 2

@@ -1,15 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://chyu8jn2cxpto"]
+[gd_scene load_steps=5 format=3 uid="uid://chyu8jn2cxpto"]
 
 [ext_resource type="Script" uid="uid://baun4byo2hfoj" path="res://addons/alicenzia/rightdock_inspector/scripts/add_new_string_enum_dialog.gd" id="1_ttvfg"]
 [ext_resource type="PackedScene" uid="uid://d06v3okq6ixlj" path="res://addons/alicenzia/expanded_box/scenes/param_and_data.tscn" id="2_jmf4a"]
 [ext_resource type="Script" uid="uid://oj2q8wepfbwf" path="res://addons/alicenzia/components/panel_themer.gd" id="3_jmf4a"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jmf4a"]
+font_size = 14
+font_color = Color(0.490196, 0.490196, 0.490196, 1)
 
 [node name="AddNewStringEnumDialog" type="ConfirmationDialog"]
 auto_translate_mode = 2
 disable_3d = true
 title = "Edit Property X"
 initial_position = 2
-size = Vector2i(471, 272)
+size = Vector2i(471, 299)
 visible = true
 unresizable = true
 auto_translate = false
@@ -19,7 +23,7 @@ script = ExtResource("1_ttvfg")
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 463.0
-offset_bottom = 223.0
+offset_bottom = 250.0
 
 [node name="ListLabel" type="Label" parent="MainVbox"]
 unique_name_in_owner = true
@@ -87,6 +91,11 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 param_name = "New Option"
+
+[node name="Label" type="Label" parent="MainVbox"]
+layout_mode = 2
+text = "*New Option should not contain a comma ( , )"
+label_settings = SubResource("LabelSettings_jmf4a")
 
 [node name="PanelThemer" type="Node" parent="." node_paths=PackedStringArray("panels_to_theme")]
 script = ExtResource("3_jmf4a")

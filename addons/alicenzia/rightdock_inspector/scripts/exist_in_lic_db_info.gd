@@ -21,7 +21,7 @@ func set_text_by_existance(is_licdata_exists : bool):
 		info_icon.texture = get_theme_icon("StatusSuccess", "EditorIcons")
 	else:
 		label.text ="This path has no license data saved in the database. " + \
-					"Create new one by filling the fields below and save."
+					"Create new one (if needed) by filling the fields below and save."
 		info_icon.texture = get_theme_icon("StatusWarning", "EditorIcons")
 
 
