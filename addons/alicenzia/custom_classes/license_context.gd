@@ -15,7 +15,8 @@ var current_fsd_path := "" # selected file on filesystemdock, should be cleansed
 var license_name := ""
 var path_type : LicensePathType = LicensePathType.UNASSIGNED
 var inherit_type : LicenseInheritType = LicenseInheritType.SELF_ASSIGNED
-var license_parent_folder := "" # if it's INHERIT_CLOSEST_PARENT_FOLDER
+var license_parent_folder_name := "" # if it's INHERIT_CLOSEST_PARENT_FOLDER
+var license_parent_folder_path := ""
 
 var folder_name : String: # unused
 	get:

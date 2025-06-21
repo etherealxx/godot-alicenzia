@@ -13,7 +13,7 @@ auto_translate_mode = 2
 disable_3d = true
 title = "Edit Property X"
 initial_position = 2
-size = Vector2i(471, 299)
+size = Vector2i(471, 296)
 visible = true
 unresizable = true
 auto_translate = false
@@ -23,7 +23,7 @@ script = ExtResource("1_ttvfg")
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 463.0
-offset_bottom = 250.0
+offset_bottom = 247.0
 
 [node name="ListLabel" type="Label" parent="MainVbox"]
 unique_name_in_owner = true

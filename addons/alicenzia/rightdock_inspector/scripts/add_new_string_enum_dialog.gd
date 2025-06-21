@@ -2,7 +2,7 @@
 extends ConfirmationDialog
 
 signal attempt_remove_hint_from_param(singular_hint: String)
-signal update_db_after_remove_hint_done
+#signal update_db_after_remove_hint_done
 
 @onready var main_vbox: VBoxContainer = $MainVbox
 @onready var list_label: Label = %ListLabel
@@ -69,6 +69,7 @@ func show_and_setup(res_to_edit : Resource, param_to_addnewoption : String) -> v
 	list_label.text = "List of current options for %s:" % cap_paramname
 	new_item_pn_d.param_name = "New %s" % cap_paramname
 	self.show()
+	new_item_lineedit.grab_focus()
 
 
 func assign_new_prop_option_to_res(alz_licdb : ALZProjectLicenseDatabase = null) -> ALZProjectLicenseDatabase:

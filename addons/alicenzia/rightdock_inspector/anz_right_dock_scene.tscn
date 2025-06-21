@@ -135,7 +135,6 @@ visible = false
 
 [node name="AddNewStringEnumDialog" parent="." instance=ExtResource("5_s5q64")]
 unique_name_in_owner = true
-size = Vector2i(471, 296)
 visible = false
 
 [node name="ConfirmRemovePathLicDialog" parent="." instance=ExtResource("8_j83lm")]
@@ -155,9 +154,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [connection signal="pressed" from="NoProjectLicenseWarn/InitPWLBtn" to="." method="_on_init_pwl_btn_pressed"]
+[connection signal="check_parent_folder_license" from="LicInheritInfo" to="." method="_on_check_parent_folder_license"]
 [connection signal="pressed" from="SaveDiscardLicHbox/SavePathLicenseBtn" to="." method="_on_save_path_license_btn_pressed"]
 [connection signal="pressed" from="SaveDiscardLicHbox/RemovePathLicenseBtn" to="." method="_on_remove_path_license_btn_pressed"]
 [connection signal="pressed" from="SaveDiscardLicHbox/DiscardChangesBtn" to="." method="_on_discard_changes_btn_pressed"]
 [connection signal="confirmed" from="ProjectWideLicenseDialog" to="." method="_on_project_wide_license_dialog_confirmed"]
+[connection signal="attempt_remove_hint_from_param" from="AddNewStringEnumDialog" to="." method="_on_attempt_remove_hint_from_param"]
 [connection signal="confirmed" from="AddNewStringEnumDialog" to="." method="_on_add_new_string_enum_dialog_confirmed"]
 [connection signal="confirmed" from="ConfirmRemovePathLicDialog" to="." method="_on_confirm_remove_path_lic_dialog_confirmed"]

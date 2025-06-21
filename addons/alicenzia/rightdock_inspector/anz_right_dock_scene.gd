@@ -28,6 +28,7 @@ var tracked_signal_callable_pair : Dictionary[Signal, Callable]
 
 var ed_theme : Theme 
 var ed_toast : EditorToaster
+var ed_fsd : FileSystemDock
 #var mini_inspector_vbox : EditorInspector
 var fsd_tree : Tree
 #var fsd_last_selected_dir : String
@@ -48,14 +49,13 @@ func _ready() -> void:
 func _addon_init() -> void:
 	ed_theme = EditorInterface.get_editor_theme()
 	ed_toast = EditorInterface.get_editor_toaster()
+	ed_fsd = EditorInterface.get_file_system_dock()
 	#pwl_dialog.hide()
 	inspector_below_here = %InspectorBelowHere
 	# mini_inspector_vbox = instantiate_inspector(DATA_TEST)
 	instantiate_inspector()
 	
-	var ed = EditorInterface.get_file_system_dock()
-	
-	for child : Node in ed.get_children():
+	for child : Node in ed_fsd.get_children():
 		if child.get_child_count() > 0:
 			var gc = child.get_child(0)
 			if gc is Tree:
@@ -85,8 +85,6 @@ func _addon_init() -> void:
 	#add_new_string_enum_dialog.attempt_remove_hint_from_param.connect(_on_attempt_remove_hint_from_param)
 	connect_and_track_signal(
 		fsd_tree.cell_selected, _on_filesystemdock_selectedpath_changed)
-	connect_and_track_signal(
-		add_new_string_enum_dialog.attempt_remove_hint_from_param, _on_attempt_remove_hint_from_param)
 	
 	save_btn.disabled = true
 	
@@ -206,12 +204,13 @@ func _refresh_right_scene_dock(force_refresh := false):
 			while (next_dir_to_search != RES_PATH):
 				#print(next_dir_to_search)
 				if lic_dict.has(next_dir_to_search):
+					lic_context.license_parent_folder_path = next_dir_to_search
 					var parent_dir_pld : PathLicenseData = lic_dict[next_dir_to_search]
 					parent_dir_license = parent_dir_pld.license_type
-					lic_context.license_parent_folder = next_dir_to_search.get_slice(
-															"/",
-															next_dir_to_search.get_slice_count("/") - 1
-														)
+					lic_context.license_parent_folder_name = next_dir_to_search.get_slice(
+																"/",
+																next_dir_to_search.get_slice_count("/") - 1
+															)
 					break
 				next_dir_to_search = _cleanse_dir_path(next_dir_to_search).get_base_dir()
 		
@@ -284,7 +283,6 @@ func _check_license_database_exists() -> bool:
 
 
 func _get_license_database_or_null() -> ALZProjectLicenseDatabase:
-	var dir = DirAccess.open(RES_PATH)
 	var alz_licdb : ALZProjectLicenseDatabase
 	 
 	if _check_license_database_exists():
@@ -302,6 +300,7 @@ func _get_license_database_or_null() -> ALZProjectLicenseDatabase:
 func _save_license_database(alz_licdb : ALZProjectLicenseDatabase) -> int:
 	var err := ResourceSaver.save(alz_licdb, LICENSE_DATABASE_SAVE_PATH)
 	#print("db updated")
+	cached_alz_licdb = alz_licdb # also refresh cache
 	return err
 	
 
@@ -329,6 +328,8 @@ func _on_save_path_license_btn_pressed() -> void:
 	#)
 	inspector_changed_unsaved = false
 	discard_changes_btn.hide()
+	save_btn.disabled = true
+	unsaved_changes_hbox.hide()
 	_refresh_right_scene_dock(true)
 
 
@@ -351,10 +352,9 @@ func _on_project_wide_license_dialog_confirmed() -> void:
 	
 	alz_licdb.project_name = ProjectSettings.get("application/config/name")
 	alz_licdb.project_wide_license = new_pwl
-	ResourceSaver.save(alz_licdb, LICENSE_DATABASE_SAVE_PATH)
+	_save_license_database(alz_licdb)
 	%NoProjectLicenseWarn.visible = false
-	if cached_alz_licdb != alz_licdb:
-		cached_alz_licdb = alz_licdb
+	_refresh_right_scene_dock(true)
 
 
 func _on_stringenumdropdown_addmore_btn_pressed(button_ref : Button, res_ref : Resource, prop_name_ref : String) -> void: # override
@@ -425,4 +425,12 @@ func _on_confirm_remove_path_lic_dialog_confirmed() -> void:
 	discard_changes_btn.hide()
 	
 	ed_toast.push_toast("Alicenzia: License data at %s successfully removed." % fsd_last_selected_file, EditorToaster.SEVERITY_INFO)
+	_refresh_right_scene_dock(true)
+
+
+func _on_check_parent_folder_license(res_path: String) -> void:
+	var dir = DirAccess.open(RES_PATH)
+	if not (dir.file_exists(res_path) or dir.dir_exists(res_path)):
+		return
+	ed_fsd.navigate_to_path(res_path)
 	_refresh_right_scene_dock(true)
