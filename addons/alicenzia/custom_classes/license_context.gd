@@ -1,5 +1,5 @@
 @tool
-extends Object
+extends RefCounted
 class_name ALZLicenseContext
 
 enum LicenseInheritType {

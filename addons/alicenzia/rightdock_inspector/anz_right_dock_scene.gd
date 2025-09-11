@@ -39,7 +39,7 @@ var cached_alz_licdb : ALZProjectLicenseDatabase
 
 var inspector_changed_unsaved := false
 var empty_pld_ref : PathLicenseData
-
+var res_diraccess : DirAccess
 
 func _ready() -> void:
 	#pwl_dialog.hide()
@@ -47,6 +47,8 @@ func _ready() -> void:
 
 
 func _addon_init() -> void:
+	res_diraccess = DirAccess.open(RES_PATH)
+	
 	ed_theme = EditorInterface.get_editor_theme()
 	ed_toast = EditorInterface.get_editor_toaster()
 	ed_fsd = EditorInterface.get_file_system_dock()
@@ -86,6 +88,12 @@ func _addon_init() -> void:
 	connect_and_track_signal(
 		fsd_tree.cell_selected, _on_filesystemdock_selectedpath_changed)
 	
+	connect_and_track_signal(
+		ed_fsd.folder_moved, _on_filesystemdock_folder_moved)
+		
+	connect_and_track_signal(
+		ed_fsd.files_moved, _on_filesystemdock_folder_moved)
+		
 	save_btn.disabled = true
 	
 	property_changed.connect(func():
@@ -126,7 +134,41 @@ func _on_filesystemdock_selectedpath_changed() -> void:
 	await get_tree().create_timer(0.01, true, true, true).timeout
 	_refresh_right_scene_dock()
 
+
+func _on_filesystemdock_folder_moved(old_path: String, new_path: String): # moved or renamed, also works for files i think
+	#print("old: %s, new: %s" % [old_path, new_path])
+	var db_exist := _check_license_database_exists()
 	
+	if not db_exist:
+		return #@TODO keep in mind to add something here
+	
+	if not cached_alz_licdb:
+		if db_exist:
+			cached_alz_licdb = _get_license_database_or_null()
+	
+	var cleansed_oldpath := _cleanse_dir_path(old_path)
+	var cleansed_newpath := _cleanse_dir_path(new_path)
+	
+	for saved_path : String in cached_alz_licdb.path_license_dict.keys():
+		if saved_path.begins_with(cleansed_oldpath):
+			var trimmed_rightpart_path := saved_path.trim_prefix(cleansed_oldpath).trim_prefix("/")
+			var combined_new_path : String
+			if trimmed_rightpart_path.strip_edges().is_empty():
+				combined_new_path = cleansed_newpath
+			else:
+				combined_new_path = cleansed_newpath.path_join(trimmed_rightpart_path)
+			#print("combined: %s" % combined_new_path)
+			if cached_alz_licdb.path_license_dict.has(saved_path):
+				var cached_value = cached_alz_licdb.path_license_dict[saved_path]
+				cached_alz_licdb.path_license_dict[combined_new_path] = cached_value
+				cached_alz_licdb.path_license_dict.erase(saved_path)
+				_save_license_database(cached_alz_licdb)
+				print("Alicenzia: Updated the newly renamed path of License data at %s." % combined_new_path)
+				if fsd_last_selected_file == saved_path:
+					ed_fsd.navigate_to_path(combined_new_path)
+					_refresh_right_scene_dock(true)
+
+
 func _refresh_right_scene_dock(force_refresh := false):
 	#var new_current_dir := EditorInterface.get_current_directory()
 	var new_current_file := EditorInterface.get_current_path()
@@ -155,7 +197,7 @@ func _refresh_right_scene_dock(force_refresh := false):
 				save_btn.text = "Save Per-File License"
 				lic_context.path_type = ALZLicenseContext.LicensePathType.FILE
 			else:
-				push_warning("type of path unknown")
+				push_warning("type of path unknown: %s" % fsd_last_selected_file)
 		
 		var db_cached := false # maybe not useful
 		var db_exist := _check_license_database_exists()
