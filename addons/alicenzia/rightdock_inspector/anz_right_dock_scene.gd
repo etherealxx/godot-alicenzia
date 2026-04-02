@@ -7,6 +7,7 @@ enum PathLicenseStatus {
 }
 
 const LICENSE_DATABASE_SAVE_PATH := "res://alz_license_database.tres"
+const LICENSE_PLD_SAVE_PATH := "res://alz_license_database_paths.json"
 const RES_PATH := "res://"
 
 #@onready var deselect_area: Control = $DeselectArea
@@ -333,14 +334,27 @@ func _get_license_database_or_null() -> ALZProjectLicenseDatabase:
 										LICENSE_DATABASE_SAVE_PATH,
 										"",
 										ResourceLoader.CACHE_MODE_REPLACE)
+										
+		alz_licdb.set_plds_from_json(_get_pld_json())
+			
 		return alz_licdb
 	else:
 		#alz_licdb = ALZProjectLicenseDatabase.new()
 		return null
 
 
+func _get_pld_json() -> String:
+	if not FileAccess.file_exists(LICENSE_PLD_SAVE_PATH):
+		return ""
+	var json_file = FileAccess.open(LICENSE_PLD_SAVE_PATH, FileAccess.READ)
+	var json_text = json_file.get_as_text()
+	return json_text
+	
+
 func _save_license_database(alz_licdb : ALZProjectLicenseDatabase) -> int:
 	var err := ResourceSaver.save(alz_licdb, LICENSE_DATABASE_SAVE_PATH)
+	var file = FileAccess.open(LICENSE_PLD_SAVE_PATH, FileAccess.WRITE)
+	file.store_string(alz_licdb.get_data_as_string_json())
 	#print("db updated")
 	cached_alz_licdb = alz_licdb # also refresh cache
 	return err
