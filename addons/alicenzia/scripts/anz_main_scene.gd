@@ -38,3 +38,11 @@ func _on_refresh_addon_btn_pressed() -> void:
 func _on_refresh_table_btn_pressed() -> void:
 	#%AssetsTable.refresh()
 	pass
+
+
+func on_refresh_license_table(vbox : VBoxContainer): # called from main script
+	#print(vbox.is_inside_tree())
+	var table_parent := assets_table.get_parent()
+	assets_table.queue_free()
+	#vbox.get_parent().remove_child(vbox)
+	table_parent.add_child(vbox)

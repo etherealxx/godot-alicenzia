@@ -1,5 +1,5 @@
 @tool
-class_name InspectorSpawner extends Control
+class_name VerticalInspectorSpawner extends Control
 
 signal property_changed
 
@@ -14,7 +14,7 @@ var inspector_below_here: Node
 
 var propname_edprop_map : Dictionary[String, EditorProperty]
 var mini_inspector : EditorInspector
-var mini_inspector_vbox : VBoxContainer
+var mini_inspector_hbox : HBoxContainer
 var prop_title_varname : String
 var prop_cover_varname : String
 
@@ -25,7 +25,7 @@ func _miniinspector_anchor_sizeflag_override(_mini_inspector : ScrollContainer) 
 	#set_anchors_and_offsets_preset, size_flags_horizontal, custom_minimum_size
 	pass
 
-func _inspectorvbox_anchor_sizeflag_override(_mini_inspector_vbox : VBoxContainer) -> void:
+func _inspectorvbox_anchor_sizeflag_override(_mini_inspector_vbox : HBoxContainer) -> void:
 	# size_flags_horizontal, custom_minimum_size
 	pass
 
@@ -62,11 +62,11 @@ func instantiate_inspector(res_to_edit : Resource = null, res_array := Array()) 
 		assert(inspector_below_here, "make sure to override inspector_below_here on ready")
 		inspector_below_here.add_sibling(mini_inspector)
 		
-		mini_inspector_vbox = VBoxContainer.new()
-		mini_inspector_vbox.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
-		mini_inspector_vbox.size_flags_vertical = SIZE_EXPAND_FILL
-		_inspectorvbox_anchor_sizeflag_override(mini_inspector_vbox)
-		mini_inspector.add_child(mini_inspector_vbox)
+		mini_inspector_hbox = HBoxContainer.new()
+		mini_inspector_hbox.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+		mini_inspector_hbox.size_flags_vertical = SIZE_EXPAND_FILL
+		_inspectorvbox_anchor_sizeflag_override(mini_inspector_hbox)
+		mini_inspector.add_child(mini_inspector_hbox)
 		
 		if res_to_edit != null:
 			refill_inspector(res_to_edit)
@@ -77,8 +77,8 @@ func instantiate_inspector(res_to_edit : Resource = null, res_array := Array()) 
 
 func refill_inspector(res_to_edit : Resource) -> void:
 	if Engine.is_editor_hint():
-		if mini_inspector_vbox.get_child_count() > 0:
-			for child : Node in mini_inspector_vbox.get_children():
+		if mini_inspector_hbox.get_child_count() > 0:
+			for child : Node in mini_inspector_hbox.get_children():
 				child.queue_free()
 		
 		res_to_edit_ref = res_to_edit
@@ -123,6 +123,8 @@ func refill_inspector(res_to_edit : Resource) -> void:
 					var_hint_pair[prop_name],
 					data_prop_dict["usage"]
 				)
+				#@INFO new things on this vertical stuff
+				prop_editor.name_split_ratio = 1.0
 				
 				var new_hbox = HBoxContainer.new()
 				var new_btn = Button.new()
@@ -132,7 +134,7 @@ func refill_inspector(res_to_edit : Resource) -> void:
 				new_btn.text = "+"
 				prop_editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				
-				mini_inspector_vbox.add_child(new_hbox)
+				mini_inspector_hbox.add_child(new_hbox)
 				
 			else:
 				prop_editor  = EditorInspector.instantiate_property_editor(
@@ -143,8 +145,10 @@ func refill_inspector(res_to_edit : Resource) -> void:
 					data_prop_dict["hint_string"],
 					data_prop_dict["usage"]
 				)
+				#@INFO new things on this vertical stuff
+				prop_editor.name_split_ratio = 1.0
 		
-				mini_inspector_vbox.add_child(prop_editor)
+				mini_inspector_hbox.add_child(prop_editor)
 			
 			prop_editor.set_object_and_property(res_to_edit, prop_name)
 			prop_editor.label = prop_name.capitalize()
@@ -156,7 +160,7 @@ func refill_inspector(res_to_edit : Resource) -> void:
 
 
 func _on_mini_inspector_focus_exited() -> void:
-	for edprop in mini_inspector_vbox.get_children():
+	for edprop in mini_inspector_hbox.get_children():
 		if edprop is EditorProperty:
 			edprop.deselect()
 
@@ -168,7 +172,7 @@ func _prop_changed(p_property: String, p_value, p_field: StringName, p_changing:
 	property_changed.emit()
 
 func _prop_selected(p_path:String, p_focusable: int) -> void:
-	for _edprop in mini_inspector_vbox.get_children():
+	for _edprop in mini_inspector_hbox.get_children():
 		var edprop = _edprop
 		if edprop is HBoxContainer:
 			if edprop.get_child(0) is EditorProperty:
@@ -178,22 +182,6 @@ func _prop_selected(p_path:String, p_focusable: int) -> void:
 				continue
 			if edprop.is_selected():
 				edprop.deselect()
-
-
-func set_selected_edprop_by_label(capitalized_label : String):
-		for _edprop in get_edprops():
-			var edprop = _edprop
-			if edprop is HBoxContainer:
-				if edprop.get_child(0) is EditorProperty:
-					edprop = _edprop.get_child(0)
-			if edprop is EditorProperty:
-				if edprop.label == capitalized_label:
-					edprop.select()
-					break
-
-
-func get_edprops():
-	return mini_inspector_vbox.get_children()
 
 func _on_stringenumdropdown_addmore_btn_pressed(button_ref : Button, res_ref : Resource, prop_name_ref : String) -> void:
 	pass

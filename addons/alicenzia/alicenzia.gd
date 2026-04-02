@@ -12,6 +12,9 @@ func _enter_tree() -> void:
 	if Engine.is_editor_hint():
 		_load_addon_mainscreen()
 		_load_rightdock_scene()
+		
+		#var test_dock = load("uid://dk5jia7tjw1p5").instantiate()
+		#add_control_to_dock(DOCK_SLOT_RIGHT_UL, test_dock)
 		pass
 
 
@@ -29,7 +32,12 @@ func _load_rightdock_scene():
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
+		# Signals first before the inits
 		alicenzia_main_window_node.addon_refresh.connect(_on_addon_refresh)
+		alicenzia_right_dock_node.refresh_license_table.connect(
+			alicenzia_main_window_node.on_refresh_license_table
+		)
+		
 		alicenzia_main_window_node._addon_init()
 		alicenzia_right_dock_node._addon_init()
 
@@ -64,6 +72,9 @@ func _on_addon_refresh():
 	
 	if editor_main_screen.is_ancestor_of(alicenzia_main_window_node):
 		alicenzia_main_window_node.addon_refresh.disconnect(_on_addon_refresh)
+		alicenzia_right_dock_node.refresh_license_table.disconnect(
+			alicenzia_main_window_node.on_refresh_license_table
+		)
 		#scene_saved.disconnect(album_manager_node._on_any_scene_saved)
 		alicenzia_main_window_node.queue_free()
 		#remove_inspector_plugin(inspector_plugin_inst)
@@ -76,6 +87,9 @@ func _on_addon_refresh():
 	
 	_attempt_remove_right_dock_scene()
 	_load_rightdock_scene()
+	alicenzia_right_dock_node.refresh_license_table.connect(
+		alicenzia_main_window_node.on_refresh_license_table
+	)
 	alicenzia_right_dock_node._addon_init()
 	
 	print("Alicenzia refreshed")

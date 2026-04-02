@@ -1,6 +1,8 @@
 @tool
 extends InspectorSpawner
 
+signal refresh_license_table(vbox : VBoxContainer)
+
 enum PathLicenseStatus {
 	INHERIT_NONE, INHERIT_PROJECT_WIDE,
 	INHERIT_CLOSEST_PARENT_FOLDER, SELF_ASSIGNED
@@ -10,6 +12,10 @@ const LICENSE_DATABASE_SAVE_PATH := "res://alz_license_database.tres"
 const LICENSE_PLD_SAVE_PATH := "res://alz_license_database_paths.json"
 const RES_PATH := "res://"
 
+const BLUE_LABEL_STYLEBOX = preload("res://addons/alicenzia/custom_types/blue_label_stylebox.tres")
+const LIGHTBLUE_LABEL_STYLEBOX = preload("res://addons/alicenzia/custom_types/lightblue_label_stylebox.tres")
+const EXPANDABLE_BUTTON_CELL = preload("res://addons/alicenzia/scenes/expandable_button_cell.tscn")
+#const TABLE_FIRSTROW_BUTTON = preload("res://addons/alicenzia/scenes/table_firstrow_button.tscn")
 #@onready var deselect_area: Control = $DeselectArea
 
 @onready var current_path_textbox: TextEdit = %CurrentPath
@@ -24,6 +30,8 @@ const RES_PATH := "res://"
 @onready var save_btn: Button = %SavePathLicenseBtn
 @onready var remove_path_license_btn: Button = %RemovePathLicenseBtn
 @onready var discard_changes_btn: Button = %DiscardChangesBtn
+
+#@onready var license_list_vbox: VBoxContainer = %LicenseListVbox
 
 var tracked_signal_callable_pair : Dictionary[Signal, Callable]
 
@@ -104,8 +112,74 @@ func _addon_init() -> void:
 		save_btn.disabled = false
 		remove_path_license_btn.hide()
 	)
-
+	
+	var new_license_list_vbox = list_licenses_on_rows()
+	refresh_license_table.emit(new_license_list_vbox)
+	
 	#deselect_area.deselect.connect(_on_inspector_deselect)
+
+
+func list_licenses_on_rows(): #WARNING TODO cuma tes aja tpi bisa jadi fix
+	#for n in license_list_vbox.get_children():
+		#n.queue_free()
+	var license_list_vbox = VBoxContainer.new()
+	license_list_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	
+	var alz_licdb := _get_license_database_or_null()
+	if not alz_licdb:
+		return
+
+	for pld_datas : Dictionary in alz_licdb.get_data_as_dict().values(): # only first to get the titles
+		var new_hbox := HBoxContainer.new()
+		license_list_vbox.add_child(new_hbox)
+		
+		for prop_name : String in pld_datas.keys(): 
+			if prop_name.ends_with("_hint"):
+				continue
+			
+			var new_label := EXPANDABLE_BUTTON_CELL.instantiate()
+			new_label.text = str(prop_name).capitalize()
+			
+			new_label.remove_theme_stylebox_override("normal")
+			new_label.add_theme_stylebox_override("normal", LIGHTBLUE_LABEL_STYLEBOX)
+			new_hbox.add_child(new_label)
+		
+		break
+	
+	var licdb_dict_data : Dictionary = alz_licdb.get_data_as_dict()
+	for pld_paths : String in licdb_dict_data.keys():
+		var pld_datas : Dictionary = licdb_dict_data[pld_paths]
+		var new_hbox := HBoxContainer.new()
+		license_list_vbox.add_child(new_hbox)
+		
+		for prop_name : String in pld_datas.keys():
+			if prop_name.ends_with("_hint"):
+				continue
+			
+			var prop_value = pld_datas[prop_name]
+			
+			#var new_label := Label.new()
+			var new_table_cell := EXPANDABLE_BUTTON_CELL.instantiate()
+			new_table_cell.text = str(prop_value)
+			new_table_cell.pressed.connect(_on_prop_table_cell_pressed.bind(pld_paths, prop_name)) # .bind()
+			
+			#new_label.add_theme_stylebox_override("normal", BLUE_LABEL_STYLEBOX)
+			new_hbox.add_child(new_table_cell)
+			
+	return license_list_vbox
+
+
+func _on_prop_table_cell_pressed(license_path : String, prop_name : String):
+	#self.grab_focus()
+	var dock_slot_right : TabContainer = self.get_parent()
+	var tab_idx := dock_slot_right.get_tab_idx_from_control(self)
+	dock_slot_right.current_tab = tab_idx 
+
+	#for n : Node in dock_slot_right.get_children():
+		
+	_on_check_parent_folder_license(license_path)
+	set_selected_edprop_by_label(prop_name.capitalize()) # currently only works once every refresh
+
 
 
 func connect_and_track_signal(obj_and_signal : Signal, callable_to_connect : Callable):
@@ -272,7 +346,8 @@ func _refresh_right_scene_dock(force_refresh := false):
 			lic_context.inherit_type = ALZLicenseContext.LicenseInheritType.INHERIT_NONE
 		
 		lic_inherit_info.set_text_by_license_context(lic_context)
-
+		
+		list_licenses_on_rows()
 
 #func construct_license_inspector(fsd_last_selected_file): # wtf what does this one do?
 	#pass

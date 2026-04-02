@@ -18,7 +18,7 @@ border_width_right = 10
 border_width_bottom = 4
 border_color = Color(0.2244, 0.2783, 0.44, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3wg5c"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yy88x"]
 bg_color = Color(0.182924, 0.227703, 0.359338, 1)
 border_width_left = 10
 border_width_top = 4
@@ -32,7 +32,7 @@ focus_mode = 0
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_e0u3b")
 theme_override_styles/hover = SubResource("StyleBoxFlat_tchf1")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_e0u3b")
-theme_override_styles/normal = SubResource("StyleBoxFlat_3wg5c")
+theme_override_styles/normal = SubResource("StyleBoxFlat_yy88x")
 text = "presstoexpand"
 text_overrun_behavior = 3
 script = ExtResource("1_yy88x")

@@ -52,6 +52,10 @@ metadata/_edit_lock_ = true
 [node name="ToolbarHbox" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox"]
 layout_mode = 2
 
+[node name="WIPLabel" type="Label" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+text = "⚠️Debug buttons: "
+
 [node name="RefreshAddonBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
 layout_mode = 2
 tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
@@ -61,10 +65,6 @@ text = "Refresh Addon"
 layout_mode = 2
 tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
 text = "Refresh Table"
-
-[node name="WIPLabel" type="Label" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
-layout_mode = 2
-text = "⚠️This part of the addon is currently WIP🙏"
 
 [node name="HSeparator" type="HSeparator" parent="UILayoutHbox/MainAddonVbox"]
 layout_mode = 2
@@ -187,7 +187,9 @@ cell_path_cache = Array[NodePath]([NodePath("CheckEmpty"), NodePath("FRowName"),
 custom_minimum_length = Dictionary[NodePath, float]({
 NodePath("CheckEmpty"): 40.0,
 NodePath("FRowName"): 180.0,
-NodePath("FRowMods"): 130.0
+NodePath("FRowMods"): 130.0,
+NodePath("FRowOwnType"): 154.0,
+NodePath("FRowCrtr"): 115.0
 })
 special_case_minlength = Array[NodePath]([NodePath("FRowOwnType"), NodePath("FRowCrtr")])
 
