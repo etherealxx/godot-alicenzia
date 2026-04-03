@@ -11,6 +11,8 @@ signal addon_refresh # addon
 @onready var file_digger: Node = $RecursiveFileDigger
 @onready var assets_table: VBoxContainer = %AssetsTable
 @onready var expanded_box: VBoxContainer = %ExpandedBox
+@onready var scan_license_dialog: ConfirmationDialog = %ScanLicenseDialog
+@onready var scan_result_dialog: ConfirmationDialog = %ScanResultDialog
 
 
 func _ready() -> void:
@@ -46,3 +48,15 @@ func on_refresh_license_table(vbox : VBoxContainer): # called from main script
 	assets_table.queue_free()
 	#vbox.get_parent().remove_child(vbox)
 	table_parent.add_child(vbox)
+
+
+func _on_scan_license_btn_pressed() -> void:
+	scan_license_dialog.show_and_update()
+
+
+func _on_scan_license_dialog_confirmed() -> void:
+	print("begin scan!")
+	var path_license_data_array : Array = scan_license_dialog.begin_scan()
+	scan_result_dialog.build_rows(path_license_data_array)
+	scan_result_dialog.show()
+		

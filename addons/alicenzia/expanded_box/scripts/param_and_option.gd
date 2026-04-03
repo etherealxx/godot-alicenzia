@@ -1,6 +1,8 @@
 @tool
 extends HBoxContainer
 
+signal selected_item_changed(item_name: String)
+
 @export var param_name := "Param Name":
 	set(new_name):
 		param_name = new_name
@@ -23,6 +25,16 @@ extends HBoxContainer
 		refill_options(options)
 
 
+func _ready() -> void:
+	$OptionAndPlus.selected_item_changed.connect(
+		func(new_item_text): selected_item_changed.emit(new_item_text))
+	
+	
+func disable_option_btn(set_disable : bool):
+	var opt : OptionButton = $OptionAndPlus.get_option_btn()
+	opt.disabled = set_disable
+	
+	
 func refill_options(new_opt_array : Array[String]):
 	#print("called")
 	var opt : OptionButton = $OptionAndPlus.get_option_btn()

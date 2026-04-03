@@ -15,3 +15,6 @@
 /addons/discord-rpc-gd
 alz_license_database.tres
 alz_license_database_paths.json
+/addons/alicenzia/scenes/concepts
+/addons/alicenzia/debug
+/scripts/tests
