@@ -132,13 +132,31 @@ func begin_scan() -> Array[Dictionary]:
 		var license_path_relative := license_path.trim_prefix(addon_folder_globalpath)
 		if license_path_relative.split("\\", false).size() > 2:
 			continue # skip license file found deep inside an addon, for now
+
 		var result_dict : Dictionary = spotted_license_dict["result"]
 		var license_dict : Dictionary = result_dict["license"]
+		var license_name : String = license_dict["name"]
+		var copyright_year : int
+		var copyright_owner : String
+		
+		if license_name in ["MIT"]: # supported license type to search with regex
+			var full_license_text := FileAccess.get_file_as_string(license_path)
+			var regex = RegEx.new()
+			const year_owner_search_pattern := r"Copyright\s+(?:\([cC]\)\s+|©\s+)?(?:(\d{4}(?:-\d{4})?)\s+)?(.*)" # Gemini 3.1 Pro provided this
+			regex.compile(year_owner_search_pattern) 
+			var result = regex.search(full_license_text)
+			if result:
+				copyright_year = int(result.get_string(1))
+				copyright_owner = result.get_string(2)
+
 		var path_license_dict := Dictionary() # NEED A BETTER TERM
 		path_license_dict["name"] = license_path_relative.get_slice("\\", 1) # for example, \alicenzia\LICENSE got alicenzia
-		path_license_dict["license"] = license_dict["name"]
+		path_license_dict["license"] = license_name
+		path_license_dict["copyright_year"] = copyright_year
+		path_license_dict["copyright_owner"] = copyright_owner
 		path_license_dict_array.append(path_license_dict)
-		print("path: %s | license : %s" % [license_path_relative, license_dict["name"]])
+		print(	"path: %s | license : %s | year : %d | owner : %s"
+				% [license_path_relative, license_name, copyright_year, copyright_owner])
 	
 	print("scan done!")
 	return path_license_dict_array
