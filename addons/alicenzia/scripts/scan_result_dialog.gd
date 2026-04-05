@@ -27,5 +27,13 @@ func build_rows(scanned_license_data_array : Array[Dictionary]) -> Array[Control
 	return new_rows
 
 
-func _on_scan_result_confirmed() -> void:
-	pass # Replace with function body.
+func get_confirmed_licenses() -> Array[Dictionary]: # called from the main scene
+	var confirmed_licenses : Array[Dictionary]
+	
+	for row in row_list.get_children():
+		if row == first_row:
+			continue
+		if row.is_row_selected:
+			confirmed_licenses.append(row.thisrow_license_data)
+	
+	return confirmed_licenses

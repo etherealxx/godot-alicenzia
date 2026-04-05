@@ -466,6 +466,32 @@ func _on_save_path_license_btn_pressed() -> void:
 	_refresh_right_scene_dock(true)
 
 
+func on_scan_result_save(scanned_licenses : Array[Dictionary]): # called from main scene via signal
+	#TODO update the table on main scene
+	var alz_licdb := _get_license_database_or_null()
+	if not alz_licdb:
+		alz_licdb = ALZProjectLicenseDatabase.new()
+	
+	for scanned_license_dict in scanned_licenses:
+		var pld_path : String = scanned_license_dict["license_path"] # addon directory
+		if alz_licdb.path_license_dict.has(pld_path):
+			push_warning("Alicenzia: License data for %s already found on the database. For data integrity reason it won't be added by the license scanner." % pld_path)
+		else:
+			var new_pld := PathLicenseData.new()
+			new_pld.name = scanned_license_dict["name"]
+			new_pld.type = scanned_license_dict["type"]
+			new_pld.license_type = scanned_license_dict["license"]
+			new_pld.creator = scanned_license_dict["copyright_owner"]
+			if scanned_license_dict["full_license_text"]:
+				new_pld.full_license_text = scanned_license_dict["full_license_text"]
+			
+			alz_licdb.path_license_dict.set(pld_path, new_pld)
+			print("License data of %s at %s added to the database via the scan tool." % [new_pld.name, pld_path])
+	
+	_save_license_database(alz_licdb)
+	_refresh_right_scene_dock(true)
+
+
 func is_pwl_exist() -> bool :
 	var alz_licdb = _get_license_database_or_null()
 	if alz_licdb:

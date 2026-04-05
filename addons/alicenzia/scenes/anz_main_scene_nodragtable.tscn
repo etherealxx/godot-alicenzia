@@ -316,3 +316,4 @@ middle_mouse_paste_enabled = false
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshTableBtn" to="." method="_on_refresh_table_btn_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ExpandedBox/SaveCloseBtn" to="UILayoutHbox/MainAddonVbox/ExpandedBox" method="_on_save_close_btn_pressed"]
 [connection signal="confirmed" from="ScanLicenseDialog" to="." method="_on_scan_license_dialog_confirmed"]
+[connection signal="confirmed" from="ScanResultDialog" to="." method="_on_scan_result_dialog_confirmed"]

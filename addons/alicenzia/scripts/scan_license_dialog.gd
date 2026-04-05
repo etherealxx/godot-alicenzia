@@ -153,15 +153,25 @@ func begin_scan() -> Array[Dictionary]:
 				copyright_year = int(result.get_string(1))
 				copyright_owner = result.get_string(2)
 		
-		var scanned_license_dict := Dictionary() # NEED A BETTER TERM
-		scanned_license_dict["name"] = license_path_relative.get_slice("\\", 1) # for example, \alicenzia\LICENSE got alicenzia
+		var license_respath := TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
+		var scanned_license_dict := Dictionary()
+		scanned_license_dict["name"] = license_path_relative.get_slice("\\", 1).capitalize() # for example, \alicenzia\LICENSE got Alicenzia
+		scanned_license_dict["type"] = "Addon" # for now
 		scanned_license_dict["license"] = license_name
-		scanned_license_dict["license_path"] = TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
+		scanned_license_dict["license_path"] = license_respath
 		scanned_license_dict["copyright_year"] = copyright_year
 		scanned_license_dict["copyright_owner"] = copyright_owner
+		scanned_license_dict["full_license_text"] = ""
+		
+		var dir = DirAccess.open(RES_PATH)
+		if dir.file_exists(license_respath):
+			var license_text := FileAccess.get_file_as_string(license_respath)
+			if !license_text.is_empty():
+				scanned_license_dict["full_license_text"] = license_text
+		
 		scanned_license_dict_array.append(scanned_license_dict)
-		print(	"path: %s | license : %s | year : %d | owner : %s"
-				% [scanned_license_dict["license_path"], license_name, copyright_year, copyright_owner])
+		#print(	"path: %s | license : %s | year : %d | owner : %s"
+				#% [scanned_license_dict["license_path"], license_name, copyright_year, copyright_owner])
 	
-	print("scan done!")
+	print("Scan done!")
 	return scanned_license_dict_array

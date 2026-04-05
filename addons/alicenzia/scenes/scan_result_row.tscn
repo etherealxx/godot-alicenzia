@@ -27,4 +27,5 @@ custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "View"
 
+[connection signal="toggled" from="RowCheckBox" to="." method="_on_row_check_box_toggled"]
 [connection signal="pressed" from="FullLicense" to="." method="_on_full_license_pressed"]

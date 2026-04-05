@@ -3,8 +3,10 @@ extends HBoxContainer
 
 signal show_license(scanned_license_data : String)
 
+var is_row_selected := false
 var thisrow_license_data : Dictionary
 #var license_respath : String
+
 
 func fill_row(scanned_license_data : Dictionary):
 	thisrow_license_data = scanned_license_data
@@ -23,3 +25,7 @@ func fill_row(scanned_license_data : Dictionary):
 
 func _on_full_license_pressed() -> void:
 	show_license.emit(thisrow_license_data)
+
+
+func _on_row_check_box_toggled(toggled_on: bool) -> void:
+	is_row_selected = toggled_on

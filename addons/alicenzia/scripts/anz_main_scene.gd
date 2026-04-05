@@ -2,6 +2,7 @@
 extends VBoxContainer
 
 signal addon_refresh # addon
+signal save_selected_scanned_licenses(selected_licenses : Array[Dictionary])
 #signal data_button_expand_request(idx : int, expand_yes : bool)
 
 #const ASSET_DATA_ROW : PackedScene = preload("uid://dagdcisuqdljk")
@@ -74,9 +75,13 @@ func _on_scanned_license_row_full_lic_pressed(thisrow_license_data):
 	print(license_respath)
 	full_license_text_area.text = ""
 	full_license_dialog.title = ""
-	var dir = DirAccess.open(RES_PATH)
-	if dir.file_exists(license_respath):
-		var license_text := FileAccess.get_file_as_string(license_respath)
-		full_license_text_area.text = license_text
-		full_license_dialog.title = thisrow_license_data["name"]
+	if thisrow_license_data["full_license_text"]:
+		full_license_text_area.text = thisrow_license_data["full_license_text"]
+		full_license_dialog.title = "Full license text of %s" % thisrow_license_data["name"]
 		full_license_dialog.show()
+
+
+func _on_scan_result_dialog_confirmed() -> void:
+	var confirmed_licenses : Array[Dictionary] = scan_result_dialog.get_confirmed_licenses()
+	#print(str(confirmed_licenses))
+	save_selected_scanned_licenses.emit(confirmed_licenses)

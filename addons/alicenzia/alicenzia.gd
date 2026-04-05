@@ -34,12 +34,19 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		# Signals first before the inits
 		alicenzia_main_window_node.addon_refresh.connect(_on_addon_refresh)
-		alicenzia_right_dock_node.refresh_license_table.connect(
-			alicenzia_main_window_node.on_refresh_license_table
-		)
+		signals_to_connect()
 		
 		alicenzia_main_window_node._addon_init()
 		alicenzia_right_dock_node._addon_init()
+
+
+func signals_to_connect(): # after the right dock scene is initiated
+	alicenzia_right_dock_node.refresh_license_table.connect(
+		alicenzia_main_window_node.on_refresh_license_table
+	)
+	alicenzia_main_window_node.save_selected_scanned_licenses.connect(
+		alicenzia_right_dock_node.on_scan_result_save
+	)
 
 
 func _exit_tree() -> void:
@@ -72,9 +79,15 @@ func _on_addon_refresh():
 	
 	if editor_main_screen.is_ancestor_of(alicenzia_main_window_node):
 		alicenzia_main_window_node.addon_refresh.disconnect(_on_addon_refresh)
+		
+		# disconnect all signal from signals_to_connect() manually here
 		alicenzia_right_dock_node.refresh_license_table.disconnect(
 			alicenzia_main_window_node.on_refresh_license_table
 		)
+		alicenzia_main_window_node.save_selected_scanned_licenses.disconnect(
+			alicenzia_right_dock_node.on_scan_result_save
+		)
+		
 		#scene_saved.disconnect(album_manager_node._on_any_scene_saved)
 		alicenzia_main_window_node.queue_free()
 		#remove_inspector_plugin(inspector_plugin_inst)
@@ -87,9 +100,7 @@ func _on_addon_refresh():
 	
 	_attempt_remove_right_dock_scene()
 	_load_rightdock_scene()
-	alicenzia_right_dock_node.refresh_license_table.connect(
-		alicenzia_main_window_node.on_refresh_license_table
-	)
+	signals_to_connect()
 	alicenzia_right_dock_node._addon_init()
 	
 	print("Alicenzia refreshed")

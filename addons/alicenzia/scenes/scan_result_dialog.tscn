@@ -69,5 +69,3 @@ custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Full License"
 metadata/asset_data_row_idx = 1
-
-[connection signal="confirmed" from="." to="." method="_on_scan_result_confirmed"]
