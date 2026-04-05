@@ -2,6 +2,8 @@
 extends ConfirmationDialog
 
 const WINDOW_MIN_Y := 143
+const RES_PATH := "res://"
+const USER_PATH := "user://"
 
 const TOOL_INFO_TEMPLATE_TEXT := "%s tool haven't been installed on this system yet. Click the button below to install it."
 const DOWNLOAD_BTN_TEMPLATE_TEXT := "Download %s tool (2.7MB)"
@@ -14,6 +16,7 @@ const TOOL_DOWNLOAD_FOLDER_PATH := "user://alicenzia_scan_tools"
 
 @onready var scan_tool_pn_o: HBoxContainer = %ScanToolPnO
 @onready var tool_info: Label = %ToolInfo
+
 @onready var download_tool_btn: Button = %DownloadToolBtn
 @onready var tool_info_panel: PanelContainer = %ToolInfoPanel
 
@@ -37,7 +40,7 @@ func _check_if_tool_available():
 	var chosen_tool : String = scan_tool_pn_o.get_value()
 	match (chosen_tool):
 		"askalono":
-			var dir = DirAccess.open("user://")
+			var dir = DirAccess.open(USER_PATH)
 			var okbtn := get_ok_button()
 			
 			if dir.file_exists(askalono_exe_path):
@@ -88,7 +91,7 @@ func _tool_download_completed(result, response_code, headers, body):
 		push_error("Tool couldn't be downloaded. Retry, check your internet connection, or report this as a bug.")
 	else:
 		## save the downloaded zip
-		var dir = DirAccess.open("user://")
+		var dir = DirAccess.open(USER_PATH)
 		dir.make_dir_recursive(TOOL_DOWNLOAD_FOLDER_PATH)
 		var zip_name := ASKALONO_WINDOWS_LINK.get_slice("/", ASKALONO_WINDOWS_LINK.split("/").size() - 1) # get zip name from link
 		var zip_download_path := TOOL_DOWNLOAD_FOLDER_PATH + ("/%s" % zip_name) #ASKALONO_WINDOWS_ZIPNAME)
@@ -115,8 +118,9 @@ func _tool_download_completed(result, response_code, headers, body):
 
 
 func begin_scan() -> Array[Dictionary]:
+	const TARGET_SCAN_PATH_ADDON := "res://addons"
 	var askalono_exe_globalpath := ProjectSettings.globalize_path(askalono_exe_path)
-	var addon_folder_globalpath := ProjectSettings.globalize_path("res://addons")
+	var addon_folder_globalpath := ProjectSettings.globalize_path(TARGET_SCAN_PATH_ADDON)
 	#var addon_folder_gpath_split_size := addon_folder_globalpath.split("/", false).size()
 	var output = []
 	var exit_code = OS.execute(askalono_exe_globalpath, ["--format", "json", "crawl", addon_folder_globalpath], output)
@@ -124,7 +128,7 @@ func begin_scan() -> Array[Dictionary]:
 		push_error("No output found")
 		return Array()
 	
-	var path_license_dict_array : Array[Dictionary]
+	var scanned_license_dict_array : Array[Dictionary]
 	
 	for spotted_license_json in output[0].split("\n", false):
 		var spotted_license_dict = JSON.parse_string(spotted_license_json)
@@ -148,15 +152,16 @@ func begin_scan() -> Array[Dictionary]:
 			if result:
 				copyright_year = int(result.get_string(1))
 				copyright_owner = result.get_string(2)
-
-		var path_license_dict := Dictionary() # NEED A BETTER TERM
-		path_license_dict["name"] = license_path_relative.get_slice("\\", 1) # for example, \alicenzia\LICENSE got alicenzia
-		path_license_dict["license"] = license_name
-		path_license_dict["copyright_year"] = copyright_year
-		path_license_dict["copyright_owner"] = copyright_owner
-		path_license_dict_array.append(path_license_dict)
+		
+		var scanned_license_dict := Dictionary() # NEED A BETTER TERM
+		scanned_license_dict["name"] = license_path_relative.get_slice("\\", 1) # for example, \alicenzia\LICENSE got alicenzia
+		scanned_license_dict["license"] = license_name
+		scanned_license_dict["license_path"] = TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
+		scanned_license_dict["copyright_year"] = copyright_year
+		scanned_license_dict["copyright_owner"] = copyright_owner
+		scanned_license_dict_array.append(scanned_license_dict)
 		print(	"path: %s | license : %s | year : %d | owner : %s"
-				% [license_path_relative, license_name, copyright_year, copyright_owner])
+				% [scanned_license_dict["license_path"], license_name, copyright_year, copyright_owner])
 	
 	print("scan done!")
-	return path_license_dict_array
+	return scanned_license_dict_array

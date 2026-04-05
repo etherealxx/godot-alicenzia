@@ -290,6 +290,27 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
+[node name="FullLicenseDialog" type="AcceptDialog" parent="ScanResultDialog"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+disable_3d = true
+title = "Full License of"
+initial_position = 2
+size = Vector2i(716, 357)
+auto_translate = false
+
+[node name="FullLicenseTextArea" type="TextEdit" parent="ScanResultDialog/FullLicenseDialog"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(800, 300)
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 708.0
+offset_bottom = 308.0
+editable = false
+emoji_menu_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/ScanLicenseBtn" to="." method="_on_scan_license_btn_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshAddonBtn" to="." method="_on_refresh_addon_btn_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshTableBtn" to="." method="_on_refresh_table_btn_pressed"]

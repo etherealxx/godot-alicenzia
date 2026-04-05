@@ -21,3 +21,10 @@ layout_mode = 2
 
 [node name="LicenseOwner" parent="." instance=ExtResource("2_ld8sl")]
 layout_mode = 2
+
+[node name="FullLicense" parent="." instance=ExtResource("2_ld8sl")]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "View"
+
+[connection signal="pressed" from="FullLicense" to="." method="_on_full_license_pressed"]

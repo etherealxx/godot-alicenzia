@@ -120,6 +120,8 @@ func _addon_init() -> void:
 
 
 func list_licenses_on_rows(): #WARNING TODO cuma tes aja tpi bisa jadi fix
+	#WARNING so far kalo di add/remove license ini belom ke update
+	
 	#for n in license_list_vbox.get_children():
 		#n.queue_free()
 	var license_list_vbox = VBoxContainer.new()

@@ -15,7 +15,7 @@ auto_translate_mode = 2
 disable_3d = true
 title = "Alicenzia Scan Tool Result"
 initial_position = 2
-size = Vector2i(612, 80)
+size = Vector2i(746, 80)
 visible = true
 unresizable = true
 auto_translate = false
@@ -25,7 +25,7 @@ script = ExtResource("1_7ef83")
 [node name="RowList" type="VBoxContainer" parent="."]
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 604.0
+offset_right = 738.0
 offset_bottom = 31.0
 
 [node name="FirstRow" type="HBoxContainer" parent="RowList"]
@@ -63,3 +63,11 @@ custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 text = "Owner"
 metadata/asset_data_row_idx = 1
+
+[node name="FRowFullLicense" parent="RowList/FirstRow" instance=ExtResource("2_4ahw3")]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Full License"
+metadata/asset_data_row_idx = 1
+
+[connection signal="confirmed" from="." to="." method="_on_scan_result_confirmed"]

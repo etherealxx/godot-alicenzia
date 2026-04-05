@@ -7,7 +7,9 @@ const WINDOW_MIN_Y := 80
 @onready var row_list: VBoxContainer = $RowList
 @onready var first_row: HBoxContainer = %FirstRow
 
-func build_rows(path_license_data_array : Array[Dictionary]):
+func build_rows(scanned_license_data_array : Array[Dictionary]) -> Array[Control]:
+	var new_rows : Array[Control]
+	
 	for row in row_list.get_children():
 		if row != first_row:
 			row.queue_free()
@@ -16,7 +18,14 @@ func build_rows(path_license_data_array : Array[Dictionary]):
 	row_list.size.y = WINDOW_MIN_Y
 	self.size.y = WINDOW_MIN_Y
 	
-	for path_license_data in path_license_data_array:
+	for scanned_license_data in scanned_license_data_array:
 		var new_row := SCAN_RESULT_ROW.instantiate()
 		row_list.add_child(new_row)
-		new_row.fill_row(path_license_data)
+		new_row.fill_row(scanned_license_data)
+		new_rows.append(new_row)
+		
+	return new_rows
+
+
+func _on_scan_result_confirmed() -> void:
+	pass # Replace with function body.
