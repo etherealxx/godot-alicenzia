@@ -146,7 +146,7 @@ func list_licenses_on_rows(): #WARNING TODO cuma tes aja tpi bisa jadi fix
 			new_label.add_theme_stylebox_override("normal", LIGHTBLUE_LABEL_STYLEBOX)
 			new_hbox.add_child(new_label)
 		
-		break
+		break # only firstrow
 	
 	var licdb_dict_data : Dictionary = alz_licdb.get_data_as_dict()
 	for pld_paths : String in licdb_dict_data.keys():
@@ -162,7 +162,12 @@ func list_licenses_on_rows(): #WARNING TODO cuma tes aja tpi bisa jadi fix
 			
 			#var new_label := Label.new()
 			var new_table_cell := EXPANDABLE_BUTTON_CELL.instantiate()
-			new_table_cell.text = str(prop_value)
+			
+			if prop_name == "full_license_text":
+				new_table_cell.text = "View"
+			else:
+				new_table_cell.text = str(prop_value)
+				
 			new_table_cell.pressed.connect(_on_prop_table_cell_pressed.bind(pld_paths, prop_name)) # .bind()
 			
 			#new_label.add_theme_stylebox_override("normal", BLUE_LABEL_STYLEBOX)
