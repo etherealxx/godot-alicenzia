@@ -3,6 +3,7 @@ extends VBoxContainer
 
 signal addon_refresh # addon
 signal save_selected_scanned_licenses(selected_licenses : Array[Dictionary])
+signal show_export_license_dialog
 #signal data_button_expand_request(idx : int, expand_yes : bool)
 
 #const ASSET_DATA_ROW : PackedScene = preload("uid://dagdcisuqdljk")
@@ -35,6 +36,7 @@ func _addon_init():
 		for path : String in path_data:
 			assets_table.add_data_row(path)
 			#	func(idx, expand_yes): data_button_expand_request.emit(idx, expand_yes))
+	#export_license_dialog.export_license.connect(_on_export_license)
 
 
 func _on_refresh_addon_btn_pressed() -> void:
@@ -85,3 +87,7 @@ func _on_scan_result_dialog_confirmed() -> void:
 	var confirmed_licenses : Array[Dictionary] = scan_result_dialog.get_confirmed_licenses()
 	#print(str(confirmed_licenses))
 	save_selected_scanned_licenses.emit(confirmed_licenses)
+
+
+func _on_export_license_pressed() -> void:
+	show_export_license_dialog.emit()

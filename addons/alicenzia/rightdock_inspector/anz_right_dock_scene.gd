@@ -31,6 +31,11 @@ const EXPANDABLE_BUTTON_CELL = preload("res://addons/alicenzia/scenes/expandable
 @onready var remove_path_license_btn: Button = %RemovePathLicenseBtn
 @onready var discard_changes_btn: Button = %DiscardChangesBtn
 
+@onready var export_license_dialog: ConfirmationDialog = %ExportLicenseDialog
+@onready var example_template_dialog: AcceptDialog = %ExampleTemplateDialog
+@onready var template_text_area: TextEdit = %TemplateTextArea
+@onready var save_template_dialog: FileDialog = %SaveTemplateDialog
+
 #@onready var license_list_vbox: VBoxContainer = %LicenseListVbox
 
 var tracked_signal_callable_pair : Dictionary[Signal, Callable]
@@ -38,6 +43,7 @@ var tracked_signal_callable_pair : Dictionary[Signal, Callable]
 var ed_theme : Theme 
 var ed_toast : EditorToaster
 var ed_fsd : FileSystemDock
+var ed_efs : EditorFileSystem
 #var mini_inspector_vbox : EditorInspector
 var fsd_tree : Tree
 #var fsd_last_selected_dir : String
@@ -61,6 +67,7 @@ func _addon_init() -> void:
 	ed_theme = EditorInterface.get_editor_theme()
 	ed_toast = EditorInterface.get_editor_toaster()
 	ed_fsd = EditorInterface.get_file_system_dock()
+	ed_efs = EditorInterface.get_resource_filesystem()
 	#pwl_dialog.hide()
 	inspector_below_here = %InspectorBelowHere
 	# mini_inspector_vbox = instantiate_inspector(DATA_TEST)
@@ -116,6 +123,7 @@ func _addon_init() -> void:
 	var new_license_list_vbox = list_licenses_on_rows()
 	refresh_license_table.emit(new_license_list_vbox)
 	
+	#export_license_dialog.export_license.connect(_on_export_license)
 	#deselect_area.deselect.connect(_on_inspector_deselect)
 
 
@@ -598,3 +606,66 @@ func _on_check_parent_folder_license(res_path: String) -> void:
 		return
 	ed_fsd.navigate_to_path(res_path)
 	_refresh_right_scene_dock(true)
+
+
+func on_show_export_license_dialog(): # called from main scene
+	export_license_dialog.show()
+
+
+func generate_license_template(format: String, template: String) -> String:
+	var final_text := ""
+	
+	var alz_licdb := _get_license_database_or_null()
+	if not alz_licdb:
+		alz_licdb = ALZProjectLicenseDatabase.new()
+	
+	var i := 0
+	for pld : PathLicenseData in alz_licdb.path_license_dict.values():
+		match(template):
+			"Chrome-like": # name, website link, full license
+				if i >= 1:
+					final_text += "\n———\n\n" # line to separate
+					
+				final_text += pld.name + "\n"
+				if pld.webpage_link:
+					final_text += pld.webpage_link + "\n"
+				if pld.full_license_text:
+					final_text += "\n%s\n" % pld.full_license_text
+				
+		
+		i += 1
+	
+	return final_text
+
+
+func _on_export_license_dialog_make_example_template(format: String, template: String) -> void:
+	var template_text := generate_license_template(format, template)
+	template_text_area.text = template_text
+	example_template_dialog.show()
+
+
+func _on_export_license_dialog_export_license(format: String, template: String) -> void:
+	var alz_licdb := _get_license_database_or_null()
+	if not alz_licdb:
+		alz_licdb = ALZProjectLicenseDatabase.new()
+		
+	save_template_dialog.current_file = "%s_LICENSE.txt" % alz_licdb.project_name
+	save_template_dialog.show()
+	
+	
+func _on_save_template_dialog_confirmed() -> void:
+	var alz_licdb := _get_license_database_or_null()
+	if not alz_licdb:
+		alz_licdb = ALZProjectLicenseDatabase.new()
+	
+	var ft : Array[String]= export_license_dialog.get_format_and_template()
+	var template_text := generate_license_template(ft[0], ft[1])
+	
+	var save_file_path := save_template_dialog.current_path
+	var file = FileAccess.open(save_file_path, FileAccess.WRITE)
+	file.store_string(template_text)
+	file.close()
+	save_template_dialog.hide()
+	export_license_dialog.hide()
+	ed_toast.push_toast("Alicenzia: License data successfully exported at %s." % save_file_path, EditorToaster.SEVERITY_INFO)
+	ed_efs.scan()

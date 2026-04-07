@@ -7,6 +7,8 @@ const ALICENZIA_RIGHT_DOCK_SCENE_PATH = "uid://cdgcops15lly0"
 var alicenzia_main_window_node : Control
 var alicenzia_right_dock_node : Control
 
+var connected_signals : Dictionary[Signal, Callable]
+
 
 func _enter_tree() -> void:
 	if Engine.is_editor_hint():
@@ -40,12 +42,23 @@ func _ready() -> void:
 		alicenzia_right_dock_node._addon_init()
 
 
+func signal_connect_and_log(connect_from : Signal, connect_to : Callable):
+	connect_from.connect(connect_to)
+	connected_signals[connect_from] = connect_to
+	
+	
 func signals_to_connect(): # after the right dock scene is initiated
-	alicenzia_right_dock_node.refresh_license_table.connect(
+	signal_connect_and_log(
+		alicenzia_right_dock_node.refresh_license_table,
 		alicenzia_main_window_node.on_refresh_license_table
 	)
-	alicenzia_main_window_node.save_selected_scanned_licenses.connect(
+	signal_connect_and_log(
+		alicenzia_main_window_node.save_selected_scanned_licenses,
 		alicenzia_right_dock_node.on_scan_result_save
+	)
+	signal_connect_and_log(
+		alicenzia_main_window_node.show_export_license_dialog,
+		alicenzia_right_dock_node.on_show_export_license_dialog
 	)
 
 
@@ -81,12 +94,9 @@ func _on_addon_refresh():
 		alicenzia_main_window_node.addon_refresh.disconnect(_on_addon_refresh)
 		
 		# disconnect all signal from signals_to_connect() manually here
-		alicenzia_right_dock_node.refresh_license_table.disconnect(
-			alicenzia_main_window_node.on_refresh_license_table
-		)
-		alicenzia_main_window_node.save_selected_scanned_licenses.disconnect(
-			alicenzia_right_dock_node.on_scan_result_save
-		)
+		for sg : Signal in connected_signals:
+			sg.disconnect(connected_signals[sg])
+		connected_signals.clear()
 		
 		#scene_saved.disconnect(album_manager_node._on_any_scene_saved)
 		alicenzia_main_window_node.queue_free()

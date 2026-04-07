@@ -59,6 +59,11 @@ layout_mode = 2
 tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
 text = "Scan Licenses"
 
+[node name="ExportLicense" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
+text = "Export Licenses"
+
 [node name="WIPLabel" type="Label" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
 layout_mode = 2
 text = "⚠️Debug buttons: "
@@ -312,6 +317,7 @@ virtual_keyboard_enabled = false
 middle_mouse_paste_enabled = false
 
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/ScanLicenseBtn" to="." method="_on_scan_license_btn_pressed"]
+[connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/ExportLicense" to="." method="_on_export_license_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshAddonBtn" to="." method="_on_refresh_addon_btn_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshTableBtn" to="." method="_on_refresh_table_btn_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ExpandedBox/SaveCloseBtn" to="UILayoutHbox/MainAddonVbox/ExpandedBox" method="_on_save_close_btn_pressed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cdgcops15lly0"]
+[gd_scene load_steps=10 format=3 uid="uid://cdgcops15lly0"]
 
 [ext_resource type="Script" uid="uid://cqgx4b6criqnj" path="res://addons/alicenzia/rightdock_inspector/anz_right_dock_scene.gd" id="1_gmbqi"]
 [ext_resource type="PackedScene" uid="uid://c1l4iekh4v87y" path="res://addons/alicenzia/rightdock_inspector/scenes/project_wide_license_dialog.tscn" id="2_1ly1l"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://oj2q8wepfbwf" path="res://addons/alicenzia/components/panel_themer.gd" id="4_syktp"]
 [ext_resource type="PackedScene" uid="uid://chyu8jn2cxpto" path="res://addons/alicenzia/rightdock_inspector/scenes/add_new_string_enum_dialog.tscn" id="5_s5q64"]
 [ext_resource type="PackedScene" uid="uid://dwdf70chwedd0" path="res://addons/alicenzia/rightdock_inspector/scenes/confirm_remove_path_lic_dialog.tscn" id="8_j83lm"]
+[ext_resource type="PackedScene" uid="uid://c5iv2ke4mrmsv" path="res://addons/alicenzia/scenes/export_license_dialog.tscn" id="9_ltaot"]
 
 [node name="License" type="VBoxContainer"]
 anchors_preset = 15
@@ -153,6 +154,40 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="ExportLicenseDialog" parent="." instance=ExtResource("9_ltaot")]
+unique_name_in_owner = true
+visible = false
+dialog_hide_on_ok = false
+
+[node name="ExampleTemplateDialog" type="AcceptDialog" parent="ExportLicenseDialog"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+disable_3d = true
+title = "Full License of"
+initial_position = 2
+size = Vector2i(816, 357)
+auto_translate = false
+
+[node name="TemplateTextArea" type="TextEdit" parent="ExportLicenseDialog/ExampleTemplateDialog"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(800, 300)
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 808.0
+offset_bottom = 308.0
+editable = false
+emoji_menu_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+
+[node name="SaveTemplateDialog" type="FileDialog" parent="ExportLicenseDialog"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+disable_3d = true
+initial_position = 2
+auto_translate = false
+filters = PackedStringArray("*.txt")
+
 [connection signal="pressed" from="NoProjectLicenseWarn/InitPWLBtn" to="." method="_on_init_pwl_btn_pressed"]
 [connection signal="check_parent_folder_license" from="LicInheritInfo" to="." method="_on_check_parent_folder_license"]
 [connection signal="pressed" from="SaveDiscardLicHbox/SavePathLicenseBtn" to="." method="_on_save_path_license_btn_pressed"]
@@ -162,3 +197,6 @@ size_flags_horizontal = 3
 [connection signal="attempt_remove_hint_from_param" from="AddNewStringEnumDialog" to="." method="_on_attempt_remove_hint_from_param"]
 [connection signal="confirmed" from="AddNewStringEnumDialog" to="." method="_on_add_new_string_enum_dialog_confirmed"]
 [connection signal="confirmed" from="ConfirmRemovePathLicDialog" to="." method="_on_confirm_remove_path_lic_dialog_confirmed"]
+[connection signal="export_license" from="ExportLicenseDialog" to="." method="_on_export_license_dialog_export_license"]
+[connection signal="make_example_template" from="ExportLicenseDialog" to="." method="_on_export_license_dialog_make_example_template"]
+[connection signal="confirmed" from="ExportLicenseDialog/SaveTemplateDialog" to="." method="_on_save_template_dialog_confirmed"]
