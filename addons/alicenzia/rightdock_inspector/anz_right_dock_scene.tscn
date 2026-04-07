@@ -199,4 +199,4 @@ filters = PackedStringArray("*.txt")
 [connection signal="confirmed" from="ConfirmRemovePathLicDialog" to="." method="_on_confirm_remove_path_lic_dialog_confirmed"]
 [connection signal="export_license" from="ExportLicenseDialog" to="." method="_on_export_license_dialog_export_license"]
 [connection signal="make_example_template" from="ExportLicenseDialog" to="." method="_on_export_license_dialog_make_example_template"]
-[connection signal="confirmed" from="ExportLicenseDialog/SaveTemplateDialog" to="." method="_on_save_template_dialog_confirmed"]
+[connection signal="file_selected" from="ExportLicenseDialog/SaveTemplateDialog" to="." method="_on_save_template_dialog_file_selected"]

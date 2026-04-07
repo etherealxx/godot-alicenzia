@@ -651,9 +651,9 @@ func _on_export_license_dialog_export_license(format: String, template: String) 
 		
 	save_template_dialog.current_file = "%s_LICENSE.txt" % alz_licdb.project_name
 	save_template_dialog.show()
-	
-	
-func _on_save_template_dialog_confirmed() -> void:
+
+
+func _on_save_template_dialog_file_selected(path: String) -> void:
 	var alz_licdb := _get_license_database_or_null()
 	if not alz_licdb:
 		alz_licdb = ALZProjectLicenseDatabase.new()
@@ -661,11 +661,10 @@ func _on_save_template_dialog_confirmed() -> void:
 	var ft : Array[String]= export_license_dialog.get_format_and_template()
 	var template_text := generate_license_template(ft[0], ft[1])
 	
-	var save_file_path := save_template_dialog.current_path
-	var file = FileAccess.open(save_file_path, FileAccess.WRITE)
+	var file = FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(template_text)
 	file.close()
-	save_template_dialog.hide()
+	#save_template_dialog.hide()
 	export_license_dialog.hide()
-	ed_toast.push_toast("Alicenzia: License data successfully exported at %s." % save_file_path, EditorToaster.SEVERITY_INFO)
+	ed_toast.push_toast("Alicenzia: License data successfully exported at %s." % path, EditorToaster.SEVERITY_INFO)
 	ed_efs.scan()
