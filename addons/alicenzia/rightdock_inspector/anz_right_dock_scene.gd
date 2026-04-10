@@ -641,6 +641,9 @@ func generate_license_template(format: String, template: String) -> String:
 					final_text += pld.webpage_link + "\n"
 				if pld.full_license_text:
 					final_text += "\n%s\n" % pld.full_license_text
+				else:
+					if pld.creator:
+						final_text += "by %s\n" % pld.creator
 
 				i += 1
 		"hdoc-like":
@@ -658,6 +661,8 @@ func generate_license_template(format: String, template: String) -> String:
 			for lic_name : String in license_names_sorted:
 				final_text += "- %s" % lic_name
 				var pld := _find_pld_with_this_name(lic_name, alz_licdb)
+				if pld.full_license_text.is_empty() and pld.webpage_link.is_empty() and pld.creator:
+					final_text += " (by %s)" % pld.creator
 				if pld.webpage_link:
 					final_text += " (%s)" % pld.webpage_link
 				final_text += "\n"

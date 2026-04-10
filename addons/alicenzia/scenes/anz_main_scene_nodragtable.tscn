@@ -56,12 +56,12 @@ layout_mode = 2
 
 [node name="ScanLicenseBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
 layout_mode = 2
-tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
+tooltip_text = "Scan for addons with or without licenses and add it to the database"
 text = "Scan Licenses"
 
 [node name="ExportLicense" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
 layout_mode = 2
-tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
+tooltip_text = "Export license database as a text file"
 text = "Export Licenses"
 
 [node name="VSeparator" type="VSeparator" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
@@ -73,7 +73,6 @@ text = "⚠️Debug buttons: "
 
 [node name="RefreshAddonBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
 layout_mode = 2
-tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
 text = "Refresh Addon"
 
 [node name="RefreshTableBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
@@ -203,7 +202,9 @@ cell_path_cache = Array[NodePath]([NodePath("CheckEmpty"), NodePath("FRowName"),
 custom_minimum_length = Dictionary[NodePath, float]({
 NodePath("CheckEmpty"): 40.0,
 NodePath("FRowName"): 180.0,
-NodePath("FRowMods"): 130.0
+NodePath("FRowMods"): 130.0,
+NodePath("FRowOwnType"): 154.0,
+NodePath("FRowCrtr"): 115.0
 })
 special_case_minlength = Array[NodePath]([NodePath("FRowOwnType"), NodePath("FRowCrtr")])
 
