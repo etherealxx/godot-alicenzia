@@ -21,6 +21,7 @@ const TOOL_DOWNLOAD_FOLDER_PATH := "user://alicenzia_scan_tools"
 
 const YEAR_OWNER_SEARCH_PATTERN := r"Copyright\s+(?:\([cC]\)\s+|©\s+)?(\d{4}(?:-\d{4})?)\s+(.*)" # Gemini 3.1 Pro provided this
 const PLUGIN_FILE_NAME := "plugin.cfg"
+const TARGET_SCAN_PATH_ADDON := "res://addons"
 
 @onready var scan_tool_pn_o: HBoxContainer = %ScanToolPnO
 @onready var tool_info: Label = %ToolInfo
@@ -169,12 +170,47 @@ func begin_scan() -> Array[Dictionary]:
 		scanned_license_dict_array = _scan_with_askalono()
 	elif chosen_tool == GOLICENSE_OPTION:
 		scanned_license_dict_array = _scan_with_golicense()
-		
+	
+	var manual_scan_license_dict_array = _manual_addon_scan(scanned_license_dict_array)
+	scanned_license_dict_array.append_array(manual_scan_license_dict_array)
+	
 	return scanned_license_dict_array
 	
+
+func _manual_addon_scan(prev_scan_lic_dict_array : Array[Dictionary]):
+	### skip previously scanned addons
+	var prev_scanned_addon_name : Array[String]
 	
+	for prev_scan_lic_dict : Dictionary in prev_scan_lic_dict_array:
+		prev_scanned_addon_name.append(prev_scan_lic_dict["name"])
+	
+	var scanned_license_dict_array : Array[Dictionary]
+	
+	var addon_dir := DirAccess.open(TARGET_SCAN_PATH_ADDON)
+	#var globalpath_directories : Array
+	for folder in addon_dir.get_directories():
+		if folder.capitalize() in prev_scanned_addon_name:
+			continue
+		
+		var addon_respath := TARGET_SCAN_PATH_ADDON.path_join(folder)
+		var plugin_path := addon_respath.path_join(PLUGIN_FILE_NAME)
+		var copyright_owner := _get_author_from_plugin_file(plugin_path)
+		if not copyright_owner.is_empty():
+			var scanned_license_dict := Dictionary()
+			scanned_license_dict["name"] = folder.capitalize()
+			scanned_license_dict["type"] = "Addon" # for now
+			scanned_license_dict["license"] = ""
+			scanned_license_dict["license_path"] = addon_respath
+			scanned_license_dict["copyright_owner"] = copyright_owner
+			scanned_license_dict["copyright_year"] = int()
+			scanned_license_dict["full_license_text"] = ""
+			
+			scanned_license_dict_array.append(scanned_license_dict)
+			
+	return scanned_license_dict_array
+
+
 func _scan_with_askalono():
-	const TARGET_SCAN_PATH_ADDON := "res://addons"
 	var askalono_exe_globalpath := ProjectSettings.globalize_path(askalono_exe_path)
 	var addon_folder_globalpath := ProjectSettings.globalize_path(TARGET_SCAN_PATH_ADDON)
 	#var addon_folder_gpath_split_size := addon_folder_globalpath.split("/", false).size()
@@ -263,7 +299,6 @@ func _get_author_from_plugin_file(plugin_file_path : String) -> String: # absolu
 
 
 func _scan_with_golicense():
-	const TARGET_SCAN_PATH_ADDON := "res://addons"
 	var golicense_exe_globalpath := ProjectSettings.globalize_path(golicense_exe_path)
 	var addon_folder_globalpath := ProjectSettings.globalize_path(TARGET_SCAN_PATH_ADDON)
 	

@@ -64,6 +64,9 @@ layout_mode = 2
 tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
 text = "Export Licenses"
 
+[node name="VSeparator" type="VSeparator" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+
 [node name="WIPLabel" type="Label" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
 layout_mode = 2
 text = "⚠️Debug buttons: "
@@ -74,6 +77,7 @@ tooltip_text = "Save the currently opened AlbumCollection and refresh this addon
 text = "Refresh Addon"
 
 [node name="RefreshTableBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+visible = false
 layout_mode = 2
 tooltip_text = "Save the currently opened AlbumCollection and refresh this addon"
 text = "Refresh Table"
