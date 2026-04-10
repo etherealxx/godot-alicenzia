@@ -19,6 +19,9 @@ const GOLICENSE_WINDOWS_EXENAME := "license-detector.exe"
 
 const TOOL_DOWNLOAD_FOLDER_PATH := "user://alicenzia_scan_tools"
 
+const YEAR_OWNER_SEARCH_PATTERN := r"Copyright\s+(?:\([cC]\)\s+|©\s+)?(\d{4}(?:-\d{4})?)\s+(.*)" # Gemini 3.1 Pro provided this
+const PLUGIN_FILE_NAME := "plugin.cfg"
+
 @onready var scan_tool_pn_o: HBoxContainer = %ScanToolPnO
 @onready var tool_info: Label = %ToolInfo
 
@@ -196,15 +199,28 @@ func _scan_with_askalono():
 		var copyright_year : int
 		var copyright_owner : String
 		
-		if license_name in ["MIT"]: # supported license type to search with regex
+		if license_name in ["MIT", "Apache-2.0"]: # supported license type to search with regex
 			var full_license_text := FileAccess.get_file_as_string(license_path)
 			var regex = RegEx.new()
-			const year_owner_search_pattern := r"Copyright\s+(?:\([cC]\)\s+|©\s+)?(?:(\d{4}(?:-\d{4})?)\s+)?(.*)" # Gemini 3.1 Pro provided this
-			regex.compile(year_owner_search_pattern) 
+			regex.compile(YEAR_OWNER_SEARCH_PATTERN) 
 			var result = regex.search(full_license_text)
 			if result:
 				copyright_year = int(result.get_string(1))
 				copyright_owner = result.get_string(2)
+		
+		var addon_folder_name := license_path_relative.get_slice("\\", 1) #TODO janky
+		var plugin_file_location := TARGET_SCAN_PATH_ADDON.path_join(addon_folder_name)
+		
+		var dir = DirAccess.open(plugin_file_location)
+		if copyright_owner.is_empty() and dir.file_exists(PLUGIN_FILE_NAME):
+			var plugin_path := plugin_file_location.path_join(PLUGIN_FILE_NAME)
+			var file := FileAccess.open(plugin_path, FileAccess.READ)
+			while file.get_position() < file.get_length():
+				var line := file.get_line()
+				if line.begins_with("author="):
+					copyright_owner = line.trim_prefix('author="').trim_suffix('"')
+					break
+			file.close()
 		
 		var license_respath := TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
 		var scanned_license_dict := Dictionary()
@@ -216,7 +232,7 @@ func _scan_with_askalono():
 		scanned_license_dict["copyright_owner"] = copyright_owner
 		scanned_license_dict["full_license_text"] = ""
 		
-		var dir = DirAccess.open(RES_PATH)
+		dir = DirAccess.open(RES_PATH)
 		if dir.file_exists(license_respath):
 			var license_text := FileAccess.get_file_as_string(license_respath)
 			if !license_text.is_empty():
@@ -230,6 +246,15 @@ func _scan_with_askalono():
 	return scanned_license_dict_array
 
 
+func _fix_license_name(lic_name : String):
+	match (lic_name):
+		"deprecated_GPL-3.0":
+			return "GPL-3.0-only"
+		"deprecated_GPL-3.0+":
+			return "GPL-3.0-or-later"
+	return lic_name
+	
+	
 func _scan_with_golicense():
 	const TARGET_SCAN_PATH_ADDON := "res://addons"
 	var golicense_exe_globalpath := ProjectSettings.globalize_path(golicense_exe_path)
@@ -267,20 +292,33 @@ func _scan_with_golicense():
 			var license_filename : String = license_match_dict["file"]
 			var license_globalpath : String = license_parent_dir.path_join(license_filename)
 			var license_name : String = license_match_dict["license"]
+			license_name = _fix_license_name(license_name)
 			var license_path_relative := license_globalpath.trim_prefix(addon_folder_globalpath)
 			
 			var copyright_year : int
 			var copyright_owner : String
 			
-			if license_name in ["MIT"]: # supported license type to search with regex
+			if license_name in ["MIT", "Apache-2.0"]: # supported license type to search with regex
 				var full_license_text := FileAccess.get_file_as_string(license_globalpath)
 				var regex = RegEx.new()
-				const year_owner_search_pattern := r"Copyright\s+(?:\([cC]\)\s+|©\s+)?(?:(\d{4}(?:-\d{4})?)\s+)?(.*)" # Gemini 3.1 Pro provided this
-				regex.compile(year_owner_search_pattern) 
+				regex.compile(YEAR_OWNER_SEARCH_PATTERN) 
 				var result = regex.search(full_license_text)
 				if result:
 					copyright_year = int(result.get_string(1))
 					copyright_owner = result.get_string(2)
+					
+			var plugin_file_location := license_parent_dir
+			
+			var dir = DirAccess.open(plugin_file_location)
+			if copyright_owner.is_empty() and dir.file_exists(PLUGIN_FILE_NAME):
+				var plugin_path := plugin_file_location.path_join(PLUGIN_FILE_NAME)
+				var file := FileAccess.open(plugin_path, FileAccess.READ)
+				while file.get_position() < file.get_length():
+					var line := file.get_line()
+					if line.begins_with("author="):
+						copyright_owner = line.trim_prefix('author="').trim_suffix('"')
+						break
+				file.close()
 			
 			var license_respath := TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
 			var scanned_license_dict := Dictionary()
@@ -292,7 +330,7 @@ func _scan_with_golicense():
 			scanned_license_dict["copyright_owner"] = copyright_owner
 			scanned_license_dict["full_license_text"] = ""
 			
-			var dir = DirAccess.open(RES_PATH)
+			dir = DirAccess.open(RES_PATH)
 			if dir.file_exists(license_respath):
 				var license_text := FileAccess.get_file_as_string(license_respath)
 				if !license_text.is_empty():

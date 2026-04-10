@@ -31,7 +31,8 @@ func _on_view_example_btn_pressed() -> void:
 
 
 func _update_view_example_text():
-	view_example_btn.text = "View Example of %s" % export_template_pn_o.get_value()
+	if export_format_pn_o: # prevent triggering on startup
+		view_example_btn.text = "View Example of %s" % export_template_pn_o.get_value()
 	
 func _on_export_template_pn_o_selected_item_changed(item_name: String) -> void:
 	_update_view_example_text()
