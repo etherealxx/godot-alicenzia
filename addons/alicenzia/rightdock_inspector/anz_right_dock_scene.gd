@@ -612,6 +612,15 @@ func on_show_export_license_dialog(): # called from main scene
 	export_license_dialog.show()
 
 
+func _find_pld_with_this_name(lic_name : String, alz_licdb : ALZProjectLicenseDatabase) -> PathLicenseData:
+	for license_path : String in alz_licdb.path_license_dict:
+		var pld : PathLicenseData = alz_licdb.path_license_dict[license_path]
+		if lic_name == pld.name:
+			return pld
+	
+	return PathLicenseData.new()
+
+
 func generate_license_template(format: String, template: String) -> String:
 	var final_text := ""
 	
@@ -619,10 +628,11 @@ func generate_license_template(format: String, template: String) -> String:
 	if not alz_licdb:
 		alz_licdb = ALZProjectLicenseDatabase.new()
 	
-	var i := 0
-	for pld : PathLicenseData in alz_licdb.path_license_dict.values():
-		match(template):
-			"Chrome-like": # name, website link, full license
+	match(template):
+		"Chrome-like": # name, website link, full license
+			var i := 0
+			for pld : PathLicenseData in alz_licdb.path_license_dict.values():
+			
 				if i >= 1:
 					final_text += "\n———\n\n" # line to separate
 					
@@ -631,16 +641,49 @@ func generate_license_template(format: String, template: String) -> String:
 					final_text += pld.webpage_link + "\n"
 				if pld.full_license_text:
 					final_text += "\n%s\n" % pld.full_license_text
+
+				i += 1
+		"hdoc-like":
+			# needs to be sorted first
+			var license_name_path_dict : Dictionary[String, String]
+			for license_path : String in alz_licdb.path_license_dict:
+				var pld : PathLicenseData = alz_licdb.path_license_dict[license_path]
+				license_name_path_dict[pld.name] = license_path
 				
-		
-		i += 1
-	
+			var license_names_sorted := license_name_path_dict.keys()
+			license_names_sorted.sort()
+			
+			final_text = "%s relies on several open source software projects. We thank all of the contributors to these projects for their work. These are listed below in alphabetical order:\n\n" % alz_licdb.project_name
+			
+			for lic_name : String in license_names_sorted:
+				final_text += "- %s" % lic_name
+				var pld := _find_pld_with_this_name(lic_name, alz_licdb)
+				if pld.webpage_link:
+					final_text += " (%s)" % pld.webpage_link
+				final_text += "\n"
+			
+			final_text += "\nTheir licenses are reproduced below.\n\n"
+			
+			for lic_name : String in license_names_sorted:
+				var pld := _find_pld_with_this_name(lic_name, alz_licdb)
+				if pld.full_license_text:
+					final_text += "———\n%s license\n\n" % lic_name
+					final_text += "%s\n\n" % pld.full_license_text
+			#var pl_dict_sorted : Dictionary[String, PathLicenseData]
+			#
+			#for license_name : String in license_names_sorted:
+				#for license_path : String in alz_licdb.path_license_dict:
+					#var pld : PathLicenseData = alz_licdb.path_license_dict[license_path]
+					#if license_name == pld.name:
+						#pass
+			
 	return final_text
 
 
 func _on_export_license_dialog_make_example_template(format: String, template: String) -> void:
 	var template_text := generate_license_template(format, template)
 	template_text_area.text = template_text
+	example_template_dialog.title = "Attribution text with %s template" % template
 	example_template_dialog.show()
 
 

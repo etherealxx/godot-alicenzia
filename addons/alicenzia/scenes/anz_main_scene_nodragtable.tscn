@@ -199,9 +199,7 @@ cell_path_cache = Array[NodePath]([NodePath("CheckEmpty"), NodePath("FRowName"),
 custom_minimum_length = Dictionary[NodePath, float]({
 NodePath("CheckEmpty"): 40.0,
 NodePath("FRowName"): 180.0,
-NodePath("FRowMods"): 130.0,
-NodePath("FRowOwnType"): 154.0,
-NodePath("FRowCrtr"): 115.0
+NodePath("FRowMods"): 130.0
 })
 special_case_minlength = Array[NodePath]([NodePath("FRowOwnType"), NodePath("FRowCrtr")])
 

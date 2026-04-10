@@ -163,9 +163,9 @@ dialog_hide_on_ok = false
 unique_name_in_owner = true
 auto_translate_mode = 2
 disable_3d = true
-title = "Full License of"
+title = "Attribution text with x template"
 initial_position = 2
-size = Vector2i(816, 357)
+size = Vector2i(816, 600)
 auto_translate = false
 
 [node name="TemplateTextArea" type="TextEdit" parent="ExportLicenseDialog/ExampleTemplateDialog"]
@@ -174,7 +174,7 @@ custom_minimum_size = Vector2(800, 300)
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 808.0
-offset_bottom = 308.0
+offset_bottom = 551.0
 editable = false
 emoji_menu_enabled = false
 virtual_keyboard_enabled = false
