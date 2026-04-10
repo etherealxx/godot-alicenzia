@@ -103,7 +103,7 @@ func _on_download_tool_btn_pressed() -> void:
 
 	var chosen_tool : String = scan_tool_pn_o.get_value()
 	chosen_tool_to_download = chosen_tool
-	print("chosen: %s" % chosen_tool)
+	#print("chosen: %s" % chosen_tool)
 	
 	match (chosen_tool_to_download):
 		ASKALONO_OPTION:
@@ -214,13 +214,7 @@ func _scan_with_askalono():
 		var dir = DirAccess.open(plugin_file_location)
 		if copyright_owner.is_empty() and dir.file_exists(PLUGIN_FILE_NAME):
 			var plugin_path := plugin_file_location.path_join(PLUGIN_FILE_NAME)
-			var file := FileAccess.open(plugin_path, FileAccess.READ)
-			while file.get_position() < file.get_length():
-				var line := file.get_line()
-				if line.begins_with("author="):
-					copyright_owner = line.trim_prefix('author="').trim_suffix('"')
-					break
-			file.close()
+			copyright_owner = _get_author_from_plugin_file(plugin_path)
 		
 		var license_respath := TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
 		var scanned_license_dict := Dictionary()
@@ -254,7 +248,20 @@ func _fix_license_name(lic_name : String):
 			return "GPL-3.0-or-later"
 	return lic_name
 	
-	
+
+func _get_author_from_plugin_file(plugin_file_path : String) -> String: # absolute path, i think
+	if FileAccess.file_exists(plugin_file_path):
+		var file := FileAccess.open(plugin_file_path, FileAccess.READ)
+		while file.get_position() < file.get_length():
+			var line := file.get_line()
+			if line.begins_with("author="):
+				var author = line.trim_prefix('author="').trim_suffix('"')
+				file.close()
+				return author
+		file.close()
+	return ""
+
+
 func _scan_with_golicense():
 	const TARGET_SCAN_PATH_ADDON := "res://addons"
 	var golicense_exe_globalpath := ProjectSettings.globalize_path(golicense_exe_path)
@@ -312,13 +319,7 @@ func _scan_with_golicense():
 			var dir = DirAccess.open(plugin_file_location)
 			if copyright_owner.is_empty() and dir.file_exists(PLUGIN_FILE_NAME):
 				var plugin_path := plugin_file_location.path_join(PLUGIN_FILE_NAME)
-				var file := FileAccess.open(plugin_path, FileAccess.READ)
-				while file.get_position() < file.get_length():
-					var line := file.get_line()
-					if line.begins_with("author="):
-						copyright_owner = line.trim_prefix('author="').trim_suffix('"')
-						break
-				file.close()
+				copyright_owner = _get_author_from_plugin_file(plugin_path)
 			
 			var license_respath := TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
 			var scanned_license_dict := Dictionary()
