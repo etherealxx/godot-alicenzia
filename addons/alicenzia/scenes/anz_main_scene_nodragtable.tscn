@@ -199,7 +199,9 @@ cell_path_cache = Array[NodePath]([NodePath("CheckEmpty"), NodePath("FRowName"),
 custom_minimum_length = Dictionary[NodePath, float]({
 NodePath("CheckEmpty"): 40.0,
 NodePath("FRowName"): 180.0,
-NodePath("FRowMods"): 130.0
+NodePath("FRowMods"): 130.0,
+NodePath("FRowOwnType"): 154.0,
+NodePath("FRowCrtr"): 115.0
 })
 special_case_minlength = Array[NodePath]([NodePath("FRowOwnType"), NodePath("FRowCrtr")])
 
@@ -289,6 +291,7 @@ layout_mode = 2
 
 [node name="ScanLicenseDialog" parent="." instance=ExtResource("10_fw2m3")]
 unique_name_in_owner = true
+size = Vector2i(436, 284)
 visible = false
 
 [node name="ScanResultDialog" parent="." instance=ExtResource("11_j35sf")]

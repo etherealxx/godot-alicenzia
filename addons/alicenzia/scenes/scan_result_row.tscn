@@ -12,15 +12,19 @@ layout_mode = 2
 
 [node name="AddonName" parent="." instance=ExtResource("2_ld8sl")]
 layout_mode = 2
+text = ""
 
 [node name="LicenseName" parent="." instance=ExtResource("2_ld8sl")]
 layout_mode = 2
+text = ""
 
 [node name="LicenseYear" parent="." instance=ExtResource("2_ld8sl")]
 layout_mode = 2
+text = ""
 
 [node name="LicenseOwner" parent="." instance=ExtResource("2_ld8sl")]
 layout_mode = 2
+text = ""
 
 [node name="FullLicense" parent="." instance=ExtResource("2_ld8sl")]
 custom_minimum_size = Vector2(120, 0)

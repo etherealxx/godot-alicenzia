@@ -62,8 +62,16 @@ func _on_scan_license_btn_pressed() -> void:
 
 
 func _on_scan_license_dialog_confirmed() -> void:
-	print("begin scan!")
+	#print("begin scan!")
+	scan_license_dialog.show_scan_progress()
+	await get_tree().create_timer(0.1).timeout # artificial timer to show the progess UI
+	var time_before_scan := Time.get_ticks_usec()
 	var path_license_data_array : Array = scan_license_dialog.begin_scan()
+	var time_after_scan := Time.get_ticks_usec()
+	var scan_duration_in_seconds := float(time_after_scan - time_before_scan) / 1000000.0
+	print("scan duration took %f seconds." % scan_duration_in_seconds)
+	scan_license_dialog.hide()
+	
 	var license_rows : Array[Control] = scan_result_dialog.build_rows(path_license_data_array)
 	for row in license_rows:
 		row.show_license.connect(_on_scanned_license_row_full_lic_pressed)

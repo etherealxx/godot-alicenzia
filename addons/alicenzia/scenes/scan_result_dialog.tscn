@@ -23,6 +23,7 @@ ok_button_text = "Add Files to Database"
 script = ExtResource("1_7ef83")
 
 [node name="RowList" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 738.0

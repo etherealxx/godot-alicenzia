@@ -3,8 +3,9 @@ extends ConfirmationDialog
 
 const SCAN_RESULT_ROW = preload("res://addons/alicenzia/scenes/scan_result_row.tscn")
 const WINDOW_MIN_Y := 80
+const ROW_MIN_Y := 23
 
-@onready var row_list: VBoxContainer = $RowList
+@onready var row_list: VBoxContainer = %RowList
 @onready var first_row: HBoxContainer = %FirstRow
 
 func build_rows(scanned_license_data_array : Array[Dictionary]) -> Array[Control]:
@@ -15,7 +16,7 @@ func build_rows(scanned_license_data_array : Array[Dictionary]) -> Array[Control
 			row.queue_free()
 			
 	
-	row_list.size.y = WINDOW_MIN_Y
+	row_list.size.y = ROW_MIN_Y
 	self.size.y = WINDOW_MIN_Y
 	
 	for scanned_license_data in scanned_license_data_array:
@@ -23,7 +24,9 @@ func build_rows(scanned_license_data_array : Array[Dictionary]) -> Array[Control
 		row_list.add_child(new_row)
 		new_row.fill_row(scanned_license_data)
 		new_rows.append(new_row)
-		
+	
+	self.size.y = row_list.size.y
+	
 	return new_rows
 
 
