@@ -51,10 +51,12 @@ func _on_refresh_table_btn_pressed() -> void:
 
 func on_refresh_license_table(vbox : VBoxContainer): # called from main script
 	#print(vbox.is_inside_tree())
-	var table_parent := assets_table.get_parent()
-	assets_table.queue_free()
-	#vbox.get_parent().remove_child(vbox)
-	table_parent.add_child(vbox)
+	if assets_table:
+		var table_parent := assets_table.get_parent()
+		assets_table.queue_free()
+		#vbox.get_parent().remove_child(vbox)
+		table_parent.add_child(vbox)
+		assets_table = vbox
 
 
 func _on_scan_license_btn_pressed() -> void:

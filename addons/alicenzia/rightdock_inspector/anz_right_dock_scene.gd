@@ -120,15 +120,17 @@ func _addon_init() -> void:
 		remove_path_license_btn.hide()
 	)
 	
-	var new_license_list_vbox = list_licenses_on_rows()
-	refresh_license_table.emit(new_license_list_vbox)
+	_list_license_and_refresh_table()
 	
 	#export_license_dialog.export_license.connect(_on_export_license)
 	#deselect_area.deselect.connect(_on_inspector_deselect)
 
+func _list_license_and_refresh_table():
+	var new_license_list_vbox = list_licenses_on_rows()
+	refresh_license_table.emit(new_license_list_vbox)
+
 
 func list_licenses_on_rows(): #WARNING TODO cuma tes aja tpi bisa jadi fix
-	#WARNING so far kalo di add/remove license ini belom ke update
 	
 	#for n in license_list_vbox.get_children():
 		#n.queue_free()
@@ -362,7 +364,8 @@ func _refresh_right_scene_dock(force_refresh := false):
 		
 		lic_inherit_info.set_text_by_license_context(lic_context)
 		
-		list_licenses_on_rows()
+		#list_licenses_on_rows()
+		_list_license_and_refresh_table()  #TODO mungkin baiknya kalo force update aja
 
 #func construct_license_inspector(fsd_last_selected_file): # wtf what does this one do?
 	#pass
