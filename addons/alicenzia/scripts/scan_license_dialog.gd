@@ -228,7 +228,10 @@ func _scan_with_askalono():
 		var license_path_relative := license_path.trim_prefix(addon_folder_globalpath)
 		if license_path_relative.split("\\", false).size() > 2:
 			continue # skip license file found deep inside an addon, for now
-
+			
+		if spotted_license_dict.has("error"):
+			continue
+			
 		var result_dict : Dictionary = spotted_license_dict["result"]
 		var license_dict : Dictionary = result_dict["license"]
 		var license_name : String = license_dict["name"]
@@ -251,12 +254,15 @@ func _scan_with_askalono():
 		if copyright_owner.is_empty() and dir.file_exists(PLUGIN_FILE_NAME):
 			var plugin_path := plugin_file_location.path_join(PLUGIN_FILE_NAME)
 			copyright_owner = _get_author_from_plugin_file(plugin_path)
-		
+
+		var addon_name := license_path_relative.get_slice("\\", 1)
 		var license_respath := TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
+		var license_dir_respath := TARGET_SCAN_PATH_ADDON.path_join(addon_name).replace("\\", "/").trim_prefix("/")
 		var scanned_license_dict := Dictionary()
-		scanned_license_dict["name"] = license_path_relative.get_slice("\\", 1).capitalize() # for example, \alicenzia\LICENSE got Alicenzia
+		scanned_license_dict["name"] = addon_name.capitalize() # for example, \alicenzia\LICENSE got Alicenzia
 		scanned_license_dict["type"] = "Addon" # for now
 		scanned_license_dict["license"] = license_name
+		scanned_license_dict["license_parentdir_path"] = license_dir_respath
 		scanned_license_dict["license_path"] = license_respath
 		scanned_license_dict["copyright_year"] = copyright_year
 		scanned_license_dict["copyright_owner"] = copyright_owner
@@ -356,11 +362,14 @@ func _scan_with_golicense():
 				var plugin_path := plugin_file_location.path_join(PLUGIN_FILE_NAME)
 				copyright_owner = _get_author_from_plugin_file(plugin_path)
 			
+			var addon_name := license_parent_dir.trim_prefix(addon_folder_globalpath)
 			var license_respath := TARGET_SCAN_PATH_ADDON.path_join(license_path_relative.replace("\\", "/").trim_prefix("/"))
+			var license_dir_respath := TARGET_SCAN_PATH_ADDON.path_join(addon_name.replace("\\", "/").trim_prefix("/"))
 			var scanned_license_dict := Dictionary()
 			scanned_license_dict["name"] = license_path_relative.get_slice("/", 1).capitalize() # for example, \alicenzia\LICENSE got Alicenzia
 			scanned_license_dict["type"] = "Addon" # for now
 			scanned_license_dict["license"] = license_name
+			scanned_license_dict["license_parentdir_path"] = license_dir_respath
 			scanned_license_dict["license_path"] = license_respath
 			scanned_license_dict["copyright_year"] = copyright_year
 			scanned_license_dict["copyright_owner"] = copyright_owner

@@ -489,7 +489,7 @@ func on_scan_result_save(scanned_licenses : Array[Dictionary]): # called from ma
 		alz_licdb = ALZProjectLicenseDatabase.new()
 	
 	for scanned_license_dict in scanned_licenses:
-		var pld_path : String = scanned_license_dict["license_path"] # addon directory
+		var pld_path : String = scanned_license_dict["license_parentdir_path"] # addon directory
 		if alz_licdb.path_license_dict.has(pld_path):
 			push_warning("Alicenzia: License data for %s already found on the database. For data integrity reason it won't be added by the license scanner." % pld_path)
 		else:

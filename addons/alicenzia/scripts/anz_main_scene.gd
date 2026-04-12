@@ -84,7 +84,7 @@ func _on_scan_license_dialog_confirmed() -> void:
 func _on_scanned_license_row_full_lic_pressed(thisrow_license_data):
 	#var data : Dictionary = scan_result_row.thisrow_license_data
 	var license_respath = thisrow_license_data["license_path"]
-	print(license_respath)
+	print(license_respath) # why, idk forgot
 	full_license_text_area.text = ""
 	full_license_dialog.title = ""
 	if thisrow_license_data["full_license_text"]:

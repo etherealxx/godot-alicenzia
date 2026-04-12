@@ -17,7 +17,6 @@ title = "Alicenzia Scan Tool Result"
 initial_position = 2
 size = Vector2i(736, 141)
 visible = true
-unresizable = true
 auto_translate = false
 ok_button_text = "Add Files to Database"
 script = ExtResource("1_7ef83")
