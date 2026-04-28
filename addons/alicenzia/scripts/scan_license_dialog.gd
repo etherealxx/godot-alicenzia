@@ -200,7 +200,7 @@ func _manual_addon_scan(prev_scan_lic_dict_array : Array[Dictionary]):
 			scanned_license_dict["name"] = folder.capitalize()
 			scanned_license_dict["type"] = "Addon" # for now
 			scanned_license_dict["license"] = ""
-			scanned_license_dict["license_path"] = addon_respath
+			scanned_license_dict["license_parentdir_path"] = addon_respath
 			scanned_license_dict["copyright_owner"] = copyright_owner
 			scanned_license_dict["copyright_year"] = int()
 			scanned_license_dict["full_license_text"] = ""
