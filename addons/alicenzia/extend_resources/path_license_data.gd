@@ -20,7 +20,7 @@ class_name PathLicenseData
 #}
 
 # These ones should be the default one i guess
-@export_storage var asset_type_hint := "Addon/Plugin/GDExtension,Code,Font,Music,Shader,Sound Effect"
+@export_storage var asset_type_hint := "Addon/Plugin/GDExtension,Code,Font,Music,Shader,Sprite,Sprite Sheet,Sound Effect"
 @export_storage var ownership_type_hint := "Internally Made,External"
 @export_storage var creator_hint := "Etherealxx"
 @export_storage var license_type_hint := "0BSD,All Rights Reserved,Apache 2.0,CC0 1.0,CC-BY 3.0,CC-BY 4.0,_Custom,GNU GPL 3.0,MIT,_NotProper,SIL OFL 1.1,_Unknown"

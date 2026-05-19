@@ -73,15 +73,9 @@ func _addon_init() -> void:
 	# mini_inspector_vbox = instantiate_inspector(DATA_TEST)
 	instantiate_inspector()
 	
-	for child : Node in ed_fsd.get_children():
-		if child.get_child_count() > 0:
-			var gc = child.get_child(0)
-			if gc is Tree:
-				fsd_tree = gc
-				break
+	fsd_tree = _get_tree_from_fsd(ed_fsd)
 				
 	#fsd_tree.print_tree_pretty()
-	
 	
 	%NoPWLWarnIcon.texture = get_theme_icon("StatusWarning", "EditorIcons")
 	%UnsavedChangesWarningIcon.texture = get_theme_icon("NodeWarning", "EditorIcons")
@@ -124,6 +118,43 @@ func _addon_init() -> void:
 	
 	#export_license_dialog.export_license.connect(_on_export_license)
 	#deselect_area.deselect.connect(_on_inspector_deselect)
+
+
+func _get_first_node_of_this_class(_class : Node, node_to_search : Node) -> Node:
+	var class_to_search := _class.get_class()
+	if node_to_search.get_child_count() > 0:
+		for child : Node in node_to_search.get_children():
+			if child.is_class(class_to_search):
+				return child
+		return null
+	else:
+		return null
+
+
+func _get_tree_from_fsd(fsd : FileSystemDock) -> Tree:
+	# in 4.6 it was located on:
+	#┖╴FileSystem
+	#	┠╴@VBoxContainer@6789
+	#	┃  ┠╴@SplitContainer@5873
+	#	┃  ┃  ┠╴@MarginContainer@5874
+	#	┃  ┃  ┃  ┖╴@Tree@5888
+	var ver_info := Engine.get_version_info()
+	if ver_info["major"] >= 4 and ver_info["minor"] >= 6:
+		var child1 := _get_first_node_of_this_class(VBoxContainer.new(), ed_fsd)
+		var child2 := _get_first_node_of_this_class(SplitContainer.new(), child1)
+		var child3 := _get_first_node_of_this_class(MarginContainer.new(), child2)
+		var child4 := _get_first_node_of_this_class(Tree.new(), child3)
+		if child4: return child4
+		return null
+		
+	else: # tested on 4.4
+		for child : Node in ed_fsd.get_children():
+			if child.get_child_count() > 0:
+				var gc = child.get_child(0)
+				if gc is Tree:
+					return gc
+		return null
+
 
 func _list_license_and_refresh_table():
 	var new_license_list_vbox = list_licenses_on_rows()
@@ -188,9 +219,18 @@ func list_licenses_on_rows(): #WARNING TODO cuma tes aja tpi bisa jadi fix
 
 func _on_prop_table_cell_pressed(license_path : String, prop_name : String):
 	#self.grab_focus()
-	var dock_slot_right : TabContainer = self.get_parent()
-	var tab_idx := dock_slot_right.get_tab_idx_from_control(self)
-	dock_slot_right.current_tab = tab_idx 
+	var right_dock_scene_parent := self.get_parent()
+	var dock_slot_right : TabContainer
+	if right_dock_scene_parent is TabContainer:
+		dock_slot_right = right_dock_scene_parent
+		var tab_idx := dock_slot_right.get_tab_idx_from_control(self)
+		dock_slot_right.current_tab = tab_idx 
+	else: # 4.6 upward, with the introduction of EditorDock
+		# right_dock_scene_parent is EditorDock
+		if right_dock_scene_parent.has_method("make_visible"):
+			right_dock_scene_parent.make_visible()
+		#dock_slot_right = right_dock_scene_parent.get_parent()
+
 
 	#for n : Node in dock_slot_right.get_children():
 		
