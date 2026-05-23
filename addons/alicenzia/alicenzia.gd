@@ -1,7 +1,7 @@
 @tool
 extends EditorPlugin
 
-const ALICENZIA_MAIN_WINDOW_SCENE_PATH = "uid://c321mhbnb88ir" #"uid://ch5mnmkieer5x"
+const ALICENZIA_MAIN_WINDOW_SCENE_PATH = "uid://ch5mnmkieer5x"
 const ALICENZIA_RIGHT_DOCK_SCENE_PATH = "uid://cdgcops15lly0"
 const ALICENZIA_INTRO_GUIDE_SCENE_PATH = "uid://beqcglktcyvic"
 

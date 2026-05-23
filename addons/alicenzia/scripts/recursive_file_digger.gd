@@ -1,5 +1,6 @@
 @tool
 extends Node
+# currently unused
 
 const FILE_NAME_IGNORE_LIST : Array[String] = [
 	".DS_Store"

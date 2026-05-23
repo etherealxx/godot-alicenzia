@@ -1,5 +1,6 @@
 @tool
 extends VBoxContainer
+# currently unused
 
 @onready var options_row: HBoxContainer = $OptionsRow
 @onready var line_edit_name: LineEdit = $HBoxContainer2/ParamAndData/LineEdit_name

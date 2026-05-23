@@ -29,13 +29,16 @@ func _ready() -> void:
 
 
 func _addon_init():
+	pass
 	#data_button_expand_request.connect(_on_data_button_expand_request)
-	assets_table.clear_row()
-	if prepare_data_rows_on_start:
-		var path_data : PackedStringArray = file_digger.start_walk_dir("res://")
-		#print(path_data)
-		for path : String in path_data:
-			assets_table.add_data_row(path)
+	
+	#assets_table.clear_row()
+	#if prepare_data_rows_on_start:
+		#var path_data : PackedStringArray = file_digger.start_walk_dir("res://")
+		##print(path_data)
+		#for path : String in path_data:
+			#assets_table.add_data_row(path)
+			
 			#	func(idx, expand_yes): data_button_expand_request.emit(idx, expand_yes))
 	#export_license_dialog.export_license.connect(_on_export_license)
 
