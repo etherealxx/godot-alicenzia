@@ -22,9 +22,10 @@ resources_spreadsheet_view/resource_cell_label_mode=1
 
 [application]
 
-config/name="prototype-lisensiaga"
+config/name="alicenzia-dev"
+config/version="0.0.20"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="uid://b4v2ganxi2xxx"
 
 [editor_plugins]
 
