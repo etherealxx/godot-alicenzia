@@ -4,6 +4,7 @@ extends VBoxContainer
 signal addon_refresh # addon
 signal save_selected_scanned_licenses(selected_licenses : Array[Dictionary])
 signal show_export_license_dialog
+signal view_guide_from_main_scene
 #signal data_button_expand_request(idx : int, expand_yes : bool)
 
 #const ASSET_DATA_ROW : PackedScene = preload("uid://dagdcisuqdljk")
@@ -101,3 +102,7 @@ func _on_scan_result_dialog_confirmed() -> void:
 
 func _on_export_license_pressed() -> void:
 	show_export_license_dialog.emit()
+
+
+func _on_view_guide_btn_pressed() -> void:
+	view_guide_from_main_scene.emit()

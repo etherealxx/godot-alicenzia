@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://c321mhbnb88ir"]
+[gd_scene load_steps=14 format=3 uid="uid://c321mhbnb88ir"]
 
 [ext_resource type="Script" uid="uid://453yywbf1r1i" path="res://addons/alicenzia/scripts/anz_main_scene.gd" id="1_vbuva"]
 [ext_resource type="Script" uid="uid://b24bu7ntyeqfn" path="res://addons/alicenzia/scripts/recursive_file_digger.gd" id="2_dn6rg"]
 [ext_resource type="Script" uid="uid://shtut6x5kdvu" path="res://addons/alicenzia/scripts/expanded_box.gd" id="3_0bqo7"]
 [ext_resource type="Script" uid="uid://cj3aqrhxi00ig" path="res://addons/alicenzia/scripts/assets_table.gd" id="3_ckmyg"]
+[ext_resource type="Texture2D" uid="uid://c6wnns317b2am" path="res://addons/alicenzia/assets/help.png" id="3_jpl17"]
 [ext_resource type="PackedScene" uid="uid://dagdcisuqdljk" path="res://addons/alicenzia/scenes/asset_data_row.tscn" id="3_qeyua"]
 [ext_resource type="PackedScene" uid="uid://bbvs3xb34eb8m" path="res://addons/alicenzia/scenes/table_firstrow_button.tscn" id="4_28ipe"]
 [ext_resource type="PackedScene" uid="uid://c3itrv4fmgowh" path="res://addons/alicenzia/expanded_box/scenes/param_and_option.tscn" id="4_mubm6"]
@@ -53,6 +54,12 @@ metadata/_edit_lock_ = true
 
 [node name="ToolbarHbox" type="HBoxContainer" parent="UILayoutHbox/MainAddonVbox"]
 layout_mode = 2
+
+[node name="ViewGuideBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
+layout_mode = 2
+tooltip_text = "View the quickstart guide on how to use the Alicenzia addon"
+text = "View Guide"
+icon = ExtResource("3_jpl17")
 
 [node name="ScanLicenseBtn" type="Button" parent="UILayoutHbox/MainAddonVbox/ToolbarHbox"]
 layout_mode = 2
@@ -202,9 +209,7 @@ cell_path_cache = Array[NodePath]([NodePath("CheckEmpty"), NodePath("FRowName"),
 custom_minimum_length = Dictionary[NodePath, float]({
 NodePath("CheckEmpty"): 40.0,
 NodePath("FRowName"): 180.0,
-NodePath("FRowMods"): 130.0,
-NodePath("FRowOwnType"): 154.0,
-NodePath("FRowCrtr"): 115.0
+NodePath("FRowMods"): 130.0
 })
 special_case_minlength = Array[NodePath]([NodePath("FRowOwnType"), NodePath("FRowCrtr")])
 
@@ -322,6 +327,7 @@ emoji_menu_enabled = false
 virtual_keyboard_enabled = false
 middle_mouse_paste_enabled = false
 
+[connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/ViewGuideBtn" to="." method="_on_view_guide_btn_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/ScanLicenseBtn" to="." method="_on_scan_license_btn_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/ExportLicense" to="." method="_on_export_license_pressed"]
 [connection signal="pressed" from="UILayoutHbox/MainAddonVbox/ToolbarHbox/RefreshAddonBtn" to="." method="_on_refresh_addon_btn_pressed"]

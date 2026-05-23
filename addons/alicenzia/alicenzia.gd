@@ -3,9 +3,11 @@ extends EditorPlugin
 
 const ALICENZIA_MAIN_WINDOW_SCENE_PATH = "uid://c321mhbnb88ir" #"uid://ch5mnmkieer5x"
 const ALICENZIA_RIGHT_DOCK_SCENE_PATH = "uid://cdgcops15lly0"
+const ALICENZIA_INTRO_GUIDE_SCENE_PATH = "uid://beqcglktcyvic"
 
 var alicenzia_main_window_node : Control
 var alicenzia_right_dock_node : Control
+var anz_intro_guide_window : Window
 
 var connected_signals : Dictionary[Signal, Callable]
 
@@ -14,12 +16,17 @@ func _enter_tree() -> void:
 	if Engine.is_editor_hint():
 		_load_addon_mainscreen()
 		_load_rightdock_scene()
+		anz_intro_guide_window = load(ALICENZIA_INTRO_GUIDE_SCENE_PATH).instantiate()
 		
 		#var test_dock = load("uid://dk5jia7tjw1p5").instantiate()
 		#add_control_to_dock(DOCK_SLOT_RIGHT_UL, test_dock)
 		pass
 
 
+func _enable_plugin() -> void:
+	_on_trigger_view_guide()
+	
+	
 func _load_addon_mainscreen():
 	alicenzia_main_window_node = load(ALICENZIA_MAIN_WINDOW_SCENE_PATH).instantiate()
 	
@@ -60,6 +67,12 @@ func signals_to_connect(): # after the right dock scene is initiated
 		alicenzia_main_window_node.show_export_license_dialog,
 		alicenzia_right_dock_node.on_show_export_license_dialog
 	)
+	### view guide ###
+	signal_connect_and_log(
+		alicenzia_main_window_node.view_guide_from_main_scene,
+		_on_trigger_view_guide
+	)
+	###
 
 
 func _exit_tree() -> void:
@@ -87,16 +100,20 @@ func _get_plugin_icon():
 	return EditorInterface.get_editor_theme().get_icon("CanvasLayer", "EditorIcons")
 
 
+func _disconnect_logged_signals():
+	# disconnect all signal from signals_to_connect() manually here
+	for sg : Signal in connected_signals:
+		sg.disconnect(connected_signals[sg])
+	connected_signals.clear()
+
+
 func _on_addon_refresh():
 	var editor_main_screen : Node = EditorInterface.get_editor_main_screen()
 	
 	if editor_main_screen.is_ancestor_of(alicenzia_main_window_node):
 		alicenzia_main_window_node.addon_refresh.disconnect(_on_addon_refresh)
 		
-		# disconnect all signal from signals_to_connect() manually here
-		for sg : Signal in connected_signals:
-			sg.disconnect(connected_signals[sg])
-		connected_signals.clear()
+		_disconnect_logged_signals()
 		
 		#scene_saved.disconnect(album_manager_node._on_any_scene_saved)
 		alicenzia_main_window_node.queue_free()
@@ -117,6 +134,10 @@ func _on_addon_refresh():
 	print("---")
 
 
+func _on_trigger_view_guide():
+	get_editor_interface().popup_dialog_centered(anz_intro_guide_window)
+	
+	
 func _attempt_remove_right_dock_scene():
 	if alicenzia_right_dock_node:
 		remove_control_from_docks(alicenzia_right_dock_node)
