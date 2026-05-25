@@ -11,6 +11,7 @@ enum PathLicenseStatus {
 const LICENSE_DATABASE_SAVE_PATH := "res://alz_license_database.tres"
 const LICENSE_PLD_SAVE_PATH := "res://alz_license_database_paths.json"
 const RES_PATH := "res://"
+const LICENSE_TEXT_TEMPLATES_PATH := "res://addons/alicenzia/assets/license_text_templates"
 
 const BLUE_LABEL_STYLEBOX = preload("res://addons/alicenzia/custom_types/blue_label_stylebox.tres")
 const LIGHTBLUE_LABEL_STYLEBOX = preload("res://addons/alicenzia/custom_types/lightblue_label_stylebox.tres")
@@ -36,7 +37,14 @@ const EXPANDABLE_BUTTON_CELL = preload("res://addons/alicenzia/scenes/expandable
 @onready var template_text_area: TextEdit = %TemplateTextArea
 @onready var save_template_dialog: FileDialog = %SaveTemplateDialog
 
-#@onready var license_list_vbox: VBoxContainer = %LicenseListVbox
+# bottom tools
+@onready var autofill_from_template_btn: Button = %AutofillFromTemplateBtn
+@onready var copy_from_license_path_btn: Button = %CopyFromLicensePathBtn
+
+@onready var autofill_license_from_template_dialog: ConfirmationDialog = %AutofillLicenseFromTemplateDialog
+@onready var full_license_preview_dialog: AcceptDialog = %FullLicensePreviewDialog
+@onready var full_license_preview_text_area: TextEdit = %FullLicensePreviewTextArea
+
 
 var tracked_signal_callable_pair : Dictionary[Signal, Callable]
 
@@ -55,6 +63,9 @@ var cached_alz_licdb : ALZProjectLicenseDatabase
 var inspector_changed_unsaved := false
 var empty_pld_ref : PathLicenseData
 var res_diraccess : DirAccess
+
+var license_text_with_templates : Array[String]
+
 
 func _ready() -> void:
 	#pwl_dialog.hide()
@@ -114,10 +125,22 @@ func _addon_init() -> void:
 		remove_path_license_btn.hide()
 	)
 	
+	_init_license_names_with_templates()
 	_list_license_and_refresh_table()
 	
 	#export_license_dialog.export_license.connect(_on_export_license)
 	#deselect_area.deselect.connect(_on_inspector_deselect)
+
+
+func _init_license_names_with_templates():
+	license_text_with_templates.clear()
+	
+	var dir := DirAccess.open(LICENSE_TEXT_TEMPLATES_PATH)
+	for file : String in dir.get_files():
+		const txt_ext := ".txt"
+		if file.ends_with(txt_ext):
+			var license_name := file.trim_suffix(txt_ext)
+			license_text_with_templates.append(license_name)
 
 
 func _get_first_node_of_this_class(_class : Node, node_to_search : Node) -> Node:
@@ -132,7 +155,7 @@ func _get_first_node_of_this_class(_class : Node, node_to_search : Node) -> Node
 
 
 func _get_tree_from_fsd(fsd : FileSystemDock) -> Tree:
-	# in 4.6 it was located on:
+	# in 4.6/4.7 it was located on:
 	#┖╴FileSystem
 	#	┠╴@VBoxContainer@6789
 	#	┃  ┠╴@SplitContainer@5873
@@ -147,7 +170,7 @@ func _get_tree_from_fsd(fsd : FileSystemDock) -> Tree:
 		if child4: return child4
 		return null
 		
-	else: # tested on 4.4
+	else: # tested on 4.4 & 4.5
 		for child : Node in ed_fsd.get_children():
 			if child.get_child_count() > 0:
 				var gc = child.get_child(0)
@@ -406,6 +429,7 @@ func _refresh_right_scene_dock(force_refresh := false):
 		
 		#list_licenses_on_rows()
 		_list_license_and_refresh_table()  #TODO mungkin baiknya kalo force update aja
+		_check_for_bottom_tools()
 
 #func construct_license_inspector(fsd_last_selected_file): # wtf what does this one do?
 	#pass
@@ -759,3 +783,78 @@ func _on_save_template_dialog_file_selected(path: String) -> void:
 	export_license_dialog.hide()
 	ed_toast.push_toast("Alicenzia: License data successfully exported at %s." % path, EditorToaster.SEVERITY_INFO)
 	ed_efs.scan()
+
+
+func _prop_changed_override(prop : String, value : Variant) -> void:
+	prints(prop,value)
+	if currently_edited_pld.full_license_text.is_empty():
+		match prop:
+			"license_type":
+				autofill_from_template_btn.hide()
+				if value in license_text_with_templates:
+					autofill_from_template_btn.show()
+			"license_text_path":
+				copy_from_license_path_btn.hide()
+				if value != "":
+					#copy_from_license_path_btn.show() #TODO not implemented, not important for now
+					pass
+
+
+func _hide_all_bottom_tools():
+	copy_from_license_path_btn.hide()
+	autofill_from_template_btn.hide()
+
+
+func _check_for_bottom_tools():
+	_hide_all_bottom_tools()
+	if currently_edited_pld.full_license_text.is_empty():
+		if currently_edited_pld.license_type in license_text_with_templates:
+			autofill_from_template_btn.show()
+		if not currently_edited_pld.license_text_path.is_empty():
+			#copy_from_license_path_btn.show() #TODO ditto
+			pass
+
+
+func _on_autofill_from_template_btn_pressed() -> void:
+	autofill_license_from_template_dialog.show()
+	autofill_license_from_template_dialog.fill_data(currently_edited_pld.license_type, currently_edited_pld.creator)
+
+
+#region this was written very uglily. i'm tired
+func _on_autofill_license_preview_btn_pressed() -> void:
+	var preview_license_text = _fill_preview_license()
+	
+	full_license_preview_text_area.text = preview_license_text
+	full_license_preview_dialog.title = "%s Full License Text of %s" % \
+										[autofill_license_from_template_dialog.chosen_license_type,
+										currently_edited_pld.name]
+	full_license_preview_dialog.show()
+
+
+func _fill_preview_license() -> String:
+	autofill_license_from_template_dialog.set_typed_data()
+	
+	var preview_license_text := ""
+	
+	var license_template_filename : String = autofill_license_from_template_dialog.chosen_license_type + ".txt"
+	var license_template_path := LICENSE_TEXT_TEMPLATES_PATH.path_join(license_template_filename)
+	
+	if FileAccess.file_exists(license_template_path):
+		preview_license_text = FileAccess.get_file_as_string(license_template_path)
+	
+	preview_license_text = preview_license_text.replacen("<year>", str(autofill_license_from_template_dialog.chosen_year))
+	preview_license_text = preview_license_text.replacen("<COPYRIGHT HOLDER>", autofill_license_from_template_dialog.chosen_owner)
+
+	autofill_license_from_template_dialog.preview_license_text = preview_license_text
+	
+	return preview_license_text
+
+
+func _on_autofill_license_from_template_dialog_confirmed() -> void:
+	autofill_license_from_template_dialog.hide()
+	var preview_license_text = _fill_preview_license()
+	currently_edited_pld.full_license_text = preview_license_text
+	_refill_pathlicensedata_inspector(currently_edited_pld)
+	_check_for_bottom_tools()
+
+#endregion

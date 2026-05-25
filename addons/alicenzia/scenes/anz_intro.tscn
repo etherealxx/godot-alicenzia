@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://beqcglktcyvic"]
+[gd_scene load_steps=25 format=3 uid="uid://beqcglktcyvic"]
 
 [ext_resource type="Script" uid="uid://jp7v2e6n4cii" path="res://addons/alicenzia/scripts/anz_intro.gd" id="1_2obs2"]
 [ext_resource type="LabelSettings" uid="uid://dxtha78coxldw" path="res://addons/alicenzia/resource_presets/anz_intro_labelsettings.tres" id="1_3isa3"]
@@ -16,8 +16,11 @@
 [ext_resource type="Texture2D" uid="uid://satlmrr5gi6a" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 8 pt1.png" id="13_hnmet"]
 [ext_resource type="Texture2D" uid="uid://68xnph4q1ihp" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 8 pt2.png" id="14_fekow"]
 [ext_resource type="Texture2D" uid="uid://c8fnvrvtxmaol" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 9 pt1.png" id="15_ptva5"]
+[ext_resource type="Texture2D" uid="uid://cld036udw4chc" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 8.1 pt1.png" id="16_c8061"]
 [ext_resource type="Texture2D" uid="uid://b55ubitu05r0g" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 9 pt2.png" id="16_qe6u3"]
+[ext_resource type="Texture2D" uid="uid://bfwo37mb2a02t" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 8.1 pt2.png" id="17_21ul4"]
 [ext_resource type="Texture2D" uid="uid://cl208o5b57c" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 10 pt1.png" id="17_cum03"]
+[ext_resource type="Texture2D" uid="uid://di3ksno4sc4y5" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 8.1 pt3.png" id="18_dbfg4"]
 [ext_resource type="Texture2D" uid="uid://c215tvscij11e" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 10 pt2.png" id="18_yvxoh"]
 [ext_resource type="Texture2D" uid="uid://jky5cars2c1e" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 11 pt1.png" id="19_rkckx"]
 [ext_resource type="Texture2D" uid="uid://dhdru7v200wak" path="res://addons/alicenzia/assets/guides/alicenzia guides - page 11 pt2.png" id="20_pgaju"]
@@ -75,7 +78,6 @@ metadata/_tab_index = 0
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Additions"]
 layout_mode = 2
 size_flags_horizontal = 3
-scroll_vertical = 100
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Additions/ScrollContainer"]
 layout_mode = 2
@@ -416,7 +418,7 @@ texture = ExtResource("14_fekow")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Workspace Tab" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab"]
+[node name="Autofill License" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
@@ -424,6 +426,72 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 8
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License"]
+layout_mode = 2
+size_flags_horizontal = 3
+scroll_vertical = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License/ScrollContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "When choosing a license for your asset, there are several licenses that has a template available. That way you don't need to write/manually paste the full license to the Full License Text form."
+label_settings = ExtResource("1_3isa3")
+autowrap_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+texture = ExtResource("16_c8061")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label2" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "A button will appear on the bottom right of the License dock. Clicking it will open a menu to fill the license template. Enter the preferred owner/author name and copyright year, and you could preview it first."
+label_settings = ExtResource("1_3isa3")
+autowrap_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+texture = ExtResource("17_21ul4")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label3" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Once you're done, click \"Fill License Text'. The newly generated license will appear on the \"Full License Text\" form. Don't forget to save your license data."
+label_settings = ExtResource("1_3isa3")
+autowrap_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+texture = ExtResource("18_dbfg4")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label4" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Autofill License/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Currently supported licenses are 0BSD, Apache-2.0, CC0-1.0, CC-BY-4.0, and MIT."
+label_settings = ExtResource("1_3isa3")
+autowrap_mode = 3
+
+[node name="Workspace Tab" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 9
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Workspace Tab"]
 layout_mode = 2
@@ -467,7 +535,7 @@ theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
-metadata/_tab_index = 9
+metadata/_tab_index = 10
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/License Scanner"]
 layout_mode = 2
@@ -526,7 +594,7 @@ theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
-metadata/_tab_index = 10
+metadata/_tab_index = 11
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GuideTab/Export License"]
 layout_mode = 2
@@ -581,7 +649,7 @@ text = "< Prev"
 [node name="CurrentPageNumber" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PageSwitcher"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Page 1 of 11"
+text = "Page 1 of 12"
 
 [node name="NextBtn" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PageSwitcher"]
 layout_mode = 2

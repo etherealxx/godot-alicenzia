@@ -26,3 +26,7 @@ func get_value() -> String:
 
 func get_lineedit_node() -> LineEdit:
 	return $LineEdit
+
+
+func set_value(value : String):
+	$LineEdit.text = value

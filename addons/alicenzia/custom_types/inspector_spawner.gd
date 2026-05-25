@@ -6,6 +6,7 @@ signal property_changed
 const INTERNAL_RESOURCE_PROP_NAMES := \
 	["resource_local_to_scene", "resource_name", "metadata/_custom_type_script"]
 
+#TODO unused????
 const TITLE_IDENTIFIER_CONSTNAME := "title_identifier"
 const COVER_IDENTIFIER_CONSTNAME := "cover_identifier"
 
@@ -97,7 +98,7 @@ func refill_inspector(res_to_edit : Resource) -> void:
 				var res_class_name = res_script.get_global_name()
 				var script_const_map := res_script.get_script_constant_map()
 				if TITLE_IDENTIFIER_CONSTNAME in script_const_map:
-					# the variable name that's responsible to the song name
+					# the variable name that's responsible to the song name #TODO 26/05/26 the hell does this means?
 					prop_title_varname = res_script[TITLE_IDENTIFIER_CONSTNAME]
 				if COVER_IDENTIFIER_CONSTNAME in script_const_map:
 					prop_cover_varname = res_script[COVER_IDENTIFIER_CONSTNAME]
@@ -181,15 +182,15 @@ func _prop_selected(p_path:String, p_focusable: int) -> void:
 
 
 func set_selected_edprop_by_label(capitalized_label : String):
-		for _edprop in get_edprops():
-			var edprop = _edprop
-			if edprop is HBoxContainer:
-				if edprop.get_child(0) is EditorProperty:
-					edprop = _edprop.get_child(0)
-			if edprop is EditorProperty:
-				if edprop.label == capitalized_label:
-					edprop.select()
-					break
+	for _edprop in get_edprops():
+		var edprop = _edprop
+		if edprop is HBoxContainer:
+			if edprop.get_child(0) is EditorProperty:
+				edprop = _edprop.get_child(0)
+		if edprop is EditorProperty:
+			if edprop.label == capitalized_label:
+				edprop.select()
+				break
 
 
 func get_edprops():
