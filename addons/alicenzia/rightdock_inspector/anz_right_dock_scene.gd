@@ -2,6 +2,7 @@
 extends InspectorSpawner
 
 signal refresh_license_table(vbox : VBoxContainer)
+signal view_guide_from_right_dock
 
 enum PathLicenseStatus {
 	INHERIT_NONE, INHERIT_PROJECT_WIDE,
@@ -786,7 +787,7 @@ func _on_save_template_dialog_file_selected(path: String) -> void:
 
 
 func _prop_changed_override(prop : String, value : Variant) -> void:
-	prints(prop,value)
+	#prints(prop,value)
 	if currently_edited_pld.full_license_text.is_empty():
 		match prop:
 			"license_type":
@@ -858,3 +859,7 @@ func _on_autofill_license_from_template_dialog_confirmed() -> void:
 	_check_for_bottom_tools()
 
 #endregion
+
+
+func _on_view_guide_btn_pressed() -> void:
+	view_guide_from_right_dock.emit()

@@ -8,7 +8,7 @@ auto_translate_mode = 2
 disable_3d = true
 title = "Alicenzia Scan Tool"
 initial_position = 2
-size = Vector2i(436, 362)
+size = Vector2i(436, 345)
 visible = true
 unresizable = true
 auto_translate = false
@@ -20,7 +20,22 @@ script = ExtResource("1_eq3nj")
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 428.0
-offset_bottom = 313.0
+offset_bottom = 296.0
+
+[node name="NonWindowsNotice" type="VBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/NonWindowsNotice"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Currently the scan feature aren't available on Mac and Linux"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/NonWindowsNotice"]
+layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 custom_minimum_size = Vector2(400, 0)

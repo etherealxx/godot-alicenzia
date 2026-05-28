@@ -23,6 +23,8 @@ const YEAR_OWNER_SEARCH_PATTERN := r"Copyright\s+(?:\([cC]\)\s+|©\s+)?(\d{4}(?:
 const PLUGIN_FILE_NAME := "plugin.cfg"
 const TARGET_SCAN_PATH_ADDON := "res://addons"
 
+@onready var non_windows_notice: VBoxContainer = %NonWindowsNotice
+
 @onready var scan_tool_pn_o: HBoxContainer = %ScanToolPnO
 @onready var tool_info: Label = %ToolInfo
 
@@ -40,6 +42,8 @@ var chosen_download_link : String
 var chosen_exe_path : String
 var chosen_exe_name : String
 
+var is_device_supported := true
+
 
 func _ready() -> void:
 	self.size.y = WINDOW_MIN_Y
@@ -51,12 +55,26 @@ func _ready() -> void:
 
 func show_and_update():
 	scan_progress_panel.hide()
+	non_windows_notice.hide()
 	self.show()
 	_check_if_tool_available()
 	_change_tool_texts()
+	_check_supported_device()
+
+
+func _check_supported_device():
+	if OS.get_name() != "Windows":
+		var okbtn := get_ok_button()
+		tool_info_panel.visible = false
+		okbtn.disabled = true
+		is_device_supported = false
+		non_windows_notice.show()
 
 
 func _check_if_tool_available():
+	if not is_device_supported:
+		return
+		
 	var chosen_tool : String = scan_tool_pn_o.get_value()
 	var dir = DirAccess.open(USER_PATH)
 	var okbtn := get_ok_button()

@@ -305,6 +305,7 @@ wrap_mode = 1
 [connection signal="attempt_remove_hint_from_param" from="AddNewStringEnumDialog" to="." method="_on_attempt_remove_hint_from_param"]
 [connection signal="confirmed" from="AddNewStringEnumDialog" to="." method="_on_add_new_string_enum_dialog_confirmed"]
 [connection signal="confirmed" from="ConfirmRemovePathLicDialog" to="." method="_on_confirm_remove_path_lic_dialog_confirmed"]
+[connection signal="pressed" from="BottomTool/ViewGuideBtn" to="." method="_on_view_guide_btn_pressed"]
 [connection signal="pressed" from="BottomTool/AutofillFromTemplateBtn" to="." method="_on_autofill_from_template_btn_pressed"]
 [connection signal="export_license" from="ExportLicenseDialog" to="." method="_on_export_license_dialog_export_license"]
 [connection signal="make_example_template" from="ExportLicenseDialog" to="." method="_on_export_license_dialog_make_example_template"]

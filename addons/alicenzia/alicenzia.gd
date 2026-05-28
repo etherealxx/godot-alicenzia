@@ -72,6 +72,10 @@ func signals_to_connect(): # after the right dock scene is initiated
 		alicenzia_main_window_node.view_guide_from_main_scene,
 		_on_trigger_view_guide
 	)
+	signal_connect_and_log(
+		alicenzia_right_dock_node.view_guide_from_right_dock,
+		_on_trigger_view_guide
+	)
 	###
 
 
