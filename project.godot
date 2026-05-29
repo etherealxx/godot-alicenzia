@@ -25,11 +25,10 @@ resources_spreadsheet_view/resource_cell_label_mode=1
 config/name="alicenzia-dev"
 config/version="0.0.20"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="uid://b4v2ganxi2xxx"
+config/icon="uid://si116expbvr6"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/alicenzia/plugin.cfg")
 
 [rendering]
 

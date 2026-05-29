@@ -214,8 +214,14 @@ func list_licenses_on_rows(): #WARNING TODO cuma tes aja tpi bisa jadi fix
 		break # only firstrow
 	
 	var licdb_dict_data : Dictionary = alz_licdb.get_data_as_dict()
-	for pld_paths : String in licdb_dict_data.keys():
-		var pld_datas : Dictionary = licdb_dict_data[pld_paths]
+	for pld_path : String in licdb_dict_data.keys():
+		var dir := DirAccess.open(RES_PATH)
+		
+		# file/folder exist on the database but missing in actuality
+		if not (dir.file_exists(pld_path) or dir.dir_exists(pld_path)):
+			continue # don't show it on the table
+		
+		var pld_datas : Dictionary = licdb_dict_data[pld_path]
 		var new_hbox := HBoxContainer.new()
 		license_list_vbox.add_child(new_hbox)
 		
@@ -233,7 +239,7 @@ func list_licenses_on_rows(): #WARNING TODO cuma tes aja tpi bisa jadi fix
 			else:
 				new_table_cell.text = str(prop_value)
 				
-			new_table_cell.pressed.connect(_on_prop_table_cell_pressed.bind(pld_paths, prop_name)) # .bind()
+			new_table_cell.pressed.connect(_on_prop_table_cell_pressed.bind(pld_path, prop_name)) # .bind()
 			
 			#new_label.add_theme_stylebox_override("normal", BLUE_LABEL_STYLEBOX)
 			new_hbox.add_child(new_table_cell)
