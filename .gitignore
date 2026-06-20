@@ -23,3 +23,6 @@ AlicenziaProject_LICENSE.txt
 /addons/editor_theme_explorer
 godot-alicenzia*.zip
 /scenes/tests
+/addons/addon_packer
+alicenzia_*.zip
+archive.zip

@@ -85,7 +85,8 @@ func _addon_init() -> void:
 	# mini_inspector_vbox = instantiate_inspector(DATA_TEST)
 	instantiate_inspector()
 	
-	fsd_tree = _get_tree_from_fsd(ed_fsd)
+	if not _is_version_4point6_upward():
+		fsd_tree = _get_tree_from_fsd(ed_fsd)
 				
 	#fsd_tree.print_tree_pretty()
 	
@@ -107,8 +108,13 @@ func _addon_init() -> void:
 			
 	#fsd_tree.cell_selected.connect(_on_filesystemdock_selectedpath_changed)
 	#add_new_string_enum_dialog.attempt_remove_hint_from_param.connect(_on_attempt_remove_hint_from_param)
-	connect_and_track_signal(
-		fsd_tree.cell_selected, _on_filesystemdock_selectedpath_changed)
+	
+	if _is_version_4point6_upward():
+		connect_and_track_signal(
+			ed_fsd.selection_changed, _on_filesystemdock_selectedpath_changed)
+	else:
+		connect_and_track_signal(
+			fsd_tree.cell_selected, _on_filesystemdock_selectedpath_changed)
 	
 	connect_and_track_signal(
 		ed_fsd.folder_moved, _on_filesystemdock_folder_moved)
@@ -131,6 +137,14 @@ func _addon_init() -> void:
 	
 	#export_license_dialog.export_license.connect(_on_export_license)
 	#deselect_area.deselect.connect(_on_inspector_deselect)
+
+
+func _is_version_4point6_upward() -> bool:
+	var ver_info := Engine.get_version_info()
+	if ver_info["major"] >= 4 and ver_info["minor"] >= 6:
+		return true
+		
+	return false
 
 
 func _init_license_names_with_templates():
@@ -162,8 +176,7 @@ func _get_tree_from_fsd(fsd : FileSystemDock) -> Tree:
 	#	┃  ┠╴@SplitContainer@5873
 	#	┃  ┃  ┠╴@MarginContainer@5874
 	#	┃  ┃  ┃  ┖╴@Tree@5888
-	var ver_info := Engine.get_version_info()
-	if ver_info["major"] >= 4 and ver_info["minor"] >= 6:
+	if _is_version_4point6_upward(): #INFO no longer used
 		var child1 := _get_first_node_of_this_class(VBoxContainer.new(), ed_fsd)
 		var child2 := _get_first_node_of_this_class(SplitContainer.new(), child1)
 		var child3 := _get_first_node_of_this_class(MarginContainer.new(), child2)
