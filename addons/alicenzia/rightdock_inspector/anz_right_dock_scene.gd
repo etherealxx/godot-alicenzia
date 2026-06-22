@@ -124,19 +124,21 @@ func _addon_init() -> void:
 		
 	save_btn.disabled = true
 	
-	property_changed.connect(func():
-		inspector_changed_unsaved = true
-		# TODO check if the currently edited pld is empty/default on the inspector, if yes then disable the button
-		discard_changes_btn.show()
-		save_btn.disabled = false
-		remove_path_license_btn.hide()
-	)
+	property_changed.connect(_on_licensedata_property_changed)
 	
 	_init_license_names_with_templates()
 	_list_license_and_refresh_table()
 	
 	#export_license_dialog.export_license.connect(_on_export_license)
 	#deselect_area.deselect.connect(_on_inspector_deselect)
+
+
+func _on_licensedata_property_changed():
+	inspector_changed_unsaved = true
+	# TODO check if the currently edited pld is empty/default on the inspector, if yes then disable the button
+	discard_changes_btn.show()
+	save_btn.disabled = false
+	remove_path_license_btn.hide()
 
 
 func _is_version_4point6_upward() -> bool:
@@ -875,6 +877,7 @@ func _on_autofill_license_from_template_dialog_confirmed() -> void:
 	var preview_license_text = _fill_preview_license()
 	currently_edited_pld.full_license_text = preview_license_text
 	_refill_pathlicensedata_inspector(currently_edited_pld)
+	_on_licensedata_property_changed()
 	_check_for_bottom_tools()
 
 #endregion
